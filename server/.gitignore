@@ -1,0 +1,14 @@
+node_modules
+public/uploads/*
+temp/uploads/*
+!public/uploads/.gitkeep
+!temp/uploads/.gitkeep
+
+# Environment variables
+.env
+
+# TypeScript build output
+dist
+
+# Logs
+*.log
