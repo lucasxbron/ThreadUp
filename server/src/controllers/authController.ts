@@ -6,6 +6,8 @@ import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import { createToken } from "../utils/jwt.js";
 import { JwtPayload } from "../types/jwt.js";
+import { sendVerificationEmail } from "../utils/resend.js";
+import crypto from "crypto";
 
 const secret = config.JWT_SECRET;
 
@@ -22,18 +24,61 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       throw createHttpError(409, "This email is already registered");
     }
 
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+
     const newUser = await User.create({
       username,
       email,
       password,
+      verificationToken,
+      verified: false,
     });
 
+    await sendVerificationEmail(email, verificationToken);
+
     res.status(201).json({ 
-      message: "User successfully registered", 
+      message: "User registered successfully! Please check your email to verify your account.",
       user: { 
         _id: newUser._id, 
         username: newUser.username, 
-        email: newUser.email 
+        email: newUser.email,
+        verified: newUser.verified
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const verifyEmail = async (req: Request, res: Response, next: NextFunction) => {
+  const { token } = req.query;
+
+  try {
+    if (!token || typeof token !== "string") {
+      throw createHttpError(400, "Verification token is required");
+    }
+
+    const user = await User.findOne({ verificationToken: token });
+
+    if (!user) {
+      throw createHttpError(400, "Invalid or expired verification token");
+    }
+
+    if (user.verified) {
+      throw createHttpError(400, "Email is already verified");
+    }
+
+    user.verified = true;
+    user.verificationToken = "";
+    await user.save();
+
+    res.status(200).json({ 
+      message: "Email verified successfully! You can now log in.",
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        verified: user.verified
       }
     });
   } catch (error) {
@@ -52,6 +97,10 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const user = await User.findOne({ email });
     if (!user) {
       throw createHttpError(401, "Invalid credentials");
+    }
+
+    if (!user.verified) {
+      throw createHttpError(401, "Please verify your email before logging in");
     }
 
     const comparePassword = await compare(password, user.password);
@@ -89,7 +138,41 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         email: user.email,
         roles: user.roles,
         permissions: user.permissions,
+        verified: user.verified,
       }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resendVerification = async (req: Request, res: Response, next: NextFunction) => {
+  const { email } = req.body;
+
+  try {
+    if (!email) {
+      throw createHttpError(400, "Email is required");
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    if (user.verified) {
+      throw createHttpError(400, "Email is already verified");
+    }
+
+    // Generate new verification token
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+    user.verificationToken = verificationToken;
+    await user.save();
+
+    // Send new verification email
+    await sendVerificationEmail(email, verificationToken);
+
+    res.status(200).json({ 
+      message: "Verification email sent successfully! Please check your inbox."
     });
   } catch (error) {
     next(error);
