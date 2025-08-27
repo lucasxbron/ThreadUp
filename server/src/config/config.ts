@@ -5,9 +5,13 @@ interface Config {
   PORT: number;
   MONGODB_URL?: string;
   RESEND_API_KEY: string;
-  FRONTEND_URL: string;
+  FRONTEND_URL?: string;
   JWT_SECRET: string;
+  CLOUDINARY_CLOUD_NAME: string;
+  CLOUDINARY_API_KEY: string;
+  CLOUDINARY_API_SECRET: string;
 }
+
 function getEnvVar(key: string, required: boolean = true): string | undefined {
   const value = process.env[key];
   if (required && !value) {
@@ -22,6 +26,9 @@ const config: Config = {
   RESEND_API_KEY: getEnvVar("RESEND_API_KEY")!,
   FRONTEND_URL: process.env.FRONTEND_URL || "http://localhost:3000",
   JWT_SECRET: getEnvVar("JWT_SECRET")!,
+  CLOUDINARY_CLOUD_NAME: getEnvVar("CLOUDINARY_CLOUD_NAME")!,
+  CLOUDINARY_API_KEY: getEnvVar("CLOUDINARY_API_KEY")!,
+  CLOUDINARY_API_SECRET: getEnvVar("CLOUDINARY_API_SECRET")!,
 };
 
 export default config;
