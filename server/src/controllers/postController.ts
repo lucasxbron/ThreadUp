@@ -5,33 +5,37 @@ import User from "../models/user.js";
 import Comment from "../models/comment.js";
 import Like from "../models/like.js";
 import config from "../config/config.js";
+import { uploadToCloudinary } from "../utils/cloudinary.js";
 
 export const createPost = async (req: Request, res: Response, next: NextFunction) => {
+  const { text } = req.body;
+
   try {
-    const { text } = req.body;
-    
-    if (!text || text.trim().length === 0) {
+    if (!text) {
       throw createHttpError(400, "Text is required");
     }
 
-    let imageUrl;
+    let imageUrl = null;
+    let imagePublicId = null;
+
     if (req.file) {
-      imageUrl = `http://localhost:${config.PORT}/uploads/${req.file.filename}`;
+      const result = await uploadToCloudinary(req.file.path, 'post-images');
+      imageUrl = result.secure_url;
+      imagePublicId = result.public_id;
     }
 
     const newPost = await Post.create({
+      text,
       authorId: req.user?._id,
-      text: text.trim(),
       imageUrl,
+      imagePublicId, // Store for future deletion
     });
 
-    const populatedPost = await Post.findById(newPost._id)
-      .populate('authorId', 'username')
-      .lean();
+    const populatedPost = await Post.findById(newPost._id).populate("authorId", "username");
 
     res.status(201).json({
       message: "Post successfully created",
-      post: populatedPost
+      post: populatedPost,
     });
   } catch (error) {
     next(error);
@@ -45,27 +49,31 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
     const skip = (page - 1) * limit;
 
     const posts = await Post.find()
-      .populate('authorId', 'username')
+      .populate("authorId", "username")
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit)
-      .lean();
+      .limit(limit);
 
-    const total = await Post.countDocuments();
+    const totalPosts = await Post.countDocuments();
+    const totalPages = Math.ceil(totalPosts / limit);
 
+    // Add like status and comment count for authenticated users
     const postsWithExtra = await Promise.all(posts.map(async (post) => {
       const commentsCount = await Comment.countDocuments({ postId: post._id });
-      let isLiked = false;
       
+      let isLiked = false;
       if (req.user?._id) {
-        const like = await Like.findOne({ postId: post._id, userId: req.user._id });
-        isLiked = !!like;
+        const existingLike = await Like.findOne({ 
+          userId: req.user._id, 
+          postId: post._id 
+        });
+        isLiked = !!existingLike;
       }
 
       return {
-        ...post,
+        ...post.toObject(),
         commentsCount,
-        isLiked,
+        isLiked
       };
     }));
 
@@ -73,9 +81,9 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
       posts: postsWithExtra,
       pagination: {
         currentPage: page,
-        totalPages: Math.ceil(total / limit),
-        totalPosts: total,
-        hasNext: page < Math.ceil(total / limit),
+        totalPages,
+        totalPosts,
+        hasNext: page < totalPages,
         hasPrev: page > 1,
       }
     });
@@ -85,31 +93,30 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
 };
 
 export const getPostById = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    const post = await Post.findById(id)
-      .populate('authorId', 'username')
-      .lean();
+  try {
+    const post = await Post.findById(id).populate("authorId", "username");
 
     if (!post) {
       throw createHttpError(404, "Post not found");
     }
 
     const commentsCount = await Comment.countDocuments({ postId: post._id });
-    let isLiked = false;
     
+    let isLiked = false;
     if (req.user?._id) {
-      const like = await Like.findOne({ postId: post._id, userId: req.user._id });
-      isLiked = !!like;
+      const existingLike = await Like.findOne({ 
+        userId: req.user._id, 
+        postId: post._id 
+      });
+      isLiked = !!existingLike;
     }
 
-    res.status(200).json({ 
-      post: {
-        ...post,
-        commentsCount,
-        isLiked,
-      }
+    res.status(200).json({
+      ...post.toObject(),
+      commentsCount,
+      isLiked
     });
   } catch (error) {
     next(error);
@@ -117,23 +124,32 @@ export const getPostById = async (req: Request, res: Response, next: NextFunctio
 };
 
 export const deletePost = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { id } = req.params;
+  const { id } = req.params;
 
+  try {
     const post = await Post.findById(id);
+
     if (!post) {
       throw createHttpError(404, "Post not found");
     }
 
-    if (post.authorId.toString() !== req.user?._id?.toString()) {
-      throw createHttpError(403, "Not authorized to delete post");
+    if (post.authorId.toString() !== req.user?._id) {
+      throw createHttpError(403, "Not authorized to delete this post");
     }
 
+    // Delete image from Cloudinary if exists
+    if (post.imagePublicId) {
+      const { deleteFromCloudinary } = await import("../utils/cloudinary.js");
+      await deleteFromCloudinary(post.imagePublicId);
+    }
+
+    // Delete related comments and likes
     await Comment.deleteMany({ postId: id });
     await Like.deleteMany({ postId: id });
+    
     await Post.findByIdAndDelete(id);
 
-    res.status(200).json({ message: "Post successfully deleted" });
+    res.status(200).json({ message: "Post deleted successfully" });
   } catch (error) {
     next(error);
   }
