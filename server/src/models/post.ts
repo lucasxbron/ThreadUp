@@ -1,26 +1,33 @@
-import mongoose, { Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 
-const postSchema = new Schema({
-  authorId: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+export const postSchema = new Schema(
+  {
+    text: {
+      type: String,
+      required: true,
+      maxlength: 500,
+    },
+    authorId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    imageUrl: {
+      type: String,
+      default: null,
+    },
+    imagePublicId: {
+      // Cloudinary management
+      type: String,
+      default: null,
+    },
+    likeCount: {
+      type: Number,
+      default: 0,
+    },
   },
-  text: {
-    type: String,
-    required: true,
-    maxlength: 500,
-  },
-  imageUrl: {
-    type: String,
-  },
-  likeCount: {
-    type: Number,
-    default: 0,
-  },
-}, {
-  timestamps: true,
-});
+  { timestamps: true }
+);
 
 const Post = model("Post", postSchema);
 export default Post;
