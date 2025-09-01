@@ -41,7 +41,6 @@ export const userSchema = new Schema({
     type: [String],
     default: DEFAULT_PERMISSIONS,
   },
-  // Add email verification fields
   verified: {
     type: Boolean,
     default: false,

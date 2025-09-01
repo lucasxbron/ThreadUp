@@ -9,7 +9,7 @@ const router = Router();
 router.get("/", postController.getPosts);
 router.get("/:id", postController.getPostById);
 
-// Protected routes - UPDATED TO INCLUDE IMAGE UPLOAD
+// Protected routes
 router.post("/", verifyToken, upload.single("image"), postController.createPost);
 router.delete("/:id", verifyToken, postController.deletePost);
 
