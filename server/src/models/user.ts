@@ -41,11 +41,21 @@ export const userSchema = new Schema({
     type: [String],
     default: DEFAULT_PERMISSIONS,
   },
+  // Add email verification fields
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    default: "",
+  },
 }, { timestamps: true });
 
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;
+  delete obj.verificationToken; // Don't expose verification token
   delete obj.__v;
   return obj;
 };
