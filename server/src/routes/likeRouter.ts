@@ -6,8 +6,6 @@ const router = Router();
 
 // Protected routes (authentication required)
 router.post("/post/:postId", verifyToken, likeController.toggleLike);
-
-// Public routes (can check like status without auth)
-router.get("/post/:postId", likeController.getLikeStatus);
+router.get("/post/:postId", verifyToken, likeController.getLikeStatus);
 
 export default router;
