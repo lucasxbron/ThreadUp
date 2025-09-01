@@ -5,11 +5,11 @@ import { upload } from "../middleware/multer.js";
 
 const router = Router();
 
-// Public routes (no authentication needed)
+// Public routes
 router.get("/", postController.getPosts);
 router.get("/:id", postController.getPostById);
 
-// Protected routes (authentication required)
+// Protected routes - UPDATED TO INCLUDE IMAGE UPLOAD
 router.post("/", verifyToken, upload.single("image"), postController.createPost);
 router.delete("/:id", verifyToken, postController.deletePost);
 
