@@ -57,23 +57,24 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
     const totalPosts = await Post.countDocuments();
     const totalPages = Math.ceil(totalPosts / limit);
 
-    // Add like status and comment count for authenticated users
+    // Add like status and comment count
     const postsWithExtra = await Promise.all(posts.map(async (post) => {
       const commentsCount = await Comment.countDocuments({ postId: post._id });
       
-      let isLiked = false;
+      let liked = false;
       if (req.user?._id) {
         const existingLike = await Like.findOne({ 
           userId: req.user._id, 
           postId: post._id 
         });
-        isLiked = !!existingLike;
+        liked = !!existingLike;
       }
 
       return {
         ...post.toObject(),
         commentsCount,
-        isLiked
+        likeCount: post.likeCount || 0, // ← Use cached count from Post document
+        liked
       };
     }));
 
@@ -104,19 +105,20 @@ export const getPostById = async (req: Request, res: Response, next: NextFunctio
 
     const commentsCount = await Comment.countDocuments({ postId: post._id });
     
-    let isLiked = false;
+    let liked = false;
     if (req.user?._id) {
       const existingLike = await Like.findOne({ 
         userId: req.user._id, 
         postId: post._id 
       });
-      isLiked = !!existingLike;
+      liked = !!existingLike;
     }
 
     res.status(200).json({
       ...post.toObject(),
       commentsCount,
-      isLiked
+      likeCount: post.likeCount || 0, // ← Use cached count from Post document
+      liked
     });
   } catch (error) {
     next(error);

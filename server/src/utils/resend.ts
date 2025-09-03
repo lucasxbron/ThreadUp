@@ -4,11 +4,12 @@ import config from '../config/config.js';
 const resend = new Resend(config.RESEND_API_KEY);
 
 export const sendVerificationEmail = async (email: string, verificationToken: string) => {
-  const verifyLink = `http://localhost:${config.PORT}/api/auth/verify-email?token=${verificationToken}`;
+  // const verifyLink = `http://localhost:${config.PORT}/api/auth/verify-email?token=${verificationToken}`;
+  const verifyLink = `http://localhost:3000/verify-email?token=${verificationToken}`;
   
   try {
     const { data, error } = await resend.emails.send({
-      from: 'ThreadUp <onboarding@resend.dev>',
+      from: 'ThreadUp <noreply@threadup.social>',
       to: [email],
       subject: 'Please verify your email address',
       html: `
