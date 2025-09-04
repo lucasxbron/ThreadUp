@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Comment } from '@/types/post.types';
-import { useAuth } from '@/contexts/AuthContext';
 import { apiClient } from '@/utils/api';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Textarea';
+import { Comment } from '@/types/post.types';
 
 interface CommentSectionProps {
   postId: string;
@@ -127,7 +127,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
       {/* Comments list */}
       {loading ? (
         <div className="flex justify-center py-4">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
         </div>
       ) : (
         <div className="space-y-4">
@@ -140,19 +140,19 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
               </div>
               
               <div className="flex-1 min-w-0">
-                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2">
+                <div className="bg-secondary rounded-lg px-3 py-2">
                   <div className="flex items-center justify-between mb-1">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    <p className="text-sm font-medium text-foreground">
                       {comment.authorId.username}
                     </p>
                     <div className="flex items-center space-x-2">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="text-xs text-muted-foreground">
                         {formatDate(comment.createdAt)}
                       </span>
                       {user?._id === comment.authorId._id && (
                         <button
                           onClick={() => handleDelete(comment._id)}
-                          className="text-gray-400 hover:text-red-600 dark:hover:text-red-500"
+                          className="text-muted-foreground hover:text-destructive"
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -161,7 +161,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                       )}
                     </div>
                   </div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                  <p className="text-sm text-foreground">
                     {comment.text}
                   </p>
                 </div>
@@ -170,7 +170,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
           ))}
           
           {comments.length === 0 && (
-            <p className="text-center text-gray-500 dark:text-gray-400 text-sm py-4">
+            <p className="text-center text-muted-foreground text-sm py-4">
               No comments yet. Be the first to comment!
             </p>
           )}

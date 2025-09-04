@@ -1,3 +1,4 @@
+// filepath: /home/lb/Documents/repos/ThreadUp/client/src/components/posts/PostCard.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -81,7 +82,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
   const canDelete = user?._id === post.authorId._id;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="bg-card rounded-lg shadow-sm border border-border overflow-hidden">
       {/* Post header */}
       <div className="p-4 flex items-center justify-between">
         <div className="flex items-center space-x-3">
@@ -91,10 +92,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
             </span>
           </div>
           <div>
-            <p className="font-medium text-gray-900 dark:text-white">
+            <p className="font-medium text-foreground">
               {post.authorId.username}
             </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               {formatDate(post.createdAt)}
             </p>
           </div>
@@ -106,7 +107,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
             size="sm"
             onClick={handleDelete}
             loading={deleteLoading}
-            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+            className="text-destructive hover:text-destructive hover:bg-destructive/10"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -117,7 +118,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
 
       {/* Post content */}
       <div className="px-4 pb-4">
-        <p className="text-gray-900 dark:text-white whitespace-pre-wrap">
+        <p className="text-foreground whitespace-pre-wrap">
           {post.text}
         </p>
       </div>
@@ -134,7 +135,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
       )}
 
       {/* Post actions */}
-      <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+      <div className="px-4 py-3 border-t border-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
             <button
@@ -143,7 +144,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
               className={`flex items-center space-x-2 transition-colors ${
                 liked 
                   ? 'text-red-600' 
-                  : 'text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-500'
+                  : 'text-muted-foreground hover:text-red-600'
               }`}
             >
               <svg 
@@ -159,14 +160,12 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
 
             <button
               onClick={() => setShowComments(!showComments)}
-              className="flex items-center space-x-2 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500 transition-colors"
+              className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
-              <span className="text-sm font-medium">
-                {showComments ? 'Hide' : 'Comment'}
-              </span>
+              <span className="text-sm font-medium">Comments</span>
             </button>
           </div>
         </div>
@@ -174,7 +173,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
 
       {/* Comments section */}
       {showComments && (
-        <div className="border-t border-gray-200 dark:border-gray-700">
+        <div className="border-t border-border">
           <CommentSection postId={post._id} />
         </div>
       )}
