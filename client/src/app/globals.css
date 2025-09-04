@@ -1,19 +1,143 @@
 @import "tailwindcss";
 
+/* Define CSS custom properties for light mode */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base colors - matching previous implementation */
+  --color-background: #ffffff;
+  --color-foreground: #171717;
+  
+  --color-card: #ffffff;
+  --color-card-foreground: #111827;
+  
+  --color-muted: #f9fafb;
+  --color-muted-foreground: #4b5563;
+  
+  --color-border: #e5e7eb;
+  
+  --color-input: #ffffff;
+  
+  --color-primary: #3b82f6; /* blue-500 */
+  --color-primary-600: #2563eb; /* blue-600 */
+  --color-primary-700: #1d4ed8; /* blue-700 */
+  --color-primary-foreground: #ffffff;
+  
+  --color-secondary: #f3f4f6;
+  --color-secondary-400: #e5e7eb; /* gray-200 */
+  --color-secondary-500: #d1d5db; /* gray-300 */
+  --color-secondary-foreground: #1f2937;
+  
+  --color-accent: #f3f4f6;
+  --color-accent-foreground: #1f2937;
+  
+  --color-destructive: #ef4444; /* red-500 */
+  --color-destructive-600: #dc2626; /* red-600 */
+  --color-destructive-700: #b91c1c; /* red-700 */
+  --color-destructive-foreground: #ffffff;
+  
+  --color-success: #22c55e;
+  --color-success-foreground: #ffffff;
+  
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #ffffff;
+  
+  --color-info: #3b82f6;
+  --color-info-foreground: #ffffff;
+  
+  /* Gray scale for light mode */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
 }
 
+/* Dark mode overrides */
 .dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+/* Deep blue theme based on requested colors */
+--color-background: #101828; /* Very dark blue-gray */
+  --color-foreground: #f1f5f9;
+  
+  --color-card: #1e2433; /* Slightly lighter blue-gray */
+  --color-card-foreground: #f1f5f9;
+  
+  --color-muted: #1e293b; /* Medium blue-gray */
+  --color-muted-foreground: #94a3b8; /* Light blue-gray */
+  
+  --color-border: #334155; /* Medium-light blue-gray border */
+  
+  --color-input: #1e2433;
+  
+  --color-primary: #1877F2; /* Facebook/Professional blue - trusted and recognizable */
+  --color-primary-600: #0c63d4; /* Darker blue for hover */
+  --color-primary-700: #0854b3; /* Even darker blue for active */
+  --color-primary-foreground: #ffffff; /* White text for better contrast */
+  
+  --color-secondary: #1e293b;
+  --color-secondary-400: #334155; /* slate-700 */
+  --color-secondary-500: #475569; /* slate-600 */
+  --color-secondary-foreground: #f1f5f9;
+  
+  --color-accent: #1c398e;
+  --color-accent-foreground: #f1f5f9;
+  
+  --color-destructive: #f43f5e; /* rose-500 - brighter than red for better visibility */
+  --color-destructive-600: #e11d48; /* rose-600 */
+  --color-destructive-700: #be123c; /* rose-700 */
+  --color-destructive-foreground: #ffffff;
+  
+  --color-success: #22c55e;
+  --color-success-foreground: #ffffff;
+  
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #ffffff;
+  
+  --color-info: #3b82f6;
+  --color-info-foreground: #ffffff;
+  
+  /* Gray scale for dark mode - fixed to prevent inversion */
+  --color-gray-50: #030712; /* Darkest */
+  --color-gray-100: #111827;
+  --color-gray-200: #1f2937;
+  --color-gray-300: #374151;
+  --color-gray-400: #4b5563;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #9ca3af;
+  --color-gray-700: #d1d5db;
+  --color-gray-800: #e5e7eb;
+  --color-gray-900: #f9fafb; /* Lightest */
 }
 
+/* Rest of your CSS remains the same */
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--color-foreground);
+  background: var(--color-background);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
+
+/* Apply requested gradient background in dark mode */
+.dark body {
+  background: linear-gradient(135deg, #101828 0%, #1c398e 50%, #101828 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Add subtle texture overlay */
+.dark body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 15% 50%, rgba(28, 57, 142, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 85% 30%, rgba(60, 90, 190, 0.05) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 @layer utilities {
@@ -22,199 +146,28 @@ body {
   }
 }
 
-/* FORCE light mode to be bright - override any dark defaults */
-:root .bg-gray-50 {
-  background-color: #f9fafb !important;
-}
-
-:root .bg-white {
-  background-color: #ffffff !important;
-}
-
-:root .text-gray-900 {
-  color: #111827 !important;
-}
-
-:root .text-gray-800 {
-  color: #1f2937 !important;
-}
-
-:root .text-gray-700 {
-  color: #374151 !important;
-}
-
-:root .text-gray-600 {
-  color: #4b5563 !important;
-}
-
-:root .border-gray-200 {
-  border-color: #e5e7eb !important;
-}
-
-/* ONLY dark mode overrides */
-.dark .bg-white {
-  background-color: rgb(17 24 39) !important;
-}
-
-.dark .text-gray-900 {
-  color: rgb(243 244 246) !important;
-}
-
-.dark .bg-gray-50 {
-  background-color: rgb(31 41 55) !important;
-}
-
-.dark .text-gray-700 {
-  color: rgb(209 213 219) !important;
-}
-
-.dark .bg-gray-100 {
-  background-color: rgb(31 41 55) !important;
-}
-
-.dark .text-gray-800 {
-  color: rgb(229 231 235) !important;
-}
-
-.dark .text-gray-600 {
-  color: rgb(156 163 175) !important;
-}
-
-.dark .border-gray-200 {
-  border-color: rgb(55 65 81) !important;
-}
-
-.dark .border-gray-700 {
-  border-color: rgb(55 65 81) !important;
-}
-
-.dark .bg-gray-800 {
-  background-color: rgb(17 24 39) !important;
-}
-
-.dark .bg-gray-900 {
-  background-color: rgb(3 7 18) !important;
-}
-
-.dark .text-white {
-  color: rgb(243 244 246) !important;
-}
-
-.dark .text-gray-300 {
-  color: rgb(209 213 219) !important;
-}
-
-.dark .text-gray-400 {
-  color: rgb(156 163 175) !important;
-}
-
-.dark .text-gray-500 {
-  color: rgb(107 114 128) !important;
-}
-
-.dark .border-gray-800 {
-  border-color: rgb(55 65 81) !important;
-}
-
-/* Dark mode colored elements */
-.dark .bg-red-50 {
-  background-color: rgba(239, 68, 68, 0.1) !important;
-}
-
-.dark .text-red-800 {
-  color: rgb(248 113 113) !important;
-}
-
-.dark .text-red-600 {
-  color: rgb(252 165 165) !important;
-}
-
-.dark .border-red-200 {
-  border-color: rgba(239, 68, 68, 0.3) !important;
-}
-
-.dark .bg-green-50 {
-  background-color: rgba(34, 197, 94, 0.1) !important;
-}
-
-.dark .text-green-800 {
-  color: rgb(74 222 128) !important;
-}
-
-.dark .text-green-600 {
-  color: rgb(134 239 172) !important;
-}
-
-.dark .border-green-200 {
-  border-color: rgba(34, 197, 94, 0.3) !important;
-}
-
-.dark .bg-blue-50 {
-  background-color: rgba(59, 130, 246, 0.1) !important;
-}
-
-.dark .text-blue-800 {
-  color: rgb(96 165 250) !important;
-}
-
-.dark .text-blue-600 {
-  color: rgb(147 197 253) !important;
-}
-
-.dark .border-blue-200 {
-  border-color: rgba(59, 130, 246, 0.3) !important;
-}
-
-.dark .bg-yellow-50 {
-  background-color: rgba(245, 158, 11, 0.1) !important;
-}
-
-.dark .text-yellow-800 {
-  color: rgb(252 211 77) !important;
-}
-
-.dark .text-yellow-700 {
-  color: rgb(253 224 71) !important;
-}
-
-.dark .border-yellow-200 {
-  border-color: rgba(245, 158, 11, 0.3) !important;
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(243 244 246);
-}
-
-.dark ::-webkit-scrollbar-track {
-  background: rgb(31 41 55);
+  background: var(--color-muted);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(209 213 219);
+  background: var(--color-muted-foreground);
   border-radius: 9999px;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: rgb(75 85 99);
-}
-
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(156 163 175);
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: rgb(107 114 128);
+  background: var(--color-border);
 }
 
 /* Loading animation */
 .spinner {
-  border: 2px solid #f3f3f3;
-  border-top: 2px solid #3498db;
+  border: 2px solid var(--color-muted);
+  border-top: 2px solid var(--color-primary);
   border-radius: 50%;
   width: 20px;
   height: 20px;
