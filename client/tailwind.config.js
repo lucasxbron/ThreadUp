@@ -8,13 +8,59 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
+        // Semantic colors
+        background: 'var(--color-background)',
+        foreground: 'var(--color-foreground)',
+        
+        card: 'var(--color-card)',
+        'card-foreground': 'var(--color-card-foreground)',
+        
+        muted: 'var(--color-muted)',
+        'muted-foreground': 'var(--color-muted-foreground)',
+        
+        border: 'var(--color-border)',
+        
+        input: 'var(--color-input)',
+        
         primary: {
-          50: '#eff6ff',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
+          DEFAULT: 'var(--color-primary)',
+          '600': 'var(--color-primary-600)',
+          '700': 'var(--color-primary-700)',
+          foreground: 'var(--color-primary-foreground)',
+        },
+        
+        secondary: {
+          DEFAULT: 'var(--color-secondary)',
+          '400': 'var(--color-secondary-400)',
+          '500': 'var(--color-secondary-500)',
+          foreground: 'var(--color-secondary-foreground)',
+        },
+        
+        accent: {
+          DEFAULT: 'var(--color-accent)',
+          foreground: 'var(--color-accent-foreground)',
+        },
+        
+        destructive: {
+          DEFAULT: 'var(--color-destructive)',
+          '600': 'var(--color-destructive-600)',
+          '700': 'var(--color-destructive-700)',
+          foreground: 'var(--color-destructive-foreground)',
+        },
+        
+        success: {
+          DEFAULT: 'var(--color-success)',
+          foreground: 'var(--color-success-foreground)',
+        },
+        
+        warning: {
+          DEFAULT: 'var(--color-warning)',
+          foreground: 'var(--color-warning-foreground)',
+        },
+        
+        info: {
+          DEFAULT: 'var(--color-info)',
+          foreground: 'var(--color-info-foreground)',
         },
       },
       animation: {
