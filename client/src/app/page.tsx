@@ -13,13 +13,13 @@ export default function HomePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-200">
         <Header />
         <div className="max-w-2xl mx-auto px-4 py-8">
           <div className="animate-pulse space-y-4">
-            <div className="h-32 bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
-            <div className="h-48 bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
-            <div className="h-48 bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
+            <div className="h-32 bg-gray-300 dark:bg-gray-400 rounded-lg"></div>
+            <div className="h-48 bg-gray-300 dark:bg-gray-400 rounded-lg"></div>
+            <div className="h-48 bg-gray-300 dark:bg-gray-400 rounded-lg"></div>
           </div>
         </div>
       </div>
@@ -29,7 +29,7 @@ export default function HomePage() {
   // Landing page for non-authenticated users
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-white dark:bg-black flex flex-col">
+      <div className="min-h-screen bg-background flex flex-col">
         <Header />
 
         {/* Main Content */}
@@ -42,23 +42,54 @@ export default function HomePage() {
                   {/* Realistic Phone Frame */}
                   <div className="mx-auto w-80 h-[600px] relative">
                     {/* Phone Body - Outer Frame */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-gray-800 via-gray-900 to-black rounded-[3rem] shadow-2xl">
+                    <div className="absolute inset-0 bg-[#1A1A1C] rounded-[3rem] shadow-[0_0_40px_rgba(0,0,0,0.4)] overflow-hidden">
+                      {/* Inner shadow effect - explicitly visible in both modes */}
+                      <div className="absolute inset-0 rounded-[3rem] overflow-hidden pointer-events-none">
+                        {/* Top highlight - creates edge definition */}
+                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-white/20"></div>
+
+                        {/* Left highlight */}
+                        <div className="absolute top-0 left-0 bottom-0 w-[2px] bg-white/15"></div>
+
+                        {/* Bottom shadow */}
+                        <div className="absolute bottom-0 left-8 right-8 h-[3px] bg-black/50"></div>
+
+                        {/* Right shadow */}
+                        <div className="absolute top-8 bottom-8 right-0 w-[2px] bg-black/40"></div>
+
+                        {/* Inner bevel effect */}
+                        <div className="absolute inset-[1px] rounded-[2.9rem] shadow-[inset_0_0_20px_5px_rgba(0,0,0,0.6),inset_0_1px_2px_rgba(255,255,255,0.2)]"></div>
+                      </div>
+                      {/* Light mode specific inner glow */}
+                      <div className="absolute inset-[3px] rounded-[2.8rem] bg-gradient-to-b from-[rgba(255,255,255,0.15)] to-transparent h-[30px] dark:hidden"></div>
+
+                      {/* Subtle metal band */}
+                      <div className="absolute inset-0 rounded-[3rem] border border-[#2A2A2C] opacity-50"></div>
+
+                      {/* Subtle shine effect */}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-black/0 via-white/5 to-white/10 rounded-[3rem]"></div>
+
                       {/* Screen Bezel */}
-                      <div className="absolute inset-2 bg-black rounded-[2.5rem] p-1">
+                      <div className="absolute inset-[3px] bg-black rounded-[2.8rem] overflow-hidden shadow-[inset_0_0_8px_rgba(0,0,0,0.5)]">
                         {/* Screen */}
-                        <div className="w-full h-full bg-white dark:bg-gray-900 rounded-[2rem] overflow-hidden relative">
-                          {/* Status Bar / Notch Area */}
-                          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl z-10 flex items-center justify-center">
-                            {/* Speaker/Camera */}
-                            <div className="w-16 h-1 bg-gray-700 rounded-full"></div>
+                        <div className="w-full h-full bg-white dark:bg-gray-100 rounded-[2.7rem] overflow-hidden relative">
+                          {/* Dynamic Island / Notch */}
+                          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[120px] h-[30px] bg-black rounded-b-[18px] z-10 flex items-center justify-center">
+                            {/* FaceID Sensors and Front Camera */}
+                            <div className="flex items-center space-x-3">
+                              <div className="w-[5px] h-[5px] bg-[#1a1a1a] rounded-full border border-[#333] opacity-70"></div>
+                              <div className="w-[8px] h-[8px] bg-[#252525] rounded-full border border-[#333] opacity-80"></div>
+                              <div className="w-[4px] h-[4px] bg-[#202020] rounded-full border border-[#333] opacity-60"></div>
+                            </div>
                           </div>
 
+                          {/* App content remains the same */}
                           {/* Status Bar */}
                           <div className="flex justify-between items-center px-6 pt-8 pb-2 text-xs">
-                            <div className="flex items-center space-x-1 text-gray-900 dark:text-white">
+                            <div className="flex items-center space-x-1 text-gray-900 dark:text-gray-900">
                               <span>9:41</span>
                             </div>
-                            <div className="flex items-center space-x-1 text-gray-900 dark:text-white">
+                            <div className="flex items-center space-x-1 text-gray-900 dark:text-gray-900">
                               <div className="flex space-x-0.5">
                                 <div className="w-1 h-1 bg-current rounded-full"></div>
                                 <div className="w-1 h-1 bg-current rounded-full"></div>
@@ -100,7 +131,7 @@ export default function HomePage() {
                           </div>
 
                           {/* Mock ThreadUp Interface */}
-                          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                          <div className="p-4 border-b border-gray-200 dark:border-gray-300">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center space-x-2">
                                 <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
@@ -108,7 +139,7 @@ export default function HomePage() {
                                     T
                                   </span>
                                 </div>
-                                <span className="font-bold text-gray-900 dark:text-white text-sm">
+                                <span className="font-bold text-gray-900 dark:text-gray-900 text-sm">
                                   ThreadUp
                                 </span>
                               </div>
@@ -118,32 +149,32 @@ export default function HomePage() {
                           {/* Mock Posts */}
                           <div className="p-4 space-y-4">
                             {/* Mock Post 1 */}
-                            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+                            <div className="bg-white dark:bg-gray-200 rounded-lg border border-gray-200 dark:border-gray-300 p-3">
                               <div className="flex items-center space-x-2 mb-2">
                                 <div className="w-6 h-6 bg-gradient-to-r from-pink-500 to-red-500 rounded-full"></div>
-                                <span className="text-xs font-semibold text-gray-900 dark:text-white">
+                                <span className="text-xs font-semibold text-gray-900 dark:text-gray-900">
                                   sarah_creates
                                 </span>
                               </div>
                               <div className="w-full h-24 bg-gradient-to-br from-pink-200 to-purple-200 dark:from-pink-900 dark:to-purple-900 rounded-lg mb-2"></div>
-                              <p className="text-xs text-gray-700 dark:text-gray-300">
+                              <p className="text-xs text-gray-700 dark:text-gray-700">
                                 Just finished my latest design project! 🎨
                               </p>
                             </div>
 
                             {/* Mock Post 2 */}
-                            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+                            <div className="bg-white dark:bg-gray-200 rounded-lg border border-gray-200 dark:border-gray-300 p-3">
                               <div className="flex items-center space-x-2 mb-2">
                                 <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-green-500 rounded-full"></div>
-                                <span className="text-xs font-semibold text-gray-900 dark:text-white">
+                                <span className="text-xs font-semibold text-gray-900 dark:text-gray-900">
                                   tech_explorer
                                 </span>
                               </div>
-                              <p className="text-xs text-gray-700 dark:text-gray-300 mb-2">
+                              <p className="text-xs text-gray-700 dark:text-gray-700 mb-2">
                                 Just upgraded my home network setup with Wi-Fi
                                 6! 🚀 The speed difference is amazing!
                               </p>
-                              <div className="flex items-center space-x-3 text-xs text-gray-500">
+                              <div className="flex items-center space-x-3 text-xs text-gray-500 dark:text-gray-500">
                                 <span>❤️ 24</span>
                                 <span>💬 8</span>
                               </div>
@@ -151,17 +182,17 @@ export default function HomePage() {
                           </div>
 
                           {/* Home Indicator (iPhone style) */}
-                          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gray-400 dark:bg-gray-600 rounded-full"></div>
+                          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gray-400 dark:bg-gray-500 rounded-full"></div>
                         </div>
                       </div>
 
                       {/* Side Buttons */}
                       {/* Volume Buttons */}
-                      <div className="absolute left-0 top-24 w-1 h-8 bg-gray-700 rounded-r-sm"></div>
-                      <div className="absolute left-0 top-36 w-1 h-8 bg-gray-700 rounded-r-sm"></div>
+                      <div className="absolute left-0 top-24 w-1 h-8 bg-gray-300 dark:bg-[#242426] rounded-r-sm opacity-80"></div>
+                      <div className="absolute left-0 top-36 w-1 h-8 bg-gray-500 dark:bg-[#242426] rounded-r-sm opacity-80"></div>
 
                       {/* Power Button */}
-                      <div className="absolute right-0 top-32 w-1 h-12 bg-gray-700 rounded-l-sm"></div>
+                      <div className="absolute right-0 top-32 w-1 h-12 bg-gray-500 dark:bg-[#242426] rounded-l-sm opacity-80"></div>
 
                       {/* Reflection/Gloss Effect */}
                       <div className="absolute inset-2 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-[2.5rem] pointer-events-none"></div>
@@ -176,42 +207,43 @@ export default function HomePage() {
                   <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <span className="text-white font-bold text-2xl">T</span>
                   </div>
-                  <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
+                  <h1 className="text-4xl font-bold text-foreground mb-4 tracking-tight">
                     ThreadUp
                   </h1>
-                  <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                  <p className="text-lg text-muted-foreground mb-8">
                     Connect with friends and the world around you on ThreadUp.
                   </p>
                 </div>
 
                 {/* Sign Up Form */}
-                <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg p-6 mb-4">
+                <div className="bg-card border border-border rounded-lg p-6 mb-4">
                   <div className="space-y-4">
                     <Link href="/register" className="block cursor-pointer">
-                      <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 cursor-pointer">
+                      <Button
+                        variant="primary"
+                        size="lg"
+                        className="w-full font-semibold cursor-pointer"
+                      >
                         Sign up
                       </Button>
                     </Link>
 
-                    <div className="relative">
-                      <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t border-gray-300 dark:border-gray-600" />
-                      </div>
-                      <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-white dark:bg-gray-900 px-2 text-gray-500">
-                          Or
-                        </span>
-                      </div>
+                    <div className="flex items-center my-6 mx-1">
+                      <div className="flex-grow h-0.5 bg-gray-300 dark:bg-slate-600"></div>
+                      <span className="mx-2 text-xs uppercase text-muted-foreground bg-card px-2">
+                        Or
+                      </span>
+                      <div className="flex-grow h-0.5 bg-gray-300 dark:bg-slate-600"></div>
                     </div>
 
                     <div className="text-center">
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      <p className="text-sm text-muted-foreground mb-2">
                         Already have an account?
                       </p>
                       <Link href="/login" className="cursor-pointer">
                         <Button
-                          variant="ghost"
-                          className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 font-semibold cursor-pointer"
+                          variant="secondary"
+                          className="font-semibold cursor-pointer"
                         >
                           Log in
                         </Button>
@@ -225,19 +257,17 @@ export default function HomePage() {
         </div>
 
         {/* Footer */}
-        <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-12">
+        <footer className="bg-muted border-t border-border py-12">
           <div className="max-w-6xl mx-auto px-4">
             {/* Responsive Grid: 4 cols -> 2 cols -> 1 col */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 text-center sm:text-left">
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
-                  Company
-                </h3>
-                <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <h3 className="font-semibold text-foreground mb-4">Company</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
                   <li>
                     <Link
                       href="/about"
-                      className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-pointer"
                     >
                       About
                     </Link>
@@ -245,7 +275,7 @@ export default function HomePage() {
                   <li>
                     <Link
                       href="/careers"
-                      className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-pointer"
                     >
                       Careers
                     </Link>
@@ -253,7 +283,7 @@ export default function HomePage() {
                   <li>
                     <Link
                       href="/press"
-                      className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-pointer"
                     >
                       Press
                     </Link>
@@ -261,7 +291,7 @@ export default function HomePage() {
                   <li>
                     <Link
                       href="/blog"
-                      className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-pointer"
                     >
                       Blog
                     </Link>
@@ -270,14 +300,14 @@ export default function HomePage() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+                <h3 className="font-semibold text-foreground mb-4">
                   Community
                 </h3>
-                <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <ul className="space-y-2 text-sm text-muted-foreground">
                   <li>
                     <Link
                       href="/guidelines"
-                      className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-pointer"
                     >
                       Community Guidelines
                     </Link>
@@ -285,7 +315,7 @@ export default function HomePage() {
                   <li>
                     <Link
                       href="/safety"
-                      className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-pointer"
                     >
                       Safety
                     </Link>
@@ -293,7 +323,7 @@ export default function HomePage() {
                   <li>
                     <Link
                       href="/help"
-                      className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-pointer"
                     >
                       Help Center
                     </Link>
@@ -301,7 +331,7 @@ export default function HomePage() {
                   <li>
                     <Link
                       href="/contact"
-                      className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-pointer"
                     >
                       Contact Us
                     </Link>
@@ -310,14 +340,12 @@ export default function HomePage() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
-                  Legal
-                </h3>
-                <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <h3 className="font-semibold text-foreground mb-4">Legal</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
                   <li>
                     <Link
                       href="/privacy"
-                      className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-pointer"
                     >
                       Privacy Policy
                     </Link>
@@ -325,7 +353,7 @@ export default function HomePage() {
                   <li>
                     <Link
                       href="/terms"
-                      className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-pointer"
                     >
                       Terms of Service
                     </Link>
@@ -333,7 +361,7 @@ export default function HomePage() {
                   <li>
                     <Link
                       href="/cookies"
-                      className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-pointer"
                     >
                       Cookie Policy
                     </Link>
@@ -341,7 +369,7 @@ export default function HomePage() {
                   <li>
                     <Link
                       href="/dmca"
-                      className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-pointer"
                     >
                       DMCA
                     </Link>
@@ -350,14 +378,12 @@ export default function HomePage() {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
-                  Connect
-                </h3>
+                <h3 className="font-semibold text-foreground mb-4">Connect</h3>
                 <div className="flex justify-center sm:justify-start space-x-4 mb-4">
                   {/* X (Twitter) */}
                   <Link
                     href="#"
-                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer"
+                    className="text-muted-foreground hover:text-foreground cursor-pointer"
                   >
                     <span className="sr-only">X</span>
                     <svg
@@ -372,7 +398,7 @@ export default function HomePage() {
                   {/* Instagram */}
                   <Link
                     href="#"
-                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer"
+                    className="text-muted-foreground hover:text-foreground cursor-pointer"
                   >
                     <span className="sr-only">Instagram</span>
                     <svg
@@ -391,7 +417,7 @@ export default function HomePage() {
                   {/* YouTube */}
                   <Link
                     href="#"
-                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer"
+                    className="text-muted-foreground hover:text-foreground cursor-pointer"
                   >
                     <span className="sr-only">YouTube</span>
                     <svg
@@ -410,7 +436,7 @@ export default function HomePage() {
                   {/* Facebook */}
                   <Link
                     href="#"
-                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer"
+                    className="text-muted-foreground hover:text-foreground cursor-pointer"
                   >
                     <span className="sr-only">Facebook</span>
                     <svg
@@ -426,21 +452,21 @@ export default function HomePage() {
                     </svg>
                   </Link>
                 </div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   Follow us for updates and news
                 </p>
               </div>
             </div>
 
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
+            <div className="border-t border-border pt-8">
               <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
+                <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                   <span>© 2025 ThreadUp</span>
                   <span>•</span>
                   <span>Made with ❤️</span>
                 </div>
                 <div className="flex items-center space-x-4 text-sm">
-                  <select className="bg-transparent border-none text-gray-500 dark:text-gray-400 cursor-pointer">
+                  <select className="bg-transparent border-none text-muted-foreground cursor-pointer">
                     <option>English</option>
                     <option>Español</option>
                     <option>Français</option>
@@ -458,7 +484,7 @@ export default function HomePage() {
   // Authenticated user's feed
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen bg-background">
         <Header />
         <main className="max-w-2xl mx-auto px-4 py-8">
           <PostFeed />
