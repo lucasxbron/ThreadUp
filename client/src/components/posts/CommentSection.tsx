@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { apiClient } from '@/utils/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/Button';
-import { Textarea } from '@/components/ui/Textarea';
 import { Comment } from '@/types/post.types';
 
 interface CommentSectionProps {
@@ -81,45 +80,56 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
     const days = Math.floor(hours / 24);
     
     if (days > 0) {
-      return `${days}d ago`;
+      return `${days}d`;
     } else if (hours > 0) {
-      return `${hours}h ago`;
+      return `${hours}h`;
     } else if (minutes > 0) {
-      return `${minutes}m ago`;
+      return `${minutes}m`;
     } else {
-      return 'Just now';
+      return 'now';
     }
   };
 
   return (
     <div className="p-4 space-y-4">
       {/* Comment form */}
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <div className="flex space-x-3">
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-            <span className="text-white text-xs font-semibold">
-              {user?.username?.charAt(0).toUpperCase()}
-            </span>
-          </div>
-          <div className="flex-1">
-            <Textarea
-              placeholder="Write a comment..."
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              rows={2}
-              className="text-sm"
-            />
+      <form onSubmit={handleSubmit} className="flex items-center space-x-3">
+        <div className="relative flex-shrink-0">
+          <div className="w-8 h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
+            <div 
+              className="w-full h-full rounded-full flex items-center justify-center"
+              style={{ backgroundColor: 'var(--color-card, #ffffff)' }}
+            >
+              <span 
+                className="text-xs font-semibold"
+                style={{ color: 'var(--color-card-foreground, #0f172a)' }}
+              >
+                {user?.username?.charAt(0).toUpperCase()}
+              </span>
+            </div>
           </div>
         </div>
         
-        <div className="flex justify-end">
+        <div className="flex-1 flex items-center space-x-2">
+          <input
+            type="text"
+            placeholder="Add a comment..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            className="flex-1 bg-transparent border-0 focus:ring-0 focus:outline-none text-sm placeholder-gray-500 dark:placeholder-gray-400"
+            style={{ color: 'var(--color-card-foreground, #0f172a)' }}
+            maxLength={200}
+          />
           <Button
             type="submit"
             size="sm"
+            variant="ghost"
             disabled={!newComment.trim() || submitting}
             loading={submitting}
+            className="font-semibold px-2"
+            style={{ color: 'var(--color-primary, #3b82f6)' }}
           >
-            Comment
+            Post
           </Button>
         </div>
       </form>
@@ -127,50 +137,81 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
       {/* Comments list */}
       {loading ? (
         <div className="flex justify-center py-4">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+          <div 
+            className="animate-spin rounded-full h-5 w-5 border-2 border-t-transparent"
+            style={{ borderColor: 'var(--color-muted-foreground, #64748b)' }}
+          ></div>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {comments.map((comment) => (
-            <div key={comment._id} className="flex space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-white text-xs font-semibold">
-                  {comment.authorId.username.charAt(0).toUpperCase()}
-                </span>
+            <div key={comment._id} className="flex items-start space-x-3 group">
+              <div className="relative flex-shrink-0">
+                <div className="w-8 h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
+                  <div 
+                    className="w-full h-full rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: 'var(--color-card, #ffffff)' }}
+                  >
+                    <span 
+                      className="text-xs font-semibold"
+                      style={{ color: 'var(--color-card-foreground, #0f172a)' }}
+                    >
+                      {comment.authorId.username.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                </div>
               </div>
               
               <div className="flex-1 min-w-0">
-                <div className="bg-secondary rounded-lg px-3 py-2">
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-sm font-medium text-foreground">
-                      {comment.authorId.username}
-                    </p>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xs text-muted-foreground">
-                        {formatDate(comment.createdAt)}
-                      </span>
-                      {user?._id === comment.authorId._id && (
-                        <button
-                          onClick={() => handleDelete(comment._id)}
-                          className="text-muted-foreground hover:text-destructive"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                  <p className="text-sm text-foreground">
+                <div className="text-sm">
+                  <span 
+                    className="font-semibold mr-2"
+                    style={{ color: 'var(--color-card-foreground, #0f172a)' }}
+                  >
+                    {comment.authorId.username}
+                  </span>
+                  <span style={{ color: 'var(--color-card-foreground, #0f172a)' }}>
                     {comment.text}
-                  </p>
+                  </span>
+                </div>
+                <div className="flex items-center space-x-4 mt-1">
+                  <span 
+                    className="text-xs"
+                    style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                  >
+                    {formatDate(comment.createdAt)}
+                  </span>
+                  <button 
+                    className="text-xs font-semibold hover:opacity-75 transition-opacity duration-200"
+                    style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                  >
+                    Like
+                  </button>
+                  <button 
+                    className="text-xs font-semibold hover:opacity-75 transition-opacity duration-200"
+                    style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                  >
+                    Reply
+                  </button>
+                  {user?._id === comment.authorId._id && (
+                    <button
+                      onClick={() => handleDelete(comment._id)}
+                      className="text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:text-red-600"
+                      style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
           ))}
           
           {comments.length === 0 && (
-            <p className="text-center text-muted-foreground text-sm py-4">
+            <p 
+              className="text-center text-sm py-4"
+              style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+            >
               No comments yet. Be the first to comment!
             </p>
           )}
