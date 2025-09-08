@@ -9,6 +9,7 @@ import { NoSSR } from "@/components/ui/NoSSR";
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const { theme } = useTheme(); // Get current theme from context
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -97,37 +98,31 @@ export const Header: React.FC = () => {
 
   // Get theme-aware background colors
   const getHeaderBackground = () => {
-    if (typeof window !== 'undefined') {
-      const isDark = document.documentElement.classList.contains('dark');
-      
-      if (isScrolled) {
-        return isDark 
-          ? 'rgba(30, 41, 59, 0.8)' // Dark mode scrolled - semi-transparent dark
-          : 'rgba(255, 255, 255, 0.8)'; // Light mode scrolled - semi-transparent white
-      } else {
-        return isDark 
-          ? '#1e293b' // Dark mode default - solid dark (your --color-card value)
-          : '#ffffff'; // Light mode default - solid white
-      }
+    const isDark = theme === 'dark';
+    
+    if (isScrolled) {
+      return isDark 
+        ? 'rgba(30, 36, 51, 0.8)' // Dark mode scrolled - semi-transparent dark
+        : 'rgba(255, 255, 255, 0.8)'; // Light mode scrolled - semi-transparent white
+    } else {
+      return isDark 
+        ? '#1e2433' // Dark mode default - solid dark
+        : '#ffffff'; // Light mode default - solid white
     }
-    return '#ffffff'; // Fallback
   };
 
   const getHeaderBorderColor = () => {
-    if (typeof window !== 'undefined') {
-      const isDark = document.documentElement.classList.contains('dark');
-      
-      if (isScrolled) {
-        return isDark 
-          ? 'rgba(71, 85, 105, 0.5)' // Dark mode scrolled border
-          : 'rgba(226, 232, 240, 0.5)'; // Light mode scrolled border
-      } else {
-        return isDark 
-          ? '#475569' // Dark mode default border (your --color-border value)
-          : '#e2e8f0'; // Light mode default border
-      }
+    const isDark = theme === 'dark';
+    
+    if (isScrolled) {
+      return isDark 
+        ? 'rgba(51, 65, 85, 0.5)' // Dark mode scrolled border
+        : 'rgba(226, 232, 240, 0.5)'; // Light mode scrolled border
+    } else {
+      return isDark 
+        ? '#334155' // Dark mode default border
+        : '#e2e8f0'; // Light mode default border
     }
-    return '#e2e8f0'; // Fallback
   };
 
   return (
