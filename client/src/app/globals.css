@@ -2,31 +2,31 @@
 
 /* Define CSS custom properties for light mode */
 :root {
-  /* Base colors */
-  --color-background: #ffffff;
+  /* Base colors - Updated for off-white background */
+  --color-background: #f8fafc; /* Light gray background instead of pure white */
   --color-foreground: #171717;
   
-  --color-card: #ffffff;
+  --color-card: #ffffff; /* Pure white for cards */
   --color-card-foreground: #111827;
   
-  --color-muted: #f9fafb;
+  --color-muted: #f1f5f9; /* Slightly darker gray for muted areas */
   --color-muted-foreground: #4b5563;
   
-  --color-border: #e5e7eb;
+  --color-border: #e2e8f0; /* Softer border color */
   
-  --color-input: #ffffff;
+  --color-input: #ffffff; /* Pure white for inputs */
   
   --color-primary: #3b82f6; /* blue-500 */
   --color-primary-600: #2563eb; /* blue-600 */
   --color-primary-700: #1d4ed8; /* blue-700 */
   --color-primary-foreground: #ffffff;
   
-  --color-secondary: #f3f4f6;
-  --color-secondary-400: #e5e7eb; /* gray-200 */
-  --color-secondary-500: #d1d5db; /* gray-300 */
+  --color-secondary: #f1f5f9; /* Light gray for secondary elements */
+  --color-secondary-400: #e2e8f0; /* slate-200 */
+  --color-secondary-500: #cbd5e1; /* slate-300 */
   --color-secondary-foreground: #1f2937;
   
-  --color-accent: #f3f4f6;
+  --color-accent: #f1f5f9;
   --color-accent-foreground: #1f2937;
   
   --color-destructive: #ef4444; /* red-500 */
@@ -44,16 +44,16 @@
   --color-info-foreground: #ffffff;
   
   /* Gray scale for light mode */
-  --color-gray-50: #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-200: #e5e7eb;
-  --color-gray-300: #d1d5db;
-  --color-gray-400: #9ca3af;
-  --color-gray-500: #6b7280;
-  --color-gray-600: #4b5563;
-  --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
-  --color-gray-900: #111827;
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-200: #e2e8f0;
+  --color-gray-300: #cbd5e1;
+  --color-gray-400: #94a3b8;
+  --color-gray-500: #64748b;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1e293b;
+  --color-gray-900: #0f172a;
 }
 
 /* Dark mode overrides */
@@ -181,4 +181,37 @@ body {
 /* Smooth transitions */
 * {
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+@keyframes fadeIn {
+  0% { 
+    opacity: 0; 
+    transform: translateY(-10px) scale(0.95); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+/* Enhanced backdrop blur support */
+@supports (backdrop-filter: blur(10px)) {
+  .backdrop-blur-lg {
+    backdrop-filter: blur(16px);
+  }
+}
+
+/* Fallback for browsers without backdrop-filter support */
+@supports not (backdrop-filter: blur(10px)) {
+  .backdrop-blur-lg {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .dark .backdrop-blur-lg {
+    background-color: rgba(17, 24, 39, 0.9);
+  }
 }
