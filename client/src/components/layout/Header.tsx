@@ -119,7 +119,7 @@ export const Header: React.FC = () => {
               <div className="flex items-center space-x-2">
                 <Link href="/login" className="cursor-pointer">
                   <Button
-                    variant="secondary" // Changed from ghost to secondary
+                    variant="secondary"
                     className="cursor-pointer"
                   >
                     Sign In
@@ -127,7 +127,7 @@ export const Header: React.FC = () => {
                 </Link>
                 <Link href="/register" className="cursor-pointer">
                   <Button
-                    variant="primary" // Explicitly set variant
+                    variant="primary"
                     className="cursor-pointer"
                   >
                     Get Started

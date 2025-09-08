@@ -1,4 +1,3 @@
-// filepath: /home/lb/Documents/repos/ThreadUp/client/src/components/posts/PostCard.tsx
 'use client';
 
 import React, { useState } from 'react';

@@ -2,7 +2,7 @@
 
 /* Define CSS custom properties for light mode */
 :root {
-  /* Base colors - matching previous implementation */
+  /* Base colors */
   --color-background: #ffffff;
   --color-foreground: #171717;
   
@@ -58,7 +58,7 @@
 
 /* Dark mode overrides */
 .dark {
-/* Deep blue theme based on requested colors */
+/* Deep blue theme */
 --color-background: #101828; /* Very dark blue-gray */
   --color-foreground: #f1f5f9;
   
@@ -72,7 +72,7 @@
   
   --color-input: #1e2433;
   
-  --color-primary: #1877F2; /* Facebook/Professional blue - trusted and recognizable */
+  --color-primary: #1877F2; /* Professional blue */
   --color-primary-600: #0c63d4; /* Darker blue for hover */
   --color-primary-700: #0854b3; /* Even darker blue for active */
   --color-primary-foreground: #ffffff; /* White text for better contrast */
@@ -99,7 +99,7 @@
   --color-info: #3b82f6;
   --color-info-foreground: #ffffff;
   
-  /* Gray scale for dark mode - fixed to prevent inversion */
+  /* Gray scale for dark mode */
   --color-gray-50: #030712; /* Darkest */
   --color-gray-100: #111827;
   --color-gray-200: #1f2937;
@@ -112,14 +112,13 @@
   --color-gray-900: #f9fafb; /* Lightest */
 }
 
-/* Rest of your CSS remains the same */
 body {
   color: var(--color-foreground);
   background: var(--color-background);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
 }
 
-/* Apply requested gradient background in dark mode */
+/* Apply gradient background in dark mode */
 .dark body {
   background: linear-gradient(135deg, #101828 0%, #1c398e 50%, #101828 100%);
   background-attachment: fixed;
@@ -127,7 +126,7 @@ body {
   position: relative;
 }
 
-/* Add subtle texture overlay */
+/* Subtle texture overlay */
 .dark body::before {
   content: "";
   position: fixed;

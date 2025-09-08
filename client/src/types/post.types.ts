@@ -8,7 +8,7 @@ export interface Post {
   _id: string;
   text: string;
   imageUrl?: string;
-  authorId: User; // ← This should be a User object, not just string
+  authorId: User;
   createdAt: string;
   updatedAt: string;
   liked?: boolean;
@@ -18,7 +18,7 @@ export interface Post {
 export interface Comment {
   _id: string;
   text: string;
-  authorId: User; // ← This should be a User object, not just string
+  authorId: User;
   postId: string;
   createdAt: string;
   updatedAt: string;
