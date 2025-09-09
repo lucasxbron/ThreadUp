@@ -9,7 +9,7 @@ import { NoSSR } from "@/components/ui/NoSSR";
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
-  const { theme } = useTheme(); // Get current theme from context
+  const { theme } = useTheme();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -65,7 +65,7 @@ export const Header: React.FC = () => {
       >
         {theme === "light" ? (
           <svg
-            className="w-5 h-5"
+            className="w-4 h-4 sm:w-5 sm:h-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -79,7 +79,7 @@ export const Header: React.FC = () => {
           </svg>
         ) : (
           <svg
-            className="w-5 h-5"
+            className="w-4 h-4 sm:w-5 sm:h-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -102,12 +102,12 @@ export const Header: React.FC = () => {
     
     if (isScrolled) {
       return isDark 
-        ? 'rgba(30, 36, 51, 0.8)' // Dark mode scrolled - semi-transparent dark
-        : 'rgba(255, 255, 255, 0.8)'; // Light mode scrolled - semi-transparent white
+        ? 'rgba(30, 36, 51, 0.8)' 
+        : 'rgba(255, 255, 255, 0.8)';
     } else {
       return isDark 
-        ? '#1e2433' // Dark mode default - solid dark
-        : '#ffffff'; // Light mode default - solid white
+        ? '#1e2433' 
+        : '#ffffff';
     }
   };
 
@@ -116,18 +116,18 @@ export const Header: React.FC = () => {
     
     if (isScrolled) {
       return isDark 
-        ? 'rgba(51, 65, 85, 0.5)' // Dark mode scrolled border
-        : 'rgba(226, 232, 240, 0.5)'; // Light mode scrolled border
+        ? 'rgba(51, 65, 85, 0.5)' 
+        : 'rgba(226, 232, 240, 0.5)';
     } else {
       return isDark 
-        ? '#334155' // Dark mode default border
-        : '#e2e8f0'; // Light mode default border
+        ? '#334155' 
+        : '#e2e8f0';
     }
   };
 
   return (
     <header 
-      className="sticky top-0 z-50 transition-all duration-300 border-b"
+      className="sticky top-0 z-[100] transition-all duration-300 border-b"
       style={{
         backgroundColor: getHeaderBackground(),
         backdropFilter: isScrolled ? 'blur(16px)' : 'none',
@@ -137,19 +137,20 @@ export const Header: React.FC = () => {
           : '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
       }}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+      {/* container */}
+      <div className="w-full px-3 sm:px-4 md:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link
               href="/"
-              className="flex items-center space-x-2 cursor-pointer hover:opacity-90 transition-opacity duration-200"
+              className="flex items-center space-x-1.5 sm:space-x-2 cursor-pointer hover:opacity-90 transition-opacity duration-200"
             >
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-lg">T</span>
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
+                <span className="text-white font-bold text-base sm:text-lg">T</span>
               </div>
               <span 
-                className="text-xl font-bold"
+                className="text-lg sm:text-xl font-bold hidden sm:block"
                 style={{ color: 'var(--color-foreground, #0f172a)' }}
               >
                 ThreadUp
@@ -158,7 +159,7 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <NoSSR>
               <ThemeToggle />
             </NoSSR>
@@ -167,7 +168,7 @@ export const Header: React.FC = () => {
               <div className="relative" data-dropdown>
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center space-x-2 p-2 rounded-lg transition-all duration-200 cursor-pointer hover:scale-105 transform"
+                  className="flex items-center space-x-1 sm:space-x-2 p-1.5 sm:p-2 rounded-lg transition-all duration-200 cursor-pointer hover:scale-105 transform"
                   style={{ 
                     color: 'var(--color-muted-foreground, #64748b)',
                     backgroundColor: dropdownOpen ? 'var(--color-secondary, #f1f5f9)' : 'transparent'
@@ -185,19 +186,19 @@ export const Header: React.FC = () => {
                     }
                   }}
                 >
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
-                    <span className="text-white text-sm font-semibold">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
+                    <span className="text-white text-xs sm:text-sm font-semibold">
                       {user?.username?.charAt(0).toUpperCase()}
                     </span>
                   </div>
                   <span 
-                    className="text-sm font-medium hidden sm:block"
+                    className="text-sm font-medium hidden md:block"
                     style={{ color: 'inherit' }}
                   >
                     {user?.username}
                   </span>
                   <svg 
-                    className={`w-4 h-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} 
+                    className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} 
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
@@ -207,34 +208,35 @@ export const Header: React.FC = () => {
                 </button>
 
                 {dropdownOpen && (
+                  /* Dropdown menu */
                   <div 
-                    className="absolute right-0 mt-2 w-56 rounded-xl shadow-lg border py-2 z-50 animate-fade-in"
+                    className="fixed md:absolute top-16 sm:top-18 md:top-auto md:right-0 md:mt-3 left-4 right-4 md:left-auto md:w-64 rounded-xl shadow-lg border py-2 z-[110] animate-fade-in"
                     style={{
                       backgroundColor: 'var(--color-card, #ffffff)',
                       borderColor: 'var(--color-border, #e2e8f0)',
-                      boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+                      boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
                     }}
                   >
                     {/* User Info Header */}
                     <div 
-                      className="px-4 py-3 border-b"
+                      className="px-4 py-4 border-b"
                       style={{ borderColor: 'var(--color-border, #e2e8f0)' }}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
-                          <span className="text-white text-sm font-semibold">
+                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
+                          <span className="text-white text-lg font-semibold">
                             {user?.username?.charAt(0).toUpperCase()}
                           </span>
                         </div>
                         <div className="flex-1 min-w-0">
                           <p 
-                            className="text-sm font-semibold truncate"
+                            className="text-base font-semibold truncate"
                             style={{ color: 'var(--color-foreground, #0f172a)' }}
                           >
                             {user?.username}
                           </p>
                           <p 
-                            className="text-xs truncate"
+                            className="text-sm truncate"
                             style={{ color: 'var(--color-muted-foreground, #64748b)' }}
                           >
                             {user?.email}
@@ -244,10 +246,10 @@ export const Header: React.FC = () => {
                     </div>
 
                     {/* Menu Items */}
-                    <div className="py-1">
+                    <div className="py-2">
                       <Link
                         href="/profile"
-                        className="flex items-center px-4 py-2 text-sm transition-colors duration-200 cursor-pointer"
+                        className="flex items-center px-4 py-4 text-base md:text-sm transition-colors duration-200 cursor-pointer"
                         style={{ color: 'var(--color-muted-foreground, #64748b)' }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.backgroundColor = 'var(--color-secondary, #f1f5f9)';
@@ -259,7 +261,7 @@ export const Header: React.FC = () => {
                         }}
                         onClick={() => setDropdownOpen(false)}
                       >
-                        <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 md:w-4 md:h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                         Profile
@@ -267,7 +269,7 @@ export const Header: React.FC = () => {
 
                       <Link
                         href="/settings"
-                        className="flex items-center px-4 py-2 text-sm transition-colors duration-200 cursor-pointer"
+                        className="flex items-center px-4 py-4 text-base md:text-sm transition-colors duration-200 cursor-pointer"
                         style={{ color: 'var(--color-muted-foreground, #64748b)' }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.backgroundColor = 'var(--color-secondary, #f1f5f9)';
@@ -279,8 +281,8 @@ export const Header: React.FC = () => {
                         }}
                         onClick={() => setDropdownOpen(false)}
                       >
-                        <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <svg className="w-5 h-5 md:w-4 md:h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.5 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                         Settings
@@ -288,7 +290,7 @@ export const Header: React.FC = () => {
 
                       <Link
                         href="/help"
-                        className="flex items-center px-4 py-2 text-sm transition-colors duration-200 cursor-pointer"
+                        className="flex items-center px-4 py-4 text-base md:text-sm transition-colors duration-200 cursor-pointer"
                         style={{ color: 'var(--color-muted-foreground, #64748b)' }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.backgroundColor = 'var(--color-secondary, #f1f5f9)';
@@ -300,7 +302,7 @@ export const Header: React.FC = () => {
                         }}
                         onClick={() => setDropdownOpen(false)}
                       >
-                        <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 md:w-4 md:h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Help & Support
@@ -308,13 +310,13 @@ export const Header: React.FC = () => {
 
                       {/* Divider */}
                       <div 
-                        className="my-1 border-t"
+                        className="my-2 mx-4 border-t"
                         style={{ borderColor: 'var(--color-border, #e2e8f0)' }}
                       />
 
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center px-4 py-2 text-sm transition-colors duration-200 cursor-pointer"
+                        className="w-full flex items-center px-4 py-4 text-base md:text-sm transition-colors duration-200 cursor-pointer"
                         style={{ color: 'var(--color-destructive, #ef4444)' }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
@@ -323,7 +325,7 @@ export const Header: React.FC = () => {
                           e.currentTarget.style.backgroundColor = 'transparent';
                         }}
                       >
-                        <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 md:w-4 md:h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
                         Sign Out
@@ -333,11 +335,12 @@ export const Header: React.FC = () => {
                 )}
               </div>
             ) : (
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5 sm:space-x-2">
                 <Link href="/login" className="cursor-pointer">
                   <Button
                     variant="secondary"
-                    className="cursor-pointer"
+                    size="sm"
+                    className="cursor-pointer text-xs sm:text-sm px-2 sm:px-3 py-1.5 sm:py-2"
                   >
                     Sign In
                   </Button>
@@ -345,7 +348,8 @@ export const Header: React.FC = () => {
                 <Link href="/register" className="cursor-pointer">
                   <Button
                     variant="primary"
-                    className="cursor-pointer"
+                    size="sm"
+                    className="cursor-pointer text-xs sm:text-sm px-2 sm:px-3 py-1.5 sm:py-2"
                   >
                     Get Started
                   </Button>
