@@ -91,11 +91,11 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
   };
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
       {/* Comment form */}
-      <form onSubmit={handleSubmit} className="flex items-center space-x-3">
+      <form onSubmit={handleSubmit} className="flex items-center space-x-2 sm:space-x-3">
         <div className="relative flex-shrink-0">
-          <div className="w-8 h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
+          <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
             <div 
               className="w-full h-full rounded-full flex items-center justify-center"
               style={{ backgroundColor: 'var(--color-card, #ffffff)' }}
@@ -116,7 +116,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
             placeholder="Add a comment..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="flex-1 bg-transparent border-0 focus:ring-0 focus:outline-none text-sm placeholder-gray-500 dark:placeholder-gray-400"
+            className="flex-1 bg-transparent border-0 focus:ring-0 focus:outline-none text-xs sm:text-sm placeholder-gray-500 dark:placeholder-gray-400"
             style={{ color: 'var(--color-card-foreground, #0f172a)' }}
             maxLength={200}
           />
@@ -126,7 +126,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
             variant="ghost"
             disabled={!newComment.trim() || submitting}
             loading={submitting}
-            className="font-semibold px-2"
+            className="font-semibold px-1 sm:px-2 text-xs sm:text-sm"
             style={{ color: 'var(--color-primary, #3b82f6)' }}
           >
             Post
@@ -134,20 +134,20 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
         </div>
       </form>
 
-      {/* Comments list */}
+      {/* Comments list*/}
       {loading ? (
-        <div className="flex justify-center py-4">
+        <div className="flex justify-center py-3 sm:py-4">
           <div 
-            className="animate-spin rounded-full h-5 w-5 border-2 border-t-transparent"
+            className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-2 border-t-transparent"
             style={{ borderColor: 'var(--color-muted-foreground, #64748b)' }}
           ></div>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           {comments.map((comment) => (
-            <div key={comment._id} className="flex items-start space-x-3 group">
+            <div key={comment._id} className="flex items-start space-x-2 sm:space-x-3 group">
               <div className="relative flex-shrink-0">
-                <div className="w-8 h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
                   <div 
                     className="w-full h-full rounded-full flex items-center justify-center"
                     style={{ backgroundColor: 'var(--color-card, #ffffff)' }}
@@ -163,18 +163,21 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
               </div>
               
               <div className="flex-1 min-w-0">
-                <div className="text-sm">
+                <div className="text-xs sm:text-sm">
                   <span 
-                    className="font-semibold mr-2"
+                    className="font-semibold mr-1 sm:mr-2"
                     style={{ color: 'var(--color-card-foreground, #0f172a)' }}
                   >
                     {comment.authorId.username}
                   </span>
-                  <span style={{ color: 'var(--color-card-foreground, #0f172a)' }}>
+                  <span 
+                    className="break-words"
+                    style={{ color: 'var(--color-card-foreground, #0f172a)' }}
+                  >
                     {comment.text}
                   </span>
                 </div>
-                <div className="flex items-center space-x-4 mt-1">
+                <div className="flex items-center space-x-2 sm:space-x-4 mt-1">
                   <span 
                     className="text-xs"
                     style={{ color: 'var(--color-muted-foreground, #64748b)' }}
@@ -209,7 +212,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
           
           {comments.length === 0 && (
             <p 
-              className="text-center text-sm py-4"
+              className="text-center text-xs sm:text-sm py-3 sm:py-4"
               style={{ color: 'var(--color-muted-foreground, #64748b)' }}
             >
               No comments yet. Be the first to comment!
