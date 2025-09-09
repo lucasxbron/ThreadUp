@@ -1,4 +1,3 @@
-/* filepath: /home/lb/Documents/repos/ThreadUp/client/src/components/posts/PostCard.tsx */
 'use client';
 
 import React, { useState } from 'react';
@@ -90,16 +89,16 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
       }}
     >
       {/* Post header */}
-      <div className="flex items-center justify-between p-4 pb-3">
-        <div className="flex items-center space-x-3">
-          <div className="relative">
-            <div className="w-10 h-10 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
+      <div className="flex items-center justify-between p-3 sm:p-4 pb-2 sm:pb-3">
+        <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+          <div className="relative flex-shrink-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
               <div 
                 className="w-full h-full rounded-full flex items-center justify-center"
                 style={{ backgroundColor: 'var(--color-card, #ffffff)' }}
               >
                 <span 
-                  className="text-sm font-semibold"
+                  className="text-xs sm:text-sm font-semibold"
                   style={{ color: 'var(--color-card-foreground, #0f172a)' }}
                 >
                   {post.authorId.username.charAt(0).toUpperCase()}
@@ -107,9 +106,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col min-w-0 flex-1">
             <p 
-              className="font-semibold text-sm"
+              className="font-semibold text-sm truncate"
               style={{ color: 'var(--color-card-foreground, #0f172a)' }}
             >
               {post.authorId.username}
@@ -123,28 +122,29 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
           </div>
         </div>
         
-        <div className="flex items-center space-x-2">
+        {/* Actions Menu */}
+        <div className="flex items-center space-x-1">
           {canDelete && (
             <button
               onClick={handleDelete}
               disabled={deleteLoading}
-              className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors duration-200"
+              className="p-1.5 sm:p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors duration-200"
               style={{ color: 'var(--color-muted-foreground, #64748b)' }}
             >
               {deleteLoading ? (
-                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
               ) : (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               )}
             </button>
           )}
           <button 
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors duration-200"
+            className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors duration-200"
             style={{ color: 'var(--color-muted-foreground, #64748b)' }}
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
             </svg>
           </button>
@@ -157,15 +157,15 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
           <img
             src={post.imageUrl}
             alt="Post content"
-            className="w-full h-auto max-h-[600px] object-cover"
+            className="w-full h-auto max-h-[400px] sm:max-h-[600px] object-cover"
           />
         </div>
       )}
 
       {/* Post actions */}
-      <div className="px-4 py-3">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-4">
+      <div className="px-3 sm:px-4 py-2 sm:py-3">
+        <div className="flex items-center justify-between mb-2 sm:mb-3">
+          <div className="flex items-center space-x-3 sm:space-x-4">
             <button
               onClick={handleLike}
               disabled={loading}
@@ -179,7 +179,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
               }}
             >
               <svg 
-                className={`w-6 h-6 transition-all duration-200 ${liked ? 'fill-current' : ''}`} 
+                className={`w-5 h-5 sm:w-6 sm:h-6 transition-all duration-200 ${liked ? 'fill-current' : ''}`} 
                 fill={liked ? 'currentColor' : 'none'} 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
@@ -194,7 +194,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
               className="transition-colors duration-200 hover:scale-110"
               style={{ color: 'var(--color-muted-foreground, #64748b)' }}
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </button>
@@ -203,7 +203,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
               className="transition-colors duration-200 hover:scale-110"
               style={{ color: 'var(--color-muted-foreground, #64748b)' }}
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
               </svg>
             </button>
@@ -213,7 +213,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
             className="transition-colors duration-200"
             style={{ color: 'var(--color-muted-foreground, #64748b)' }}
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
             </svg>
           </button>
@@ -222,7 +222,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
         {/* Like count */}
         {likeCount > 0 && (
           <p 
-            className="font-semibold text-sm mb-2"
+            className="font-semibold text-sm mb-1 sm:mb-2"
             style={{ color: 'var(--color-card-foreground, #0f172a)' }}
           >
             {likeCount} {likeCount === 1 ? 'like' : 'likes'}
@@ -231,18 +231,18 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
 
         {/* Post content */}
         <div 
-          className="text-sm"
+          className="text-sm leading-relaxed"
           style={{ color: 'var(--color-card-foreground, #0f172a)' }}
         >
           <span className="font-semibold mr-2">{post.authorId.username}</span>
-          <span className="whitespace-pre-wrap">{post.text}</span>
+          <span className="whitespace-pre-wrap break-words">{post.text}</span>
         </div>
 
         {/* View comments button */}
         {!showComments && (
           <button
             onClick={() => setShowComments(true)}
-            className="text-sm mt-2 transition-colors duration-200"
+            className="text-sm mt-1 sm:mt-2 transition-colors duration-200"
             style={{ color: 'var(--color-muted-foreground, #64748b)' }}
           >
             View all comments
