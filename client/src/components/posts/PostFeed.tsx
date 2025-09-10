@@ -26,6 +26,16 @@ export const PostFeed: React.FC = () => {
     loadPosts();
   }, []);
 
+  // Listen for refresh events from header create post modal
+  useEffect(() => {
+    const handleRefresh = () => {
+      loadPosts();
+    };
+
+    window.addEventListener('refreshPosts', handleRefresh);
+    return () => window.removeEventListener('refreshPosts', handleRefresh);
+  }, []);
+
   const loadPosts = async () => {
     setLoading(true);
     setError('');
