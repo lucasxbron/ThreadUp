@@ -103,6 +103,16 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
     onClose();
   };
 
+  // Get user initials for avatar
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  };
+
+  // Get full name
+  const getFullName = (firstName: string, lastName: string) => {
+    return `${firstName} ${lastName}`;
+  };
+
   return (
     <>
       {/* Global CSS for placeholder styling */}
@@ -149,7 +159,10 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                     className="text-sm sm:text-base font-semibold"
                     style={{ color: 'var(--color-card-foreground, #0f172a)' }}
                   >
-                    {user?.username?.charAt(0).toUpperCase()}
+                    {user?.firstName && user?.lastName 
+                      ? getInitials(user.firstName, user.lastName)
+                      : user?.username?.charAt(0).toUpperCase()
+                    }
                   </span>
                 </div>
               </div>
@@ -159,7 +172,10 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                 className="font-semibold text-base"
                 style={{ color: 'var(--color-foreground, #0f172a)' }}
               >
-                {user?.username}
+                {user?.firstName && user?.lastName 
+                  ? getFullName(user.firstName, user.lastName)
+                  : user?.username
+                }
               </p>
               <p 
                 className="text-sm"
@@ -182,7 +198,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             } as React.CSSProperties}
           >
             <textarea
-              placeholder={`What's on your mind, ${user?.username}?`}
+              placeholder={`What's on your mind, ${user?.firstName || user?.username}?`}
               value={text}
               onChange={(e) => setText(e.target.value)}
               onFocus={() => setIsFocused(true)}
