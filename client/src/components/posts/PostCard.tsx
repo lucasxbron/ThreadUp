@@ -82,6 +82,16 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
 
   const canDelete = user?._id === post.authorId._id;
 
+  // Get user initials for avatar
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  };
+
+  // Get full name
+  const getFullName = (firstName: string, lastName: string) => {
+    return `${firstName} ${lastName}`;
+  };
+
   return (
     <>
       <div 
@@ -104,7 +114,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
                     className="text-xs sm:text-sm font-semibold"
                     style={{ color: 'var(--color-card-foreground, #0f172a)' }}
                   >
-                    {post.authorId.username.charAt(0).toUpperCase()}
+                    {getInitials(post.authorId.firstName, post.authorId.lastName)}
                   </span>
                 </div>
               </div>
@@ -114,14 +124,25 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
                 className="font-semibold text-sm truncate"
                 style={{ color: 'var(--color-card-foreground, #0f172a)' }}
               >
-                {post.authorId.username}
+                {getFullName(post.authorId.firstName, post.authorId.lastName)}
               </p>
-              <p 
-                className="text-xs"
-                style={{ color: 'var(--color-muted-foreground, #64748b)' }}
-              >
-                {formatDate(post.createdAt)}
-              </p>
+              <div className="flex items-center space-x-1 text-xs">
+                <span 
+                  style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                >
+                  @{post.authorId.username}
+                </span>
+                <span 
+                  style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                >
+                  •
+                </span>
+                <span 
+                  style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                >
+                  {formatDate(post.createdAt)}
+                </span>
+              </div>
             </div>
           </div>
           
@@ -160,7 +181,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
             className="text-sm leading-relaxed"
             style={{ color: 'var(--color-card-foreground, #0f172a)' }}
           >
-            <span className="font-semibold mr-2">{post.authorId.username}</span>
+            <span className="font-semibold mr-2">
+              {getFullName(post.authorId.firstName, post.authorId.lastName)}
+            </span>
             <span className="whitespace-pre-wrap break-words">{post.text}</span>
           </div>
         </div>
@@ -305,7 +328,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
         isOpen={imageModalOpen}
         onClose={() => setImageModalOpen(false)}
         imageUrl={post.imageUrl || ''}
-        alt={`Post by ${post.authorId.username}`}
+        alt={`Post by ${getFullName(post.authorId.firstName, post.authorId.lastName)}`}
       />
     </>
   );
