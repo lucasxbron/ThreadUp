@@ -10,13 +10,15 @@ interface AuthContextType extends AuthState {
     password: string
   ) => Promise<{ success: boolean; error?: string }>;
   register: (
+    firstName: string,
+    lastName: string,
     username: string,
     email: string,
     password: string
   ) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   updateProfile: (
-    username: string
+    updateData: { firstName?: string; lastName?: string; username?: string }
   ) => Promise<{ success: boolean; error?: string }>;
   refreshProfile: () => Promise<void>;
 }
@@ -104,11 +106,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const register = async (
+    firstName: string,
+    lastName: string,
     username: string,
     email: string,
     password: string
   ) => {
-    const response = await apiClient.register({ username, email, password });
+    const response = await apiClient.register({ 
+      firstName, 
+      lastName, 
+      username, 
+      email, 
+      password 
+    });
     if (response.data || response.message) {
       return { success: true };
     }
@@ -125,8 +135,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   };
 
-  const updateProfile = async (username: string) => {
-    const response = await apiClient.updateProfile({ username });
+  const updateProfile = async (updateData: { firstName?: string; lastName?: string; username?: string }) => {
+    const response = await apiClient.updateProfile(updateData);
     if (response.data) {
       const profileData = response.data as ProfileResponse;
       setAuthState((prev) => ({
