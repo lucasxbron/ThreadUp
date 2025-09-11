@@ -487,7 +487,7 @@ export default function HomePage() {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex transition-colors duration-300">
-          <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 md:py-6 lg:py-8">
+          <div className="w-full mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 md:py-6 lg:py-8">
             <PostFeed />
           </div>
         </main>
