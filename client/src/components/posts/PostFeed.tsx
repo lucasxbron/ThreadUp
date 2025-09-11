@@ -58,7 +58,7 @@ export const PostFeed: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="space-y-4 md:space-y-6">
+      <div className="max-w-2xl mx-auto space-y-4 md:space-y-6">
         {/* Create post skeleton */}
         <div 
           className="rounded-lg md:rounded-xl p-3 md:p-4 shadow-sm border"
@@ -149,42 +149,44 @@ export const PostFeed: React.FC = () => {
 
   if (error) {
     return (
-      <div 
-        className="rounded-lg md:rounded-xl p-4 md:p-6 border"
-        style={{
-          backgroundColor: 'rgba(239, 68, 68, 0.1)',
-          borderColor: 'rgba(239, 68, 68, 0.3)'
-        }}
-      >
-        <div className="flex flex-col sm:flex-row">
-          <svg 
-            className="w-5 h-5 mb-2 sm:mb-0 sm:mr-3 flex-shrink-0 sm:mt-0.5" 
-            fill="currentColor" 
-            viewBox="0 0 20 20"
-            style={{ color: 'var(--color-destructive, #ef4444)' }}
-          >
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-          </svg>
-          <div className="flex-1">
-            <h3 
-              className="text-sm font-medium"
+      <div className="max-w-2xl mx-auto">
+        <div 
+          className="rounded-lg md:rounded-xl p-4 md:p-6 border"
+          style={{
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            borderColor: 'rgba(239, 68, 68, 0.3)'
+          }}
+        >
+          <div className="flex flex-col sm:flex-row">
+            <svg 
+              className="w-5 h-5 mb-2 sm:mb-0 sm:mr-3 flex-shrink-0 sm:mt-0.5" 
+              fill="currentColor" 
+              viewBox="0 0 20 20"
               style={{ color: 'var(--color-destructive, #ef4444)' }}
             >
-              Error loading posts
-            </h3>
-            <p 
-              className="text-sm mt-1"
-              style={{ color: 'rgba(239, 68, 68, 0.8)' }}
-            >
-              {error}
-            </p>
-            <button
-              onClick={loadPosts}
-              className="mt-3 text-sm font-medium underline hover:opacity-80 active:opacity-60 transition-opacity"
-              style={{ color: 'var(--color-destructive, #ef4444)' }}
-            >
-              Try again
-            </button>
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            <div className="flex-1">
+              <h3 
+                className="text-sm font-medium"
+                style={{ color: 'var(--color-destructive, #ef4444)' }}
+              >
+                Error loading posts
+              </h3>
+              <p 
+                className="text-sm mt-1"
+                style={{ color: 'rgba(239, 68, 68, 0.8)' }}
+              >
+                {error}
+              </p>
+              <button
+                onClick={loadPosts}
+                className="mt-3 text-sm font-medium underline hover:opacity-80 active:opacity-60 transition-opacity"
+                style={{ color: 'var(--color-destructive, #ef4444)' }}
+              >
+                Try again
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -192,7 +194,7 @@ export const PostFeed: React.FC = () => {
   }
 
   return (
-    <div className="space-y-4 md:space-y-6">
+    <div className="max-w-2xl mx-auto space-y-4 md:space-y-6">
       <CreatePost onPostCreated={handlePostUpdate} />
       
       {posts.length === 0 ? (
