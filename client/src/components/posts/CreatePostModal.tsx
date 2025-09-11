@@ -194,13 +194,17 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
             />
           </div>
           
-          {/* Image Preview */}
+          {/* Image Preview with variable height */}
           {imagePreview && (
             <div className="relative rounded-lg sm:rounded-xl overflow-hidden">
               <img
                 src={imagePreview}
                 alt="Preview"
-                className="w-full max-h-80 object-cover"
+                className="w-full h-auto object-contain"
+                style={{
+                  maxHeight: '500px', // Slightly larger in modal
+                  backgroundColor: 'var(--color-muted, #f1f5f9)'
+                }}
               />
               <button
                 type="button"
