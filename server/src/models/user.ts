@@ -4,9 +4,29 @@ import { hash } from "bcrypt-ts";
 import { DEFAULT_ROLE, DEFAULT_PERMISSIONS } from "../utils/constants.js";
 
 export const userSchema = new Schema({
+  firstName: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 50,
+  },
+  lastName: {
+    type: String,
+    required: true,
+    trim: true,
+    maxlength: 50,
+  },
   username: {
     type: String,
     required: true,
+    trim: true,
+    unique: true,
+    minlength: 3,
+    maxlength: 30,
+    validate: {
+      validator: (v: string) => /^[a-zA-Z0-9_]+$/.test(v),
+      message: "Username can only contain letters, numbers, and underscores",
+    },
   },
   email: {
     type: String,
@@ -64,6 +84,17 @@ userSchema.pre("save", async function (next) {
   this.email = validator.normalizeEmail(this.email, {
     gmail_remove_dots: false,
   }) || this.email;
+
+  // Trim and normalize names
+  if (this.isModified("firstName")) {
+    this.firstName = this.firstName.trim();
+  }
+  if (this.isModified("lastName")) {
+    this.lastName = this.lastName.trim();
+  }
+  if (this.isModified("username")) {
+    this.username = this.username.trim().toLowerCase();
+  }
 
   if (this.isModified("password")) {
     this.password = await hash(this.password, 10);
