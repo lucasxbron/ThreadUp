@@ -12,23 +12,32 @@ import crypto from "crypto";
 const secret = config.JWT_SECRET;
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
-  const { username, email, password } = req.body;
+  const { firstName, lastName, username, email, password } = req.body;
 
   try {
-    if (!username || !email || !password) {
-      throw createHttpError(400, "Username, email and password are required");
+    if (!firstName || !lastName || !username || !email || !password) {
+      throw createHttpError(400, "First name, last name, username, email and password are required");
     }
 
+    // Check if email already exists
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
       throw createHttpError(409, "This email is already registered");
     }
 
+    // Check if username already exists
+    const existingUsername = await User.findOne({ username: username.toLowerCase() });
+    if (existingUsername) {
+      throw createHttpError(409, "This username is already taken");
+    }
+
     const verificationToken = crypto.randomBytes(32).toString("hex");
 
     const newUser = await User.create({
-      username,
-      email,
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      username: username.trim().toLowerCase(),
+      email: email.trim(),
       password,
       verificationToken,
       verified: false,
@@ -40,9 +49,12 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       message: "User registered successfully! Please check your email to verify your account.",
       user: { 
         _id: newUser._id, 
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
         username: newUser.username, 
         email: newUser.email,
-        verified: newUser.verified
+        verified: newUser.verified,
+        createdAt: newUser.createdAt
       }
     });
   } catch (error) {
@@ -76,9 +88,12 @@ export const verifyEmail = async (req: Request, res: Response, next: NextFunctio
       message: "Email verified successfully! You can now log in.",
       user: {
         _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         username: user.username,
         email: user.email,
-        verified: user.verified
+        verified: user.verified,
+        createdAt: user.createdAt
       }
     });
   } catch (error) {
@@ -134,11 +149,15 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       token,
       user: {
         _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
         username: user.username,
         email: user.email,
         roles: user.roles,
         permissions: user.permissions,
         verified: user.verified,
+        createdAt: user.createdAt, // ✅ Added this!
+        updatedAt: user.updatedAt  // ✅ Added this too!
       }
     });
   } catch (error) {
@@ -202,15 +221,31 @@ export const getOwnProfile = async (req: Request, res: Response, next: NextFunct
 
 export const updateOwnProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { username } = req.body;
+    const { firstName, lastName, username } = req.body;
     
-    if (!username) {
-      throw createHttpError(400, "Username is required");
+    const updateData: any = {};
+    
+    if (firstName) updateData.firstName = firstName.trim();
+    if (lastName) updateData.lastName = lastName.trim();
+    if (username) {
+      // Check if username is taken by another user
+      const existingUser = await User.findOne({ 
+        username: username.toLowerCase(), 
+        _id: { $ne: req.user?._id } 
+      });
+      if (existingUser) {
+        throw createHttpError(409, "Username is already taken");
+      }
+      updateData.username = username.trim().toLowerCase();
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      throw createHttpError(400, "No valid fields to update");
     }
 
     const updatedUser = await User.findByIdAndUpdate(
       req.user?._id,
-      { username },
+      updateData,
       { new: true }
     ).select("-password");
 
