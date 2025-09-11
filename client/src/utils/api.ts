@@ -1,172 +1,174 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3005";
-
-export interface ApiResponse<T> {
+interface ApiResponse<T = any> {
   data?: T;
-  message?: string;
   error?: string;
+  message?: string;
 }
 
 class ApiClient {
   private baseURL: string;
 
-  constructor(baseURL: string) {
-    this.baseURL = baseURL;
+  constructor() {
+    this.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3006';
   }
 
-  private async request<T>(
+  private async makeRequest<T = any>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     try {
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
-        ...options,
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      
+      const config: RequestInit = {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...(token && { Authorization: `Bearer ${token}` }),
           ...options.headers,
         },
-        credentials: "include",
-      });
+        credentials: 'include',
+        ...options,
+      };
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Something went wrong");
+      // Remove Content-Type for FormData requests
+      if (options.body instanceof FormData) {
+        delete (config.headers as any)['Content-Type'];
       }
 
-      return { data, message: data.message };
+      const response = await fetch(`${this.baseURL}${endpoint}`, config);
+      
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Store token if it's in the response
+        if (data.token && typeof window !== 'undefined') {
+          localStorage.setItem('token', data.token);
+        }
+        
+        return { data };
+      } else {
+        const errorData = await response.json();
+        return { error: errorData.message || 'Request failed' };
+      }
     } catch (error) {
-      return {
-        error: error instanceof Error ? error.message : "Unknown error",
-      };
+      console.error('API request failed:', error);
+      return { error: 'Network error occurred' };
     }
   }
 
   // Auth endpoints
-  async register(userData: {
-    username: string;
-    email: string;
-    password: string;
-  }) {
-    return this.request("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify(userData),
+  async login(data: { email: string; password: string }) {
+    return this.makeRequest('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(data),
     });
   }
 
-  async login(credentials: { email: string; password: string }) {
-    const response = await this.request<{ token: string; user: any }>(
-      "/api/auth/login",
-      {
-        method: "POST",
-        body: JSON.stringify(credentials),
-      }
-    );
-
-    if (response.data?.token && typeof window !== "undefined") {
-      localStorage.setItem("token", response.data.token);
-    }
-
-    return response;
+  async register(data: { 
+    firstName: string; 
+    lastName: string; 
+    username: string; 
+    email: string; 
+    password: string; 
+  }) {
+    return this.makeRequest('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   }
 
   async logout() {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("token");
+    const response = await this.makeRequest('/api/auth/logout', {
+      method: 'POST',
+    });
+    
+    // Always clear local token regardless of response
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
     }
-    return this.request("/api/auth/logout", { method: "POST" });
+    
+    return response;
   }
 
   async getProfile() {
-    return this.request("/api/auth/profile");
+    return this.makeRequest('/api/auth/profile');
   }
 
-  async updateProfile(data: { username: string }) {
-    return this.request("/api/auth/profile", {
-      method: "PUT",
+  async updateProfile(data: { firstName?: string; lastName?: string; username?: string }) {
+    return this.makeRequest('/api/auth/profile', {
+      method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
   async verifyEmail(token: string) {
-    return this.request(`/api/auth/verify-email?token=${token}`);
+    return this.makeRequest(`/api/auth/verify-email?token=${token}`);
   }
 
   async resendVerification(email: string) {
-    return this.request("/api/auth/resend-verification", {
-      method: "POST",
+    return this.makeRequest('/api/auth/resend-verification', {
+      method: 'POST',
       body: JSON.stringify({ email }),
     });
   }
 
-  // Posts endpoints
-  async getPosts(page = 1, limit = 20) {
-    return this.request(`/api/posts?page=${page}&limit=${limit}`);
+  // Post endpoints
+  async getPosts(page: number = 1, limit: number = 20) {
+    return this.makeRequest(`/api/posts?page=${page}&limit=${limit}`);
   }
 
-  async getPost(id: string) {
-    return this.request(`/api/posts/${id}`);
+  async getPostById(id: string) {
+    return this.makeRequest(`/api/posts/${id}`);
   }
 
   async createPost(formData: FormData) {
-    const token =
-      typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
-    try {
-      const response = await fetch(`${this.baseURL}/api/posts`, {
-        method: "POST",
-        headers: {
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-        credentials: "include",
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to create post");
-      }
-
-      return { data, message: data.message };
-    } catch (error) {
-      return {
-        error: error instanceof Error ? error.message : "Unknown error",
-      };
-    }
+    return this.makeRequest('/api/posts', {
+      method: 'POST',
+      body: formData,
+    });
   }
 
   async deletePost(id: string) {
-    return this.request(`/api/posts/${id}`, { method: "DELETE" });
+    return this.makeRequest(`/api/posts/${id}`, {
+      method: 'DELETE',
+    });
   }
 
-  // Comments endpoints
+  // Comment endpoints
   async getComments(postId: string) {
-    return this.request(`/api/comments/post/${postId}`);
+    return this.makeRequest(`/api/comments/post/${postId}`);
   }
 
   async createComment(postId: string, text: string) {
-    return this.request(`/api/comments/post/${postId}`, {
-      method: "POST",
+    return this.makeRequest(`/api/comments/post/${postId}`, {
+      method: 'POST',
       body: JSON.stringify({ text }),
     });
   }
 
   async deleteComment(id: string) {
-    return this.request(`/api/comments/${id}`, { method: "DELETE" });
+    return this.makeRequest(`/api/comments/${id}`, {
+      method: 'DELETE',
+    });
   }
 
-  // Likes endpoints
+  // Like endpoints
   async toggleLike(postId: string) {
-    return this.request(`/api/likes/post/${postId}`, { method: "POST" });
+    return this.makeRequest(`/api/likes/post/${postId}`, {
+      method: 'POST',
+    });
   }
 
   async getLikeStatus(postId: string) {
-    return this.request(`/api/likes/post/${postId}`);
+    return this.makeRequest(`/api/likes/post/${postId}`);
+  }
+
+  // Upload endpoints
+  async uploadFile(formData: FormData, type: 'profile' | 'post' | 'general' = 'general') {
+    formData.append('type', type);
+    return this.makeRequest('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
   }
 }
 
-export const apiClient = new ApiClient(API_BASE_URL);
+export const apiClient = new ApiClient();
