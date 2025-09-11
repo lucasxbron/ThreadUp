@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { useAuth } from "@/contexts/AuthContext";
-import { useTheme } from "@/contexts/ThemeContext";
-import { Button } from "@/components/ui/Button";
-import { NoSSR } from "@/components/ui/NoSSR";
-import { CreatePostModal } from "@/components/posts/CreatePostModal";
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import { Button } from '@/components/ui/Button';
+import { NoSSR } from '@/components/ui/NoSSR';
+import { CreatePostModal } from '@/components/posts/CreatePostModal';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -42,6 +42,16 @@ export const Header: React.FC = () => {
   const handleLogout = async () => {
     await logout();
     setDropdownOpen(false);
+  };
+
+  // Get user initials for avatar
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  };
+
+  // Get full name
+  const getFullName = (firstName: string, lastName: string) => {
+    return `${firstName} ${lastName}`;
   };
 
   const ThemeToggle = () => {
@@ -222,14 +232,20 @@ export const Header: React.FC = () => {
                   >
                     <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
                       <span className="text-white text-xs sm:text-sm font-semibold">
-                        {user?.username?.charAt(0).toUpperCase()}
+                        {user?.firstName && user?.lastName 
+                          ? getInitials(user.firstName, user.lastName)
+                          : user?.username?.charAt(0).toUpperCase()
+                        }
                       </span>
                     </div>
                     <span 
-                      className="text-sm font-medium hidden md:block"
+                      className="text-sm font-medium hidden md:block max-w-[120px] truncate"
                       style={{ color: 'inherit' }}
                     >
-                      {user?.username}
+                      {user?.firstName && user?.lastName 
+                        ? getFullName(user.firstName, user.lastName)
+                        : user?.username
+                      }
                     </span>
                     <svg 
                       className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} 
@@ -259,7 +275,10 @@ export const Header: React.FC = () => {
                         <div className="flex items-center space-x-3">
                           <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
                             <span className="text-white text-lg font-semibold">
-                              {user?.username?.charAt(0).toUpperCase()}
+                              {user?.firstName && user?.lastName 
+                                ? getInitials(user.firstName, user.lastName)
+                                : user?.username?.charAt(0).toUpperCase()
+                              }
                             </span>
                           </div>
                           <div className="flex-1 min-w-0">
@@ -267,13 +286,16 @@ export const Header: React.FC = () => {
                               className="text-base font-semibold truncate"
                               style={{ color: 'var(--color-foreground, #0f172a)' }}
                             >
-                              {user?.username}
+                              {user?.firstName && user?.lastName 
+                                ? getFullName(user.firstName, user.lastName)
+                                : user?.username
+                              }
                             </p>
                             <p 
                               className="text-sm truncate"
                               style={{ color: 'var(--color-muted-foreground, #64748b)' }}
                             >
-                              {user?.email}
+                              @{user?.username}
                             </p>
                           </div>
                         </div>
@@ -316,7 +338,7 @@ export const Header: React.FC = () => {
                           onClick={() => setDropdownOpen(false)}
                         >
                           <svg className="w-5 h-5 md:w-4 md:h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.5 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                           </svg>
                           Settings
