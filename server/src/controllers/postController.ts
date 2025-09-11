@@ -31,7 +31,7 @@ export const createPost = async (req: Request, res: Response, next: NextFunction
       imagePublicId, // Store for future deletion
     });
 
-    const populatedPost = await Post.findById(newPost._id).populate("authorId", "username");
+    const populatedPost = await Post.findById(newPost._id).populate("authorId", "firstName lastName username");
 
     res.status(201).json({
       message: "Post successfully created",
@@ -49,7 +49,7 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
     const skip = (page - 1) * limit;
 
     const posts = await Post.find()
-      .populate("authorId", "username")
+      .populate("authorId", "firstName lastName username")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -73,7 +73,7 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
       return {
         ...post.toObject(),
         commentsCount,
-        likeCount: post.likeCount || 0, // ← Use cached count from Post document
+        likeCount: post.likeCount || 0,
         liked
       };
     }));
@@ -97,7 +97,7 @@ export const getPostById = async (req: Request, res: Response, next: NextFunctio
   const { id } = req.params;
 
   try {
-    const post = await Post.findById(id).populate("authorId", "username");
+    const post = await Post.findById(id).populate("authorId", "firstName lastName username");
 
     if (!post) {
       throw createHttpError(404, "Post not found");
@@ -117,7 +117,7 @@ export const getPostById = async (req: Request, res: Response, next: NextFunctio
     res.status(200).json({
       ...post.toObject(),
       commentsCount,
-      likeCount: post.likeCount || 0, // ← Use cached count from Post document
+      likeCount: post.likeCount || 0,
       liked
     });
   } catch (error) {

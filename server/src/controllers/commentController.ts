@@ -24,7 +24,7 @@ export const createComment = async (req: Request, res: Response, next: NextFunct
     });
 
     const populatedComment = await Comment.findById(newComment._id)
-      .populate('authorId', 'username')
+      .populate('authorId', 'firstName lastName username')
       .lean();
 
     res.status(201).json({
@@ -46,7 +46,7 @@ export const getCommentsByPost = async (req: Request, res: Response, next: NextF
     }
 
     const comments = await Comment.find({ postId })
-      .populate('authorId', 'username')
+      .populate('authorId', 'firstName lastName username')
       .sort({ createdAt: 1 })
       .lean();
 
