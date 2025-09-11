@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/Button';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
     username: '',
     email: '',
     password: '',
@@ -30,7 +32,7 @@ export default function RegisterPage() {
     e.preventDefault();
     
     // Validate all fields are filled
-    if (!formData.username.trim() || !formData.email.trim() || !formData.password.trim() || !formData.confirmPassword.trim()) {
+    if (!formData.firstName.trim() || !formData.lastName.trim() || !formData.username.trim() || !formData.email.trim() || !formData.password.trim() || !formData.confirmPassword.trim()) {
       setError('Please fill in all fields');
       return;
     }
@@ -41,9 +43,20 @@ export default function RegisterPage() {
       return;
     }
 
-    // Validate password length
+    // Validate password length (keep original 6 characters)
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters');
+      return;
+    }
+
+    // Add username validation for first/last name registration
+    if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
+      setError('Username can only contain letters, numbers, and underscores');
+      return;
+    }
+
+    if (formData.username.length < 3) {
+      setError('Username must be at least 3 characters');
       return;
     }
 
@@ -51,7 +64,13 @@ export default function RegisterPage() {
     setError('');
 
     try {
-      const result = await register(formData.username.trim(), formData.email.trim(), formData.password);
+      const result = await register(
+        formData.firstName.trim(),
+        formData.lastName.trim(),
+        formData.username.trim(), 
+        formData.email.trim(), 
+        formData.password
+      );
       
       // Handle the correct response format: {success: boolean, error?: string}
       if (result && typeof result === 'object' && result.success === true) {
@@ -162,6 +181,44 @@ export default function RegisterPage() {
               </div>
             )}
 
+            {/* First and Last Name Row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div>
+                <input
+                  id="firstName"
+                  name="firstName"
+                  type="text"
+                  autoComplete="given-name"
+                  required
+                  placeholder="First name"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className="register-input w-full px-3 py-3 md:py-2 rounded-lg transition-colors duration-200"
+                  disabled={loading}
+                  style={{
+                    fontSize: '16px' // Prevent iOS zoom
+                  }}
+                />
+              </div>
+              <div>
+                <input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  autoComplete="family-name"
+                  required
+                  placeholder="Last name"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  className="register-input w-full px-3 py-3 md:py-2 rounded-lg transition-colors duration-200"
+                  disabled={loading}
+                  style={{
+                    fontSize: '16px'
+                  }}
+                />
+              </div>
+            </div>
+
             <div>
               <input
                 id="username"
@@ -175,7 +232,7 @@ export default function RegisterPage() {
                 className="register-input w-full px-3 py-3 md:py-2 rounded-lg transition-colors duration-200"
                 disabled={loading}
                 style={{
-                  fontSize: '16px' // Prevent iOS zoom
+                  fontSize: '16px'
                 }}
               />
             </div>
@@ -236,7 +293,7 @@ export default function RegisterPage() {
 
             <Button
               type="submit"
-              disabled={loading || !formData.username.trim() || !formData.email.trim() || !formData.password.trim() || !formData.confirmPassword.trim()}
+              disabled={loading || !formData.firstName.trim() || !formData.lastName.trim() || !formData.username.trim() || !formData.email.trim() || !formData.password.trim() || !formData.confirmPassword.trim()}
               loading={loading}
               className="w-full py-3 text-base md:text-sm font-medium"
             >
