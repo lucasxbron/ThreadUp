@@ -1,5 +1,7 @@
 export interface User {
   _id: string;
+  firstName: string;
+  lastName: string;
   username: string;
   email: string;
   roles: string[];
@@ -22,6 +24,8 @@ export interface LoginData {
 }
 
 export interface RegisterData {
+  firstName: string;
+  lastName: string;
   username: string;
   email: string;
   password: string;
