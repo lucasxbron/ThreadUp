@@ -155,13 +155,17 @@ export const CreatePost: React.FC<CreatePostProps> = ({ onPostCreated }) => {
                 />
               </div>
               
-              {/* Image Preview */}
+              {/* Image Preview with variable height */}
               {imagePreview && (
                 <div className="relative rounded-lg sm:rounded-xl overflow-hidden">
                   <img
                     src={imagePreview}
                     alt="Preview"
-                    className="w-full max-h-64 sm:max-h-96 object-cover"
+                    className="w-full h-auto object-contain"
+                    style={{
+                      maxHeight: '400px', // Reasonable max height for preview
+                      backgroundColor: 'var(--color-muted, #f1f5f9)'
+                    }}
                   />
                   <button
                     type="button"
