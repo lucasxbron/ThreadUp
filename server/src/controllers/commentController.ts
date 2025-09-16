@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
 import Comment from "../models/comment.js";
 import Post from "../models/post.js";
+import CommentLike from "../models/commentLike.js";
 
 export const createComment = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -27,9 +28,16 @@ export const createComment = async (req: Request, res: Response, next: NextFunct
       .populate('authorId', 'firstName lastName username')
       .lean();
 
+    // Add like status for the creating user
+    const commentWithLikeStatus = {
+      ...populatedComment,
+      likeCount: 0,
+      liked: false
+    };
+
     res.status(201).json({
       message: "Comment successfully created",
-      comment: populatedComment
+      comment: commentWithLikeStatus
     });
   } catch (error) {
     next(error);
@@ -50,7 +58,27 @@ export const getCommentsByPost = async (req: Request, res: Response, next: NextF
       .sort({ createdAt: 1 })
       .lean();
 
-    res.status(200).json({ comments });
+    // Add like status for each comment
+    const commentsWithLikeStatus = await Promise.all(comments.map(async (comment) => {
+      let liked = false;
+      
+      // Only check like status if user is authenticated
+      if (req.user?._id) {
+        const existingLike = await CommentLike.findOne({ 
+          userId: req.user._id, 
+          commentId: comment._id 
+        });
+        liked = !!existingLike;
+      }
+
+      return {
+        ...comment,
+        likeCount: comment.likeCount || 0,
+        liked
+      };
+    }));
+
+    res.status(200).json({ comments: commentsWithLikeStatus });
   } catch (error) {
     next(error);
   }
@@ -69,6 +97,10 @@ export const deleteComment = async (req: Request, res: Response, next: NextFunct
       throw createHttpError(403, "Not authorized to delete comment");
     }
 
+    // Delete related comment likes
+    await CommentLike.deleteMany({ commentId: id });
+    
+    // Delete the comment
     await Comment.findByIdAndDelete(id);
 
     res.status(200).json({ message: "Comment successfully deleted" });

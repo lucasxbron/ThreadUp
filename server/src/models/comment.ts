@@ -16,6 +16,10 @@ const commentSchema = new Schema({
     required: true,
     maxlength: 200,
   },
+  likeCount: {
+    type: Number,
+    default: 0,
+  },
 }, {
   timestamps: true,
 });
