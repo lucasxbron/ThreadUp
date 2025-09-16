@@ -8,4 +8,7 @@ const router = Router();
 router.post("/post/:postId", verifyToken, likeController.toggleLike);
 router.get("/post/:postId", verifyToken, likeController.getLikeStatus);
 
+// Get users who liked a post (public route)
+router.get("/post/:postId/users", likeController.getPostLikers);
+
 export default router;

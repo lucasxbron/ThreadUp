@@ -5,12 +5,26 @@ import { upload } from "../middleware/multer.js";
 
 const router = Router();
 
-// Public routes
-router.get("/", postController.getPosts);
-router.get("/:id", postController.getPostById);
+// Optional authentication middleware for public routes
+const optionalAuth = async (req: any, res: any, next: any) => {
+  try {
+    await verifyToken(req, res, next);
+  } catch (error) {
+    // If authentication fails, continue without user context
+    req.user = null;
+    next();
+  }
+};
+
+// Public routes with optional authentication
+router.get("/", optionalAuth, postController.getPosts);
+router.get("/:id", optionalAuth, postController.getPostById);
 
 // Protected routes
 router.post("/", verifyToken, upload.single("image"), postController.createPost);
 router.delete("/:id", verifyToken, postController.deletePost);
+
+// Like tracking routes
+router.get("/:id/likes", postController.getPostLikes);
 
 export default router;
