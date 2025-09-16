@@ -34,8 +34,6 @@ class ApiClient {
         config.headers = headersWithoutContentType;
       }
 
-      console.log(`Making request to ${endpoint} with token: ${token ? 'YES' : 'NO'}`);
-
       const response = await fetch(`${this.baseURL}${endpoint}`, config);
       
       if (response.ok) {
@@ -49,11 +47,6 @@ class ApiClient {
       console.error('API request failed:', error);
       return { error: 'Network error occurred' };
     }
-  }
-
-  // Post endpoints
-  async getPosts(page: number = 1, limit: number = 20) {
-    return this.makeRequest(`/api/posts?page=${page}&limit=${limit}`);
   }
 
   // Auth endpoints
@@ -157,7 +150,7 @@ class ApiClient {
     });
   }
 
-  // Like endpoints
+  // Post like endpoints
   async toggleLike(postId: string) {
     return this.makeRequest(`/api/likes/post/${postId}`, {
       method: 'POST',
@@ -171,6 +164,22 @@ class ApiClient {
   // Get users who liked a post
   async getPostLikers(postId: string) {
     return this.makeRequest(`/api/likes/post/${postId}/users`);
+  }
+
+  // Comment like endpoints
+  async toggleCommentLike(commentId: string) {
+    return this.makeRequest(`/api/comment-likes/comment/${commentId}`, {
+      method: 'POST',
+    });
+  }
+
+  async getCommentLikeStatus(commentId: string) {
+    return this.makeRequest(`/api/comment-likes/comment/${commentId}`);
+  }
+
+  // Get users who liked a comment
+  async getCommentLikers(commentId: string) {
+    return this.makeRequest(`/api/comment-likes/comment/${commentId}/users`);
   }
 
   // Upload endpoints
