@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { apiClient } from "@/utils/api";
-import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/Button";
-import { Comment } from "@/types/post.types";
+import React, { useState, useEffect } from 'react';
+import { Comment } from '@/types/post.types';
+import { apiClient } from '@/utils/api';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/Button';
 
 interface CommentSectionProps {
   postId: string;
@@ -18,13 +18,21 @@ interface CommentResponse {
   comment: Comment;
 }
 
+interface CommentLikeResponse {
+  liked: boolean;
+  likeCount: number;
+  likedAt?: string;
+  unlikedAt?: string;
+}
+
 export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [likingComments, setLikingComments] = useState<Set<string>>(new Set());
 
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
     loadComments();
@@ -59,7 +67,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
     setSubmitting(false);
   };
 
-  const handleDelete = async (commentId: string) => {
+  const handleDeleteComment = async (commentId: string) => {
     if (!confirm("Are you sure you want to delete this comment?")) return;
 
     const response = await apiClient.deleteComment(commentId);
@@ -68,6 +76,42 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
       setComments((prev) =>
         prev.filter((comment) => comment._id !== commentId)
       );
+    }
+  };
+
+  const handleCommentLike = async (commentId: string) => {
+    if (!isAuthenticated || !user || likingComments.has(commentId)) {
+      return;
+    }
+
+    setLikingComments(prev => new Set([...prev, commentId]));
+
+    try {
+      const response = await apiClient.toggleCommentLike(commentId);
+      
+      if (response.data) {
+        const likeData = response.data as CommentLikeResponse;
+        
+        setComments(prevComments => 
+          prevComments.map(comment => 
+            comment._id === commentId 
+              ? { 
+                  ...comment, 
+                  liked: likeData.liked,
+                  likeCount: likeData.likeCount 
+                }
+              : comment
+          )
+        );
+      }
+    } catch {
+      // Silently handle errors
+    } finally {
+      setLikingComments(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(commentId);
+        return newSet;
+      });
     }
   };
 
@@ -133,7 +177,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
             placeholder="Add a comment..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="flex-1 bg-transparent border-0 focus:ring-0 focus:outline-none text-xs sm:text-sm placeholder-gray-500 dark:placeholder-gray-400"
+            className="flex-1 bg-transparent border-0 focus:ring-0 focus:outline-none text-xs sm:text-sm placeholder-gray-500 dark:placeholder-gray-400 py-2 sm:py-1"
             style={{ color: "var(--color-card-foreground, #0f172a)" }}
             maxLength={200}
           />
@@ -143,7 +187,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
             variant="ghost"
             disabled={!newComment.trim() || submitting}
             loading={submitting}
-            className="font-semibold px-1 sm:px-2 text-xs sm:text-sm"
+            className="font-semibold px-2 sm:px-3 py-2 text-xs sm:text-sm min-h-[36px] sm:min-h-[32px]"
             style={{ color: "var(--color-primary, #3b82f6)" }}
           >
             Post
@@ -153,14 +197,14 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
 
       {/* Comments list*/}
       {loading ? (
-        <div className="flex justify-center py-3 sm:py-4">
+        <div className="flex justify-center py-4 sm:py-6">
           <div
-            className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-2 border-t-transparent"
+            className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-2 border-t-transparent"
             style={{ borderColor: "var(--color-muted-foreground, #64748b)" }}
           ></div>
         </div>
       ) : (
-        <div className="space-y-2 sm:space-y-3">
+        <div className="space-y-3 sm:space-y-4">
           {comments.map((comment) => (
             <div
               key={comment._id}
@@ -203,37 +247,113 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                     {comment.text}
                   </span>
                 </div>
-                <div className="flex items-center space-x-2 sm:space-x-4 mt-1">
+                
+                {/* Action buttons */}
+                <div className="flex items-center space-x-1 mt-1">
                   <span
-                    className="text-xs"
+                    className="text-xs px-1 py-0.5"
                     style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
                     {formatDate(comment.createdAt)}
                   </span>
                   <span
-                    className="text-xs"
+                    className="text-xs px-1 py-0.5"
                     style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
                     @{comment.authorId.username}
                   </span>
+                  
+                  {/* Like button */}
                   <button
-                    className="text-xs font-semibold hover:opacity-75 transition-opacity duration-200"
-                    style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                    onClick={() => handleCommentLike(comment._id)}
+                    disabled={!isAuthenticated || likingComments.has(comment._id)}
+                    className={`flex items-center space-x-1 px-2 py-1.5 sm:px-1 sm:py-0.5 rounded-md transition-all duration-200 ${
+                      isAuthenticated 
+                        ? 'hover:scale-105 active:scale-95' 
+                        : 'opacity-50 cursor-not-allowed'
+                    }`}
+                    style={{ 
+                      minHeight: '32px',
+                      minWidth: '32px'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (isAuthenticated) {
+                        e.currentTarget.style.backgroundColor = 'var(--color-secondary, #f1f5f9)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
                   >
-                    Like
+                    <svg 
+                      className={`w-5 h-5 sm:w-4 sm:h-4 transition-colors duration-200 ${
+                        comment.liked ? 'text-red-500 fill-current' : ''
+                      }`}
+                      fill={comment.liked ? 'currentColor' : 'none'}
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                      style={{ 
+                        color: comment.liked ? '#ef4444' : 'var(--color-muted-foreground, #64748b)',
+                        strokeWidth: comment.liked ? 0 : 2
+                      }}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                    {comment.likeCount > 0 && (
+                      <span
+                        className="text-xs font-semibold"
+                        style={{ 
+                          color: comment.liked ? '#ef4444' : 'var(--color-muted-foreground, #64748b)'
+                        }}
+                      >
+                        {comment.likeCount}
+                      </span>
+                    )}
+                    {likingComments.has(comment._id) && (
+                      <div 
+                        className="animate-spin rounded-full h-2 w-2 border border-t-transparent ml-1"
+                        style={{ borderColor: 'var(--color-muted-foreground, #64748b)' }}
+                      ></div>
+                    )}
                   </button>
+
+                  {/* Reply button */}
                   <button
-                    className="text-xs font-semibold hover:opacity-75 transition-opacity duration-200"
-                    style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                    className="text-xs font-semibold px-2 py-1.5 sm:px-1 sm:py-0.5 rounded-md transition-all duration-200 active:scale-95"
+                    style={{ 
+                      color: "var(--color-muted-foreground, #64748b)",
+                      minHeight: '32px',
+                      minWidth: '40px'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--color-secondary, #f1f5f9)';
+                      e.currentTarget.style.color = 'var(--color-foreground, #0f172a)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = 'var(--color-muted-foreground, #64748b)';
+                    }}
                   >
                     Reply
                   </button>
+
+                  {/* Delete button (only for comment author) */}
                   {user?._id === comment.authorId._id && (
                     <button
-                      onClick={() => handleDelete(comment._id)}
-                      className="text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:text-red-600"
+                      onClick={() => handleDeleteComment(comment._id)}
+                      className="text-xs font-semibold px-2 py-1.5 sm:px-1 sm:py-0.5 rounded-md opacity-70 group-hover:opacity-100 transition-all duration-200 active:scale-95"
                       style={{
                         color: "var(--color-muted-foreground, #64748b)",
+                        minHeight: '32px',
+                        minWidth: '40px'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                        e.currentTarget.style.color = 'var(--color-destructive, #ef4444)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = 'var(--color-muted-foreground, #64748b)';
                       }}
                     >
                       Delete
@@ -246,7 +366,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
 
           {comments.length === 0 && (
             <p
-              className="text-center text-xs sm:text-sm py-3 sm:py-4"
+              className="text-center text-sm py-4 sm:py-6"
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               No comments yet. Be the first to comment!
