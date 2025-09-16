@@ -13,7 +13,7 @@ export interface Post {
   authorId: User;
   createdAt: string;
   updatedAt: string;
-  liked?: boolean;
+  liked: boolean;
   likeCount: number;
 }
 

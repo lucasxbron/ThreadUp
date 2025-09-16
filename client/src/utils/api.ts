@@ -30,28 +30,30 @@ class ApiClient {
 
       // Remove Content-Type for FormData requests
       if (options.body instanceof FormData) {
-        delete (config.headers as any)['Content-Type'];
+        const { 'Content-Type': _, ...headersWithoutContentType } = config.headers as Record<string, string>;
+        config.headers = headersWithoutContentType;
       }
+
+      console.log(`Making request to ${endpoint} with token: ${token ? 'YES' : 'NO'}`);
 
       const response = await fetch(`${this.baseURL}${endpoint}`, config);
       
       if (response.ok) {
         const data = await response.json();
-        
-        // Store token if it's in the response
-        if (data.token && typeof window !== 'undefined') {
-          localStorage.setItem('token', data.token);
-        }
-        
         return { data };
       } else {
-        const errorData = await response.json();
-        return { error: errorData.message || 'Request failed' };
+        const errorData = await response.json().catch(() => ({}));
+        return { error: errorData.message || `Request failed with status ${response.status}` };
       }
     } catch (error) {
       console.error('API request failed:', error);
       return { error: 'Network error occurred' };
     }
+  }
+
+  // Post endpoints
+  async getPosts(page: number = 1, limit: number = 20) {
+    return this.makeRequest(`/api/posts?page=${page}&limit=${limit}`);
   }
 
   // Auth endpoints
@@ -132,6 +134,11 @@ class ApiClient {
     });
   }
 
+  // Get post likes with user details
+  async getPostLikes(postId: string) {
+    return this.makeRequest(`/api/posts/${postId}/likes`);
+  }
+
   // Comment endpoints
   async getComments(postId: string) {
     return this.makeRequest(`/api/comments/post/${postId}`);
@@ -159,6 +166,11 @@ class ApiClient {
 
   async getLikeStatus(postId: string) {
     return this.makeRequest(`/api/likes/post/${postId}`);
+  }
+
+  // Get users who liked a post
+  async getPostLikers(postId: string) {
+    return this.makeRequest(`/api/likes/post/${postId}/users`);
   }
 
   // Upload endpoints

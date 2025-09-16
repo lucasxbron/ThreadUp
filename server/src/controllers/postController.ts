@@ -62,14 +62,15 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
       const commentsCount = await Comment.countDocuments({ postId: post._id });
       
       let liked = false;
-      if (req.user?._id) {
+      // Always check like status if user is authenticated (including from Authorization header)
+      const userId = req.user?._id;
+      if (userId) {
         const existingLike = await Like.findOne({ 
-          userId: req.user._id, 
+          userId: userId, 
           postId: post._id 
         });
         liked = !!existingLike;
-      }
-
+      } 
       return {
         ...post.toObject(),
         commentsCount,
@@ -118,7 +119,7 @@ export const getPostById = async (req: Request, res: Response, next: NextFunctio
       ...post.toObject(),
       commentsCount,
       likeCount: post.likeCount || 0,
-      liked
+      liked // Make sure this is explicitly included
     });
   } catch (error) {
     next(error);
@@ -152,6 +153,34 @@ export const deletePost = async (req: Request, res: Response, next: NextFunction
     await Post.findByIdAndDelete(id);
 
     res.status(200).json({ message: "Post deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Add new endpoint to get post likes with user details
+export const getPostLikes = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  try {
+    const post = await Post.findById(id);
+    if (!post) {
+      throw createHttpError(404, "Post not found");
+    }
+
+    const likes = await Like.find({ postId: id })
+      .populate('userId', 'firstName lastName username')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.status(200).json({
+      likes: likes.map(like => ({
+        _id: like._id,
+        user: like.userId,
+        likedAt: like.createdAt
+      })),
+      totalLikes: likes.length
+    });
   } catch (error) {
     next(error);
   }

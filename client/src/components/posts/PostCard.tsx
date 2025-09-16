@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Post } from '@/types/post.types';
 import { useAuth } from '@/contexts/AuthContext';
 import { apiClient } from '@/utils/api';
-import { Button } from '@/components/ui/Button';
 import { CommentSection } from './CommentSection';
 import { ImageModal } from '@/components/ui/ImageModal';
 
@@ -16,17 +16,49 @@ interface PostCardProps {
 interface LikeResponse {
   liked: boolean;
   likeCount: number;
+  likedAt?: string;
+  unlikedAt?: string;
 }
 
 export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
-  const [liked, setLiked] = useState(post.liked || false);
-  const [likeCount, setLikeCount] = useState(post.likeCount || 0);
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
   const [showComments, setShowComments] = useState(false);
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [imageModalOpen, setImageModalOpen] = useState(false);
   
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+
+  // Update like state when post prop changes (e.g., after refresh)
+  useEffect(() => {
+    const isLiked = Boolean(post.liked);
+    const count = post.likeCount || 0;
+    
+    setLiked(isLiked);
+    setLikeCount(count);
+    
+  }, [post.liked, post.likeCount, post._id, isAuthenticated]);
+
+  // Also fetch like status when component mounts if user is authenticated
+  useEffect(() => {
+  const fetchLikeStatus = async () => {
+    if (isAuthenticated && user) {
+      try {
+        const response = await apiClient.getLikeStatus(post._id);
+        if (response.data) {
+          setLiked(response.data.liked);
+          setLikeCount(response.data.likeCount);
+        }
+      } catch {
+      }
+    }
+  };
+
+    if (isAuthenticated && user && (post.liked === undefined || post.liked === null)) {
+      fetchLikeStatus();
+    }
+  }, [post._id, isAuthenticated, user, post.liked]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -52,6 +84,11 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
   };
 
   const handleLike = async () => {
+    // Don't allow liking if not authenticated
+    if (!isAuthenticated || !user) {
+      return;
+    }
+
     if (loading) return;
     
     setLoading(true);
@@ -156,7 +193,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
                 style={{ color: 'var(--color-muted-foreground, #64748b)' }}
               >
                 {deleteLoading ? (
-                  <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                  <div 
+                    className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border border-t-transparent"
+                    style={{ borderColor: 'var(--color-muted-foreground, #64748b)' }}
+                  ></div>
                 ) : (
                   <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -196,7 +236,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
               alt="Post content"
               className="w-full h-auto object-contain cursor-pointer transition-transform duration-200 group-hover:scale-[1.01]"
               style={{
-                maxHeight: '400px', // Reasonable max height to prevent excessive scaling
+                maxHeight: '400px', // Max height to prevent excessive scaling
                 minHeight: '200px', // Minimum height for consistency
                 backgroundColor: 'var(--color-muted, #f1f5f9)'
               }}
@@ -234,45 +274,54 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
         <div className="px-3 sm:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between mb-2 sm:mb-3">
             <div className="flex items-center space-x-3 sm:space-x-4">
+              {/* Like Button */}
               <button
                 onClick={handleLike}
-                disabled={loading}
-                className={`transition-all duration-200 hover:scale-110 ${
-                  liked 
-                    ? 'text-red-500 hover:text-red-600 scale-110' 
-                    : 'hover:text-red-500'
+                disabled={loading || !isAuthenticated}
+                className={`flex items-center space-x-1 transition-all duration-200 ${
+                  isAuthenticated ? 'hover:scale-110' : 'opacity-50 cursor-not-allowed'
                 }`}
-                style={{ 
-                  color: liked ? '#ef4444' : 'var(--color-muted-foreground, #64748b)' 
-                }}
               >
                 <svg 
-                  className={`w-5 h-5 sm:w-6 sm:h-6 transition-all duration-200 ${liked ? 'fill-current' : ''}`} 
-                  fill={liked ? 'currentColor' : 'none'} 
+                  className={`w-5 h-5 sm:w-6 sm:h-6 transition-colors duration-200 ${
+                    liked ? 'text-red-500 fill-current' : ''
+                  }`}
+                  fill={liked ? 'currentColor' : 'none'}
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
-                  strokeWidth={liked ? 0 : 2}
+                  style={{ 
+                    color: liked ? '#ef4444' : 'var(--color-muted-foreground, #64748b)',
+                    strokeWidth: liked ? 0 : 2
+                  }}
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
+                {loading && (
+                  <div 
+                    className="animate-spin rounded-full h-3 w-3 border border-t-transparent ml-1"
+                    style={{ borderColor: 'var(--color-muted-foreground, #64748b)' }}
+                  ></div>
+                )}
               </button>
 
+              {/* Comment Button */}
               <button
                 onClick={() => setShowComments(!showComments)}
                 className="transition-colors duration-200 hover:scale-110"
                 style={{ color: 'var(--color-muted-foreground, #64748b)' }}
               >
-                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
               </button>
 
+              {/* Share Button */}
               <button 
                 className="transition-colors duration-200 hover:scale-110"
                 style={{ color: 'var(--color-muted-foreground, #64748b)' }}
               >
-                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                 </svg>
               </button>
             </div>
@@ -281,8 +330,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
               className="transition-colors duration-200"
               style={{ color: 'var(--color-muted-foreground, #64748b)' }}
             >
-              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
               </svg>
             </button>
           </div>

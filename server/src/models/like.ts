@@ -18,5 +18,11 @@ const likeSchema = new Schema({
 // Unique index to prevent duplicate likes
 likeSchema.index({ postId: 1, userId: 1 }, { unique: true });
 
+likeSchema.statics.getLikesWithUsers = async function(postId: string) {
+  return this.find({ postId })
+    .populate('userId', 'firstName lastName username')
+    .sort({ createdAt: -1 });
+};
+
 const Like = model("Like", likeSchema);
 export default Like;
