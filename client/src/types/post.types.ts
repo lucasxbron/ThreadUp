@@ -24,6 +24,8 @@ export interface Comment {
   postId: string;
   createdAt: string;
   updatedAt: string;
+  liked: boolean;
+  likeCount: number;
 }
 
 export interface CreatePostData {
