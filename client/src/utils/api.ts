@@ -182,6 +182,25 @@ class ApiClient {
     return this.makeRequest(`/api/comment-likes/comment/${commentId}/users`);
   }
 
+  // Follow endpoints
+  async toggleFollow(userId: string) {
+    return this.makeRequest(`/api/follows/user/${userId}`, {
+      method: 'POST',
+    });
+  }
+
+  async getFollowStatus(userId: string) {
+    return this.makeRequest(`/api/follows/user/${userId}/status`);
+  }
+
+  async getFollowers(userId: string, page: number = 1, limit: number = 20) {
+    return this.makeRequest(`/api/follows/user/${userId}/followers?page=${page}&limit=${limit}`);
+  }
+
+  async getFollowing(userId: string, page: number = 1, limit: number = 20) {
+    return this.makeRequest(`/api/follows/user/${userId}/following?page=${page}&limit=${limit}`);
+  }
+
   // Upload endpoints
   async uploadFile(formData: FormData, type: 'profile' | 'post' | 'general' = 'general') {
     formData.append('type', type);
