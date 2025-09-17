@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Post } from '@/types/post.types';
 import { useAuth } from '@/contexts/AuthContext';
+import { useFollow } from '@/contexts/FollowContext';
 import { apiClient } from '@/utils/api';
 import { CommentSection } from './CommentSection';
 import { ImageModal } from '@/components/ui/ImageModal';
@@ -21,32 +22,39 @@ interface LikeResponse {
   unlikedAt?: string;
 }
 
-interface FollowResponse {
-  following: boolean;
-  followedAt?: string;
-  unfollowedAt?: string;
-}
-
 export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollowUpdate }) => {
   const [liked, setLiked] = useState(post.liked || false);
   const [likeCount, setLikeCount] = useState(post.likeCount || 0);
-  const [following, setFollowing] = useState(post.following || false);
-  const [followerCount, setFollowerCount] = useState(post.authorId.followersCount || 0); // Track follower count
   const [showComments, setShowComments] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [followLoading, setFollowLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [imageModalOpen, setImageModalOpen] = useState(false);
   
   const { user, isAuthenticated } = useAuth();
+  const { getFollowState, toggleFollow, updateFollowState } = useFollow();
 
-  // Update states when post prop changes
+  // Get follow state from global context
+  const globalFollowState = getFollowState(post.authorId._id);
+  const following = globalFollowState?.isFollowing ?? post.following ?? false;
+  const followerCount = globalFollowState?.followersCount ?? post.authorId.followersCount ?? 0;
+  const followLoading = globalFollowState?.isLoading ?? false;
+
+  // Initialize global follow state if not present
+  useEffect(() => {
+    if (!globalFollowState && post.authorId._id) {
+      updateFollowState(
+        post.authorId._id,
+        post.following ?? false,
+        post.authorId.followersCount ?? 0
+      );
+    }
+  }, [post.authorId._id, post.following, post.authorId.followersCount, globalFollowState, updateFollowState]);
+
+  // Update local like states when post prop changes
   useEffect(() => {
     setLiked(Boolean(post.liked));
     setLikeCount(post.likeCount || 0);
-    setFollowing(Boolean(post.following));
-    setFollowerCount(post.authorId.followersCount || 0);
-  }, [post.liked, post.likeCount, post.following, post._id, post.authorId.followersCount]);
+  }, [post.liked, post.likeCount, post._id]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -92,30 +100,16 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollow
     if (!isAuthenticated || !user || followLoading) {
       return;
     }
+
+    const success = await toggleFollow(post.authorId._id, followerCount);
     
-    setFollowLoading(true);
-    const response = await apiClient.toggleFollow(post.authorId._id);
-    
-    if (response.data) {
-      const followData = response.data as FollowResponse;
-      const newFollowingStatus = followData.following;
-      
-      // Calculate new follower count
-      const newFollowerCount = newFollowingStatus 
-        ? followerCount + 1 
-        : Math.max(0, followerCount - 1);
-      
-      // Update local state
-      setFollowing(newFollowingStatus);
-      setFollowerCount(newFollowerCount);
-      
-      // Notify parent component to update all posts by this user
-      if (onFollowUpdate) {
-        onFollowUpdate(post.authorId._id, newFollowingStatus, newFollowerCount);
+    if (success) {
+      // Get updated state from global context
+      const updatedState = getFollowState(post.authorId._id);
+      if (updatedState && onFollowUpdate) {
+        onFollowUpdate(post.authorId._id, updatedState.isFollowing, updatedState.followersCount);
       }
     }
-    
-    setFollowLoading(false);
   };
 
   const handleDelete = async () => {
