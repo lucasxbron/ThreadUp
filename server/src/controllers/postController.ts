@@ -212,3 +212,75 @@ export const getPostLikes = async (req: Request, res: Response, next: NextFuncti
     next(error);
   }
 };
+
+export const getUserPosts = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { userId } = req.params;
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 20;
+    const skip = (page - 1) * limit;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    const posts = await Post.find({ authorId: userId })
+      .populate("authorId", "firstName lastName username followersCount")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalPosts = await Post.countDocuments({ authorId: userId });
+    const totalPages = Math.ceil(totalPosts / limit);
+
+    // Add like status, comment count, and follow status
+    const postsWithExtra = await Promise.all(posts.map(async (post) => {
+      const commentsCount = await Comment.countDocuments({ postId: post._id });
+      
+      let liked = false;
+      let following = false;
+      
+      const currentUserId = req.user?._id;
+      if (currentUserId) {
+        // Check like status
+        const existingLike = await Like.findOne({ 
+          userId: currentUserId, 
+          postId: post._id 
+        });
+        liked = !!existingLike;
+
+        // Check follow status (only if not the user's own post)
+        if (currentUserId !== post.authorId._id.toString()) {
+          const existingFollow = await Follow.findOne({
+            followerId: currentUserId,
+            followingId: post.authorId._id
+          });
+          following = !!existingFollow;
+        }
+      }
+
+      return {
+        ...post.toObject(),
+        commentsCount,
+        likeCount: post.likeCount || 0,
+        liked,
+        following
+      };
+    }));
+
+    res.status(200).json({
+      posts: postsWithExtra,
+      totalPosts,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalPosts,
+        hasNext: page < totalPages,
+        hasPrev: page > 1,
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
