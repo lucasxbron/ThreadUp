@@ -9,6 +9,8 @@ export interface User {
   verified: boolean;
   createdAt: string;
   updatedAt: string;
+  followersCount?: number;
+  followingCount?: number;
 }
 
 export interface AuthState {
