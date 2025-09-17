@@ -11,6 +11,7 @@ import { ImageModal } from '@/components/ui/ImageModal';
 interface PostCardProps {
   post: Post;
   onPostUpdate: () => void;
+  onFollowUpdate?: (userId: string, newFollowingStatus: boolean, newFollowerCount: number) => void; // ✅ New prop
 }
 
 interface LikeResponse {
@@ -20,45 +21,32 @@ interface LikeResponse {
   unlikedAt?: string;
 }
 
-export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
+interface FollowResponse {
+  following: boolean;
+  followedAt?: string;
+  unfollowedAt?: string;
+}
+
+export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollowUpdate }) => {
+  const [liked, setLiked] = useState(post.liked || false);
+  const [likeCount, setLikeCount] = useState(post.likeCount || 0);
+  const [following, setFollowing] = useState(post.following || false);
+  const [followerCount, setFollowerCount] = useState(post.authorId.followersCount || 0); // ✅ Track follower count
   const [showComments, setShowComments] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [imageModalOpen, setImageModalOpen] = useState(false);
   
   const { user, isAuthenticated } = useAuth();
 
-  // Update like state when post prop changes (e.g., after refresh)
+  // Update states when post prop changes
   useEffect(() => {
-    const isLiked = Boolean(post.liked);
-    const count = post.likeCount || 0;
-    
-    setLiked(isLiked);
-    setLikeCount(count);
-    
-  }, [post.liked, post.likeCount, post._id, isAuthenticated]);
-
-  // Also fetch like status when component mounts if user is authenticated
-  useEffect(() => {
-  const fetchLikeStatus = async () => {
-    if (isAuthenticated && user) {
-      try {
-        const response = await apiClient.getLikeStatus(post._id);
-        if (response.data) {
-          setLiked(response.data.liked);
-          setLikeCount(response.data.likeCount);
-        }
-      } catch {
-      }
-    }
-  };
-
-    if (isAuthenticated && user && (post.liked === undefined || post.liked === null)) {
-      fetchLikeStatus();
-    }
-  }, [post._id, isAuthenticated, user, post.liked]);
+    setLiked(Boolean(post.liked));
+    setLikeCount(post.likeCount || 0);
+    setFollowing(Boolean(post.following));
+    setFollowerCount(post.authorId.followersCount || 0);
+  }, [post.liked, post.likeCount, post.following, post._id, post.authorId.followersCount]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -84,12 +72,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
   };
 
   const handleLike = async () => {
-    // Don't allow liking if not authenticated
-    if (!isAuthenticated || !user) {
+    if (!isAuthenticated || !user || loading) {
       return;
     }
-
-    if (loading) return;
     
     setLoading(true);
     const response = await apiClient.toggleLike(post._id);
@@ -101,6 +86,36 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
     }
     
     setLoading(false);
+  };
+
+  const handleFollow = async () => {
+    if (!isAuthenticated || !user || followLoading) {
+      return;
+    }
+    
+    setFollowLoading(true);
+    const response = await apiClient.toggleFollow(post.authorId._id);
+    
+    if (response.data) {
+      const followData = response.data as FollowResponse;
+      const newFollowingStatus = followData.following;
+      
+      // Calculate new follower count
+      const newFollowerCount = newFollowingStatus 
+        ? followerCount + 1 
+        : Math.max(0, followerCount - 1);
+      
+      // Update local state
+      setFollowing(newFollowingStatus);
+      setFollowerCount(newFollowerCount);
+      
+      // Notify parent component to update all posts by this user
+      if (onFollowUpdate) {
+        onFollowUpdate(post.authorId._id, newFollowingStatus, newFollowerCount);
+      }
+    }
+    
+    setFollowLoading(false);
   };
 
   const handleDelete = async () => {
@@ -118,6 +133,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
   };
 
   const canDelete = user?._id === post.authorId._id;
+  const isOwnPost = user?._id === post.authorId._id;
 
   // Get user initials for avatar
   const getInitials = (firstName: string, lastName: string) => {
@@ -157,13 +173,62 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
               </div>
             </div>
             <div className="flex flex-col min-w-0 flex-1">
-              <p 
-                className="font-semibold text-sm truncate"
-                style={{ color: 'var(--color-card-foreground, #0f172a)' }}
-              >
-                {getFullName(post.authorId.firstName, post.authorId.lastName)}
-              </p>
-              <div className="flex items-center space-x-1 text-xs">
+              <div className="flex items-center space-x-2">
+                <p 
+                  className="font-semibold text-sm truncate"
+                  style={{ color: 'var(--color-card-foreground, #0f172a)' }}
+                >
+                  {getFullName(post.authorId.firstName, post.authorId.lastName)}
+                </p>
+                
+                {/* Follow Button - Only show for other users */}
+                {isAuthenticated && !isOwnPost && (
+                  <button
+                    onClick={handleFollow}
+                    disabled={followLoading}
+                    className={`px-2 py-1 rounded-md text-xs font-medium transition-all duration-200 ${
+                      following
+                        ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                    }`}
+                    style={{
+                      minWidth: '60px',
+                      backgroundColor: following 
+                        ? 'var(--color-secondary, #f1f5f9)' 
+                        : 'var(--color-primary, #3b82f6)',
+                      color: following 
+                        ? 'var(--color-secondary-foreground, #1f2937)' 
+                        : 'white'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!following) {
+                        e.currentTarget.style.backgroundColor = 'var(--color-primary-600, #2563eb)';
+                      } else {
+                        e.currentTarget.style.backgroundColor = 'var(--color-secondary-400, #e2e8f0)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!following) {
+                        e.currentTarget.style.backgroundColor = 'var(--color-primary, #3b82f6)';
+                      } else {
+                        e.currentTarget.style.backgroundColor = 'var(--color-secondary, #f1f5f9)';
+                      }
+                    }}
+                  >
+                    {followLoading ? (
+                      <div 
+                        className="animate-spin rounded-full h-3 w-3 border border-t-transparent mx-auto"
+                        style={{ borderColor: following ? 'var(--color-secondary-foreground, #1f2937)' : 'white' }}
+                      ></div>
+                    ) : following ? (
+                      'Following'
+                    ) : (
+                      'Follow'
+                    )}
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center space-x-1 text-xs mt-1">
                 <span 
                   style={{ color: 'var(--color-muted-foreground, #64748b)' }}
                 >
@@ -179,6 +244,20 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
                 >
                   {formatDate(post.createdAt)}
                 </span>
+                {followerCount !== undefined && (
+                  <>
+                    <span 
+                      style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                    >
+                      •
+                    </span>
+                    <span 
+                      style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                    >
+                      {followerCount} followers
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -236,8 +315,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate }) => {
               alt="Post content"
               className="w-full h-auto object-contain cursor-pointer transition-transform duration-200 group-hover:scale-[1.01]"
               style={{
-                maxHeight: '400px', // Max height to prevent excessive scaling
-                minHeight: '200px', // Minimum height for consistency
+                maxHeight: '400px',
+                minHeight: '200px',
                 backgroundColor: 'var(--color-muted, #f1f5f9)'
               }}
               onClick={() => setImageModalOpen(true)}
