@@ -4,22 +4,60 @@ import React from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { PostFeed } from "@/components/posts/PostFeed";
+import { ProfileCard } from "@/components/profile/ProfileCard";
+import { SuggestionsCard } from "@/components/profile/SuggestionsCard";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
 export default function HomePage() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-200">
         <Header />
-        <div className="max-w-2xl mx-auto px-4 py-8">
-          <div className="animate-pulse space-y-4">
-            <div className="h-32 bg-gray-300 dark:bg-gray-400 rounded-lg"></div>
-            <div className="h-48 bg-gray-300 dark:bg-gray-400 rounded-lg"></div>
-            <div className="h-48 bg-gray-300 dark:bg-gray-400 rounded-lg"></div>
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="flex gap-6 justify-center">
+            {/* Profile Card Skeleton */}
+            <div className="hidden lg:block flex-shrink-0 w-80">
+              <div className="animate-pulse bg-white dark:bg-gray-300 rounded-xl p-6 shadow-sm border">
+                <div className="text-center">
+                  <div className="w-20 h-20 bg-gray-300 dark:bg-gray-400 rounded-full mx-auto mb-4"></div>
+                  <div className="h-6 bg-gray-300 dark:bg-gray-400 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-300 dark:bg-gray-400 rounded mb-4 w-24 mx-auto"></div>
+                  <div className="flex justify-between mb-4">
+                    <div className="text-center">
+                      <div className="h-6 w-8 bg-gray-300 dark:bg-gray-400 rounded mb-1"></div>
+                      <div className="h-3 w-8 bg-gray-300 dark:bg-gray-400 rounded"></div>
+                    </div>
+                    <div className="text-center">
+                      <div className="h-6 w-8 bg-gray-300 dark:bg-gray-400 rounded mb-1"></div>
+                      <div className="h-3 w-12 bg-gray-300 dark:bg-gray-400 rounded"></div>
+                    </div>
+                    <div className="text-center">
+                      <div className="h-6 w-8 bg-gray-300 dark:bg-gray-400 rounded mb-1"></div>
+                      <div className="h-3 w-12 bg-gray-300 dark:bg-gray-400 rounded"></div>
+                    </div>
+                  </div>
+                  <div className="h-4 bg-gray-300 dark:bg-gray-400 rounded w-32 mx-auto"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Post Feed Skeleton */}
+            <div className="flex-1 max-w-2xl">
+              <div className="animate-pulse space-y-4">
+                <div className="h-32 bg-gray-300 dark:bg-gray-400 rounded-lg"></div>
+                <div className="h-48 bg-gray-300 dark:bg-gray-400 rounded-lg"></div>
+                <div className="h-48 bg-gray-300 dark:bg-gray-400 rounded-lg"></div>
+              </div>
+            </div>
+
+            {/* Right Side Placeholder */}
+            <div className="hidden xl:block w-80 flex-shrink-0">
+              {/* Future: Suggestions, trending topics, etc. */}
+            </div>
           </div>
         </div>
       </div>
@@ -315,7 +353,7 @@ export default function HomePage() {
                   <li>
                     <Link
                       href="/safety"
-                      className="hover:text-foreground transition-colors cursor-pointer"
+                      className="hover:text-foreground transition-colors cursor-colors cursor-pointer"
                     >
                       Safety
                     </Link>
@@ -481,14 +519,56 @@ export default function HomePage() {
     );
   }
 
-  // Authenticated user's feed
+  // Authenticated user's feed with ProfileCard and SuggestionsCard
   return (
     <ProtectedRoute>
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="flex transition-colors duration-300">
-          <div className="w-full mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 md:py-6 lg:py-8">
-            <PostFeed />
+        <main
+          className="flex-1 transition-colors duration-300"
+          style={{ backgroundColor: "var(--color-background, #ffffff)" }}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex gap-6 justify-center">
+              {/* Profile Card and Suggestions - Left Side (Hidden on mobile/tablet) */}
+              <div className="hidden lg:block flex-shrink-0 space-y-6">
+                {/* ProfileCard */}
+                {user && <ProfileCard user={user} />}
+
+                {/* SuggestionsCard */}
+                <SuggestionsCard />
+              </div>
+
+              {/* Post Feed - Center */}
+              <div className="flex-1 max-w-2xl">
+                <PostFeed />
+              </div>
+
+              {/* Right Side - What's happening (Hidden on mobile) */}
+              <div className="hidden xl:block w-80 flex-shrink-0">
+                {/* Future: Trending topics, activity feed, etc. */}
+                <div
+                  className="rounded-xl shadow-sm border p-6"
+                  style={{
+                    backgroundColor: "var(--color-card, #ffffff)",
+                    borderColor: "var(--color-border, #e2e8f0)",
+                  }}
+                >
+                  <h3
+                    className="font-semibold text-lg mb-4"
+                    style={{ color: "var(--color-card-foreground, #0f172a)" }}
+                  >
+                    What's happening
+                  </h3>
+                  <p
+                    className="text-sm"
+                    style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                  >
+                    Coming soon...
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </main>
       </div>
