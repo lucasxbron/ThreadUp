@@ -4,6 +4,8 @@ export interface User {
   lastName: string;
   username: string;
   email: string;
+  followersCount?: number;
+  followingCount?: number;
 }
 
 export interface Post {
@@ -15,6 +17,7 @@ export interface Post {
   updatedAt: string;
   liked: boolean;
   likeCount: number;
+  following?: boolean;
 }
 
 export interface Comment {
@@ -31,4 +34,11 @@ export interface Comment {
 export interface CreatePostData {
   text: string;
   image?: File;
+}
+
+export interface FollowStatus {
+  following: boolean;
+  followersCount: number;
+  followingCount: number;
+  followedAt?: string;
 }
