@@ -17,6 +17,7 @@ const optionalAuth = async (req: any, res: any, next: any) => {
 
 // Protected routes (authentication required)
 router.post("/user/:userId", verifyToken, followController.toggleFollow);
+router.get("/suggestions", verifyToken, followController.getSuggestions);
 
 // Public routes with optional authentication for follow status
 router.get("/user/:userId/status", optionalAuth, followController.getFollowStatus);
