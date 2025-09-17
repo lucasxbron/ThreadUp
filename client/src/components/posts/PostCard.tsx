@@ -11,7 +11,7 @@ import { ImageModal } from '@/components/ui/ImageModal';
 interface PostCardProps {
   post: Post;
   onPostUpdate: () => void;
-  onFollowUpdate?: (userId: string, newFollowingStatus: boolean, newFollowerCount: number) => void; // ✅ New prop
+  onFollowUpdate?: (userId: string, newFollowingStatus: boolean, newFollowerCount: number) => void;
 }
 
 interface LikeResponse {
@@ -31,7 +31,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollow
   const [liked, setLiked] = useState(post.liked || false);
   const [likeCount, setLikeCount] = useState(post.likeCount || 0);
   const [following, setFollowing] = useState(post.following || false);
-  const [followerCount, setFollowerCount] = useState(post.authorId.followersCount || 0); // ✅ Track follower count
+  const [followerCount, setFollowerCount] = useState(post.authorId.followersCount || 0); // Track follower count
   const [showComments, setShowComments] = useState(false);
   const [loading, setLoading] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
