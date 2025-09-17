@@ -201,6 +201,14 @@ class ApiClient {
     return this.makeRequest(`/api/follows/user/${userId}/following?page=${page}&limit=${limit}`);
   }
 
+  async getUserPosts(userId: string, page: number = 1, limit: number = 20) {
+  return this.makeRequest(`/api/posts/user/${userId}?page=${page}&limit=${limit}`);
+}
+
+async getSuggestions(limit: number = 5) {
+  return this.makeRequest(`/api/follows/suggestions?limit=${limit}`);
+}
+
   // Upload endpoints
   async uploadFile(formData: FormData, type: 'profile' | 'post' | 'general' = 'general') {
     formData.append('type', type);
