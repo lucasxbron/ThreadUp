@@ -19,6 +19,7 @@ const optionalAuth = async (req: any, res: any, next: any) => {
 // Public routes with optional authentication
 router.get("/", optionalAuth, postController.getPosts);
 router.get("/:id", optionalAuth, postController.getPostById);
+router.get("/user/:userId", optionalAuth, postController.getUserPosts);
 
 // Protected routes
 router.post("/", verifyToken, upload.single("image"), postController.createPost);
