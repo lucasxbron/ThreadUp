@@ -56,6 +56,24 @@ export const PostFeed: React.FC = () => {
     loadPosts();
   };
 
+  const handleFollowUpdate = (userId: string, newFollowingStatus: boolean, newFollowerCount: number) => {
+    setPosts(prevPosts => 
+      prevPosts.map(post => {
+        if (post.authorId._id === userId) {
+          return {
+            ...post,
+            following: newFollowingStatus,
+            authorId: {
+              ...post.authorId,
+              followersCount: newFollowerCount
+            }
+          };
+        }
+        return post;
+      })
+    );
+  };
+
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto space-y-4 md:space-y-6">
@@ -107,7 +125,7 @@ export const PostFeed: React.FC = () => {
                     style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                   ></div>
                   <div 
-                    className="h-2 md:h-3 rounded w-1/6"
+                    className="h-2 md:h-3 rounded w-1/3"
                     style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                   ></div>
                 </div>
@@ -233,6 +251,7 @@ export const PostFeed: React.FC = () => {
             key={post._id}
             post={post}
             onPostUpdate={handlePostUpdate}
+            onFollowUpdate={handleFollowUpdate} // Pass the follow update handler
           />
         ))
       )}
