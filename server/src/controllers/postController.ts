@@ -4,6 +4,7 @@ import Post from "../models/post.js";
 import User from "../models/user.js";
 import Comment from "../models/comment.js";
 import Like from "../models/like.js";
+import Follow from "../models/follow.js";
 import config from "../config/config.js";
 import { uploadToCloudinary } from "../utils/cloudinary.js";
 
@@ -28,7 +29,7 @@ export const createPost = async (req: Request, res: Response, next: NextFunction
       text,
       authorId: req.user?._id,
       imageUrl,
-      imagePublicId, // Store for future deletion
+      imagePublicId,
     });
 
     const populatedPost = await Post.findById(newPost._id).populate("authorId", "firstName lastName username");
@@ -49,7 +50,7 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
     const skip = (page - 1) * limit;
 
     const posts = await Post.find()
-      .populate("authorId", "firstName lastName username")
+      .populate("authorId", "firstName lastName username followersCount")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -57,25 +58,38 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
     const totalPosts = await Post.countDocuments();
     const totalPages = Math.ceil(totalPosts / limit);
 
-    // Add like status and comment count
+    // Like status, comment count, and follow status
     const postsWithExtra = await Promise.all(posts.map(async (post) => {
       const commentsCount = await Comment.countDocuments({ postId: post._id });
       
       let liked = false;
-      // Always check like status if user is authenticated (including from Authorization header)
+      let following = false;
+      
       const userId = req.user?._id;
       if (userId) {
+        // Check like status
         const existingLike = await Like.findOne({ 
           userId: userId, 
           postId: post._id 
         });
         liked = !!existingLike;
-      } 
+
+        // Check follow status (only if not the user's own post)
+        if (userId !== post.authorId._id.toString()) {
+          const existingFollow = await Follow.findOne({
+            followerId: userId,
+            followingId: post.authorId._id
+          });
+          following = !!existingFollow;
+        }
+      }
+
       return {
         ...post.toObject(),
         commentsCount,
         likeCount: post.likeCount || 0,
-        liked
+        liked,
+        following
       };
     }));
 
@@ -98,7 +112,7 @@ export const getPostById = async (req: Request, res: Response, next: NextFunctio
   const { id } = req.params;
 
   try {
-    const post = await Post.findById(id).populate("authorId", "firstName lastName username");
+    const post = await Post.findById(id).populate("authorId", "firstName lastName username followersCount");
 
     if (!post) {
       throw createHttpError(404, "Post not found");
@@ -107,19 +121,32 @@ export const getPostById = async (req: Request, res: Response, next: NextFunctio
     const commentsCount = await Comment.countDocuments({ postId: post._id });
     
     let liked = false;
+    let following = false;
+    
     if (req.user?._id) {
+      // Check like status
       const existingLike = await Like.findOne({ 
         userId: req.user._id, 
         postId: post._id 
       });
       liked = !!existingLike;
+
+      // Check follow status (only if not the user's own post)
+      if (req.user._id !== post.authorId._id.toString()) {
+        const existingFollow = await Follow.findOne({
+          followerId: req.user._id,
+          followingId: post.authorId._id
+        });
+        following = !!existingFollow;
+      }
     }
 
     res.status(200).json({
       ...post.toObject(),
       commentsCount,
       likeCount: post.likeCount || 0,
-      liked // Make sure this is explicitly included
+      liked,
+      following
     });
   } catch (error) {
     next(error);
@@ -158,7 +185,7 @@ export const deletePost = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-// Add new endpoint to get post likes with user details
+// Endpoint to get post likes with user details
 export const getPostLikes = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
 
