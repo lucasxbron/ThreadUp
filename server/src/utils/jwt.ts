@@ -11,7 +11,7 @@ export function createToken(payload: JwtPayload): string {
       throw createHttpError(500, "JWT was not set");
     }
     
-    const token = jwt.sign(payload, secret, { expiresIn: "24h" });
+    const token = jwt.sign(payload, secret, { expiresIn: "7d" });
     return token;
   } catch (error) {
     throw createHttpError(500, "Token could not be created");
