@@ -209,6 +209,31 @@ async getSuggestions(limit: number = 5) {
   return this.makeRequest(`/api/follows/suggestions?limit=${limit}`);
 }
 
+async getFilteredPosts(filter: string = 'recent', page: number = 1, limit: number = 20) {
+  return this.makeRequest(`/api/posts/feed?filter=${filter}&page=${page}&limit=${limit}`);
+}
+
+async changePassword(data: { currentPassword: string; newPassword: string }) {
+  return this.makeRequest('/api/auth/change-password', {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+async deleteAccount(password: string) {
+  const response = await this.makeRequest('/api/auth/delete-account', {
+    method: 'DELETE',
+    body: JSON.stringify({ password }),
+  });
+  
+  // Always clear local token after delete attempt
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('token');
+  }
+  
+  return response;
+}
+
   // Upload endpoints
   async uploadFile(formData: FormData, type: 'profile' | 'post' | 'general' = 'general') {
     formData.append('type', type);
