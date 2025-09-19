@@ -1,6 +1,8 @@
 import { Router } from "express";
 import * as authController from "../controllers/authController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
+import { compare } from "bcrypt-ts";
+import validator from "validator";
 
 const router = Router();
 
@@ -14,5 +16,7 @@ router.post("/resend-verification", authController.resendVerification);
 // Protected routes
 router.get("/profile", verifyToken, authController.getOwnProfile);
 router.put("/profile", verifyToken, authController.updateOwnProfile);
+router.put("/change-password", verifyToken, authController.changePassword);
+router.delete("/delete-account", verifyToken, authController.deleteAccount);
 
 export default router;
