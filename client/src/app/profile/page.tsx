@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { Header } from '@/components/layout/Header';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { PasswordChangeCard } from '@/components/profile/PasswordChangeCard';
+import { DeleteAccountCard } from '@/components/profile/DeleteAccountCard';
+import Link from 'next/link';
 
 export default function ProfilePage() {
   const { user, updateProfile, isLoading } = useAuth();
@@ -193,6 +196,31 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Password Change Card Loading Skeleton */}
+                <div 
+                  className="rounded-xl shadow-lg border p-6"
+                  style={{
+                    backgroundColor: 'var(--color-card, #ffffff)',
+                    borderColor: 'var(--color-border, #e2e8f0)'
+                  }}
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="profile-loading w-10 h-10 rounded-lg"></div>
+                      <div>
+                        <div className="profile-loading h-5 w-32 rounded mb-1"></div>
+                        <div className="profile-loading h-4 w-40 rounded"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="profile-loading h-10 w-full rounded-lg"></div>
+                      <div className="profile-loading h-10 w-full rounded-lg"></div>
+                      <div className="profile-loading h-10 w-full rounded-lg"></div>
+                      <div className="profile-loading h-10 w-32 rounded-lg ml-auto"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </main>
           </div>
@@ -242,7 +270,7 @@ export default function ProfilePage() {
           <Header />
           <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
             <div className="space-y-6">
-              {/* Page Header */}
+              {/* Back Button and Page Header */}
               <div 
                 className="rounded-xl shadow-lg border p-6 transition-all duration-300"
                 style={{
@@ -252,26 +280,48 @@ export default function ProfilePage() {
                 }}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-                  <div>
-                    <h1 
-                      className="text-2xl sm:text-3xl font-bold"
-                      style={{ color: 'var(--color-foreground, #0f172a)' }}
-                    >
-                      Profile Settings
-                    </h1>
-                    <p 
-                      className="mt-2 text-base"
-                      style={{ color: 'var(--color-muted-foreground, #64748b)' }}
-                    >
-                      Manage your account information and preferences
-                    </p>
+                  <div className="flex items-center space-x-4">
+                    {/* Back Button */}
+                    <Link href="/">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="flex items-center space-x-2 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        <span>Back to Feed</span>
+                      </Button>
+                    </Link>
+                    
+                    {/* Title */}
+                    <div>
+                      <h1 
+                        className="text-2xl sm:text-3xl font-bold"
+                        style={{ color: 'var(--color-foreground, #0f172a)' }}
+                      >
+                        Profile Settings
+                      </h1>
+                      <p 
+                        className="mt-1 text-base"
+                        style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                      >
+                        Manage your account information and preferences
+                      </p>
+                    </div>
                   </div>
+                  
+                  {/* Edit Button */}
                   <Button
                     onClick={() => setIsEditing(true)}
                     variant="primary"
                     size="sm"
-                    className="px-6 py-2.5"
+                    className="px-6 py-2.5 w-full sm:w-auto"
                   >
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
                     Edit Profile
                   </Button>
                 </div>
@@ -296,7 +346,7 @@ export default function ProfilePage() {
                 </div>
               )}
 
-              {/* Profile Information */}
+              {/* Profile Information Card */}
               <div 
                 className="rounded-xl shadow-lg border p-6 transition-all duration-300"
                 style={{
@@ -486,6 +536,11 @@ export default function ProfilePage() {
                   </div>
                 </div>
               </div>
+
+              {/* Password Change Card */}
+              <PasswordChangeCard />
+              {/* Delete Account Card */}
+              <DeleteAccountCard />
             </div>
           </main>
 
@@ -573,6 +628,7 @@ export default function ProfilePage() {
                 />
               </div>
 
+              {/* Error Display */}
               {error && (
                 <div 
                   className="border rounded-lg p-3"
@@ -591,6 +647,7 @@ export default function ProfilePage() {
                 </div>
               )}
 
+              {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-3 pt-4">
                 <Button
                   type="button"
