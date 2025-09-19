@@ -2,12 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
 import User from "../models/user.js";
 import { compare } from "bcrypt-ts";
+import validator from "validator";
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import { createToken } from "../utils/jwt.js";
 import { JwtPayload } from "../types/jwt.js";
 import { sendVerificationEmail } from "../utils/resend.js";
 import crypto from "crypto";
+import mongoose from "mongoose";
 
 const secret = config.JWT_SECRET;
 
@@ -288,6 +290,189 @@ export const updateOwnProfile = async (
       message: "Profile updated",
       user: updatedUser,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const changePassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      throw createHttpError(400, "Current password and new password are required");
+    }
+
+    const user = await User.findById(req.user?._id);
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    // Verify current password
+    const isCurrentPasswordValid = await compare(currentPassword, user.password);
+    if (!isCurrentPasswordValid) {
+      throw createHttpError(400, "Current password is incorrect");
+    }
+
+    // Validate new password strength
+    if (!validator.isStrongPassword(newPassword, {
+      minLength: 8,
+      minNumbers: 1,
+      minSymbols: 1,
+      minUppercase: 1,
+      minLowercase: 1,
+    })) {
+      throw createHttpError(400, "New password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 number, and 1 symbol");
+    }
+
+    // Update password (will be hashed by pre-save middleware)
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({
+      message: "Password changed successfully"
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteAccount = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { password } = req.body;
+    const userId = req.user?._id;
+
+    if (!password) {
+      throw createHttpError(400, "Password is required to delete account");
+    }
+
+    if (!userId) {
+      throw createHttpError(401, "User not authenticated");
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    // Verify password before deletion
+    const isPasswordValid = await compare(password, user.password);
+    if (!isPasswordValid) {
+      throw createHttpError(400, "Invalid password");
+    }
+
+    // Start a transaction to ensure data consistency
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      // Import all necessary models
+      const Post = (await import("../models/post.js")).default;
+      const Comment = (await import("../models/comment.js")).default;
+      const Like = (await import("../models/like.js")).default;
+      const CommentLike = (await import("../models/commentLike.js")).default;
+      const Follow = (await import("../models/follow.js")).default;
+
+      // Get all user's posts to delete associated data
+      const userPosts = await Post.find({ authorId: userId }).session(session);
+      const postIds = userPosts.map(post => post._id);
+
+      // Delete all comments on user's posts
+      await Comment.deleteMany({ postId: { $in: postIds } }).session(session);
+
+      // Delete all likes on user's posts
+      await Like.deleteMany({ postId: { $in: postIds } }).session(session);
+
+      // Delete all comment likes on comments from user's posts
+      const commentsOnUserPosts = await Comment.find({ postId: { $in: postIds } }).session(session);
+      const commentIds = commentsOnUserPosts.map(comment => comment._id);
+      await CommentLike.deleteMany({ commentId: { $in: commentIds } }).session(session);
+
+      // Delete all user's comments on other posts
+      const userComments = await Comment.find({ authorId: userId }).session(session);
+      const userCommentIds = userComments.map(comment => comment._id);
+      await CommentLike.deleteMany({ commentId: { $in: userCommentIds } }).session(session);
+      await Comment.deleteMany({ authorId: userId }).session(session);
+
+      // Delete all user's likes on posts
+      await Like.deleteMany({ userId }).session(session);
+
+      // Delete all user's comment likes
+      await CommentLike.deleteMany({ userId }).session(session);
+
+      // Delete all follow relationships
+      await Follow.deleteMany({ 
+        $or: [
+          { followerId: userId },
+          { followingId: userId }
+        ]
+      }).session(session);
+
+      // Update follower/following counts for affected users
+      const followersToUpdate = await Follow.find({ followingId: userId }).session(session);
+      const followingToUpdate = await Follow.find({ followerId: userId }).session(session);
+
+      // Update follower counts for users who were following the deleted user
+      for (const follow of followersToUpdate) {
+        await User.findByIdAndUpdate(
+          follow.followerId,
+          { $inc: { followingCount: -1 } },
+          { session }
+        );
+      }
+
+      // Update following counts for users who the deleted user was following
+      for (const follow of followingToUpdate) {
+        await User.findByIdAndUpdate(
+          follow.followingId,
+          { $inc: { followersCount: -1 } },
+          { session }
+        );
+      }
+
+      // Delete all user's posts (including images from Cloudinary)
+      const { deleteFromCloudinary } = await import("../utils/cloudinary.js");
+      for (const post of userPosts) {
+        if (post.imagePublicId) {
+          try {
+            await deleteFromCloudinary(post.imagePublicId);
+          } catch (error) {
+            console.warn(`Failed to delete image ${post.imagePublicId}:`, error);
+            // Continue with deletion even if image deletion fails
+          }
+        }
+      }
+      await Post.deleteMany({ authorId: userId }).session(session);
+
+      // Delete the user account
+      await User.findByIdAndDelete(userId).session(session);
+
+      // Commit the transaction
+      await session.commitTransaction();
+
+      // Clear the authentication cookie
+      res.clearCookie("token");
+
+      res.status(200).json({
+        message: "Account and all associated data have been permanently deleted"
+      });
+
+    } catch (error) {
+      // Rollback the transaction on error
+      await session.abortTransaction();
+      throw error;
+    } finally {
+      session.endSession();
+    }
+
   } catch (error) {
     next(error);
   }
