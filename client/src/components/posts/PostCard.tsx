@@ -297,7 +297,17 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollow
             <span className="font-semibold mr-2">
               {getFullName(post.authorId.firstName, post.authorId.lastName)}
             </span>
-            <span className="whitespace-pre-wrap break-words">{post.text}</span>
+            <span 
+              className="whitespace-pre-wrap break-words"
+              style={{
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
+                hyphens: 'auto',
+                maxWidth: '100%'
+              }}
+            >
+              {post.text}
+            </span>
           </div>
         </div>
 
