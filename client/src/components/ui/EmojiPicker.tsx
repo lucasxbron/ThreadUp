@@ -3,10 +3,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 interface EmojiPickerProps {
-  onEmojiSelect: (emoji: string) => void;
   isOpen: boolean;
   onClose: () => void;
-  triggerRef: React.RefObject<HTMLElement | null>;
+  onEmojiSelect: (emoji: string) => void;
+  triggerRef?: React.RefObject<HTMLElement | null>;
 }
 
 interface EmojiData {
@@ -401,9 +401,11 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
 
   // Calculate position relative to trigger element and account for scroll
   useEffect(() => {
-    if (isOpen && triggerRef.current) {
+    if (isOpen && triggerRef?.current) {
       const updatePosition = () => {
-        const triggerRect = triggerRef.current!.getBoundingClientRect();
+        if (!triggerRef?.current) return;
+        
+        const triggerRect = triggerRef.current.getBoundingClientRect();
         const viewportHeight = window.innerHeight;
         const viewportWidth = window.innerWidth;
         const pickerWidth = 320;
@@ -446,7 +448,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
       if (
         pickerRef.current &&
         !pickerRef.current.contains(target) &&
-        triggerRef.current &&
+        triggerRef?.current &&
         !triggerRef.current.contains(target)
       ) {
         onClose();
