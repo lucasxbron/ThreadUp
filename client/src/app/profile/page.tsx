@@ -8,6 +8,7 @@ import { Header } from '@/components/layout/Header';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { PasswordChangeCard } from '@/components/profile/PasswordChangeCard';
 import { DeleteAccountCard } from '@/components/profile/DeleteAccountCard';
+import { EmailChangeCard } from '@/components/profile/EmailChangeCard';
 import Link from 'next/link';
 
 export default function ProfilePage() {
@@ -537,6 +538,8 @@ export default function ProfilePage() {
                 </div>
               </div>
 
+              {/* Email Change Card */}
+              <EmailChangeCard />
               {/* Password Change Card */}
               <PasswordChangeCard />
               {/* Delete Account Card */}
