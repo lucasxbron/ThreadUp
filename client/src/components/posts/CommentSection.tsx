@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Comment } from '@/types/post.types';
-import { apiClient } from '@/utils/api';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { apiClient } from '@/utils/api';
 import { Button } from '@/components/ui/Button';
+import { EmojiPicker } from '@/components/ui/EmojiPicker';
+import { Comment } from '@/types/post.types';
 
 interface CommentSectionProps {
   postId: string;
@@ -31,6 +32,9 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [likingComments, setLikingComments] = useState<Set<string>>(new Set());
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiButtonRef = useRef<HTMLButtonElement>(null);
+  const commentInputRef = useRef<HTMLInputElement>(null);
 
   const { user, isAuthenticated } = useAuth();
 
@@ -48,6 +52,23 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
     }
 
     setLoading(false);
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    const input = commentInputRef.current;
+    if (input) {
+      const start = input.selectionStart || 0;
+      const end = input.selectionEnd || 0;
+      const newText = newComment.slice(0, start) + emoji + newComment.slice(end);
+      setNewComment(newText);
+      
+      setTimeout(() => {
+        input.selectionStart = input.selectionEnd = start + emoji.length;
+        input.focus();
+      }, 0);
+    } else {
+      setNewComment(prev => prev + emoji);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -148,7 +169,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
 
   return (
     <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
-      {/* Comment form */}
+      {/* Comment form with emoji button */}
       <form
         onSubmit={handleSubmit}
         className="flex items-center space-x-2 sm:space-x-3"
@@ -163,24 +184,48 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                 className="text-xs font-semibold"
                 style={{ color: "var(--color-card-foreground, #0f172a)" }}
               >
-                {user?.firstName && user?.lastName
-                  ? getInitials(user.firstName, user.lastName)
-                  : user?.username?.charAt(0).toUpperCase()}
+                {user && getInitials(user.firstName, user.lastName)}
               </span>
             </div>
           </div>
         </div>
 
-        <div className="flex-1 flex items-center space-x-2">
+        <div className="flex-1 flex items-center space-x-1 relative">
           <input
+            ref={commentInputRef}
             type="text"
             placeholder="Add a comment..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            className="flex-1 bg-transparent border-0 focus:ring-0 focus:outline-none text-xs sm:text-sm placeholder-gray-500 dark:placeholder-gray-400 py-2 sm:py-1"
+            className="flex-1 bg-transparent border-0 focus:ring-0 focus:outline-none text-xs sm:text-sm placeholder-gray-500 dark:placeholder-gray-400 py-2 sm:py-1 pr-8"
             style={{ color: "var(--color-card-foreground, #0f172a)" }}
             maxLength={200}
           />
+          
+          {/* Emoji Button */}
+          <button
+            ref={emojiButtonRef}
+            type="button"
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            className="p-1 rounded transition-all duration-200 hover:scale-110"
+            style={{
+              color: 'var(--color-muted-foreground, #64748b)',
+              backgroundColor: 'transparent'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'var(--color-secondary, #f1f5f9)';
+              e.currentTarget.style.color = 'var(--color-foreground, #0f172a)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = 'var(--color-muted-foreground, #64748b)';
+            }}
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </button>
+
           <Button
             type="submit"
             size="sm"
@@ -194,6 +239,14 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
           </Button>
         </div>
       </form>
+
+      {/* Emoji Picker */}
+      <EmojiPicker
+        isOpen={showEmojiPicker}
+        onClose={() => setShowEmojiPicker(false)}
+        onEmojiSelect={handleEmojiSelect}
+        triggerRef={emojiButtonRef}
+      />
 
       {/* Comments list*/}
       {loading ? (
@@ -220,10 +273,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                       className="text-xs font-semibold"
                       style={{ color: "var(--color-card-foreground, #0f172a)" }}
                     >
-                      {getInitials(
-                        comment.authorId.firstName,
-                        comment.authorId.lastName
-                      )}
+                      {getInitials(comment.authorId.firstName, comment.authorId.lastName)}
                     </span>
                   </div>
                 </div>
@@ -232,131 +282,98 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
               <div className="flex-1 min-w-0">
                 <div className="text-xs sm:text-sm">
                   <span
-                    className="font-semibold mr-1 sm:mr-2 whitespace-nowrap"
+                    className="font-medium mr-2"
                     style={{ color: "var(--color-card-foreground, #0f172a)" }}
                   >
-                    {getFullName(
-                      comment.authorId.firstName,
-                      comment.authorId.lastName
-                    )}
+                    {getFullName(comment.authorId.firstName, comment.authorId.lastName)}
                   </span>
                   <span
-                    className="break-words"
-                    style={{ color: "var(--color-card-foreground, #0f172a)" }}
-                  >
-                    {comment.text}
-                  </span>
-                </div>
-                
-                {/* Action buttons */}
-                <div className="flex items-center space-x-1 mt-1">
-                  <span
-                    className="text-xs px-1 py-0.5"
-                    style={{ color: "var(--color-muted-foreground, #64748b)" }}
-                  >
-                    {formatDate(comment.createdAt)}
-                  </span>
-                  <span
-                    className="text-xs px-1 py-0.5"
+                    className="mr-2"
                     style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
                     @{comment.authorId.username}
                   </span>
-                  
-                  {/* Like button */}
+                  <span
+                    className="text-xs"
+                    style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                  >
+                    · {formatDate(comment.createdAt)}
+                  </span>
+                </div>
+                <p
+                  className="mt-1 text-xs sm:text-sm break-words"
+                  style={{ color: "var(--color-card-foreground, #0f172a)" }}
+                >
+                  {comment.text}
+                </p>
+                
+                {/* Comment Actions */}
+                <div className="flex items-center space-x-1 mt-1">
+                  {/* Like Button */}
                   <button
                     onClick={() => handleCommentLike(comment._id)}
                     disabled={!isAuthenticated || likingComments.has(comment._id)}
-                    className={`flex items-center space-x-1 px-2 py-1.5 sm:px-1 sm:py-0.5 rounded-md transition-all duration-200 ${
-                      isAuthenticated 
-                        ? 'hover:scale-105 active:scale-95' 
-                        : 'opacity-50 cursor-not-allowed'
+                    className={`flex items-center space-x-1 px-2 py-1 rounded transition-all duration-200 group-hover:bg-red-50 dark:group-hover:bg-red-900/20 ${
+                      comment.liked ? "text-red-600" : ""
                     }`}
-                    style={{ 
-                      minHeight: '32px',
-                      minWidth: '32px'
+                    style={{
+                      color: comment.liked
+                        ? "var(--color-destructive, #ef4444)"
+                        : "var(--color-muted-foreground, #64748b)",
+                      backgroundColor: "transparent",
                     }}
                     onMouseEnter={(e) => {
-                      if (isAuthenticated) {
-                        e.currentTarget.style.backgroundColor = 'var(--color-secondary, #f1f5f9)';
+                      if (!comment.liked) {
+                        e.currentTarget.style.color = "var(--color-destructive, #ef4444)";
                       }
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
+                      if (!comment.liked) {
+                        e.currentTarget.style.color = "var(--color-muted-foreground, #64748b)";
+                      }
                     }}
                   >
-                    <svg 
-                      className={`w-5 h-5 sm:w-4 sm:h-4 transition-colors duration-200 ${
-                        comment.liked ? 'text-red-500 fill-current' : ''
-                      }`}
-                      fill={comment.liked ? 'currentColor' : 'none'}
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                      style={{ 
-                        color: comment.liked ? '#ef4444' : 'var(--color-muted-foreground, #64748b)',
-                        strokeWidth: comment.liked ? 0 : 2
-                      }}
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                    {comment.likeCount > 0 && (
-                      <span
-                        className="text-xs font-semibold"
-                        style={{ 
-                          color: comment.liked ? '#ef4444' : 'var(--color-muted-foreground, #64748b)'
-                        }}
-                      >
-                        {comment.likeCount}
-                      </span>
-                    )}
-                    {likingComments.has(comment._id) && (
-                      <div 
-                        className="animate-spin rounded-full h-2 w-2 border border-t-transparent ml-1"
-                        style={{ borderColor: 'var(--color-muted-foreground, #64748b)' }}
+                    {likingComments.has(comment._id) ? (
+                      <div
+                        className="animate-spin rounded-full h-3 w-3 border border-t-transparent"
+                        style={{ borderColor: "currentColor" }}
                       ></div>
+                    ) : (
+                      <svg
+                        className="w-3 h-3 sm:w-4 sm:h-4"
+                        fill={comment.liked ? "currentColor" : "none"}
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                        />
+                      </svg>
+                    )}
+                    {comment.likeCount > 0 && (
+                      <span className="text-xs">{comment.likeCount}</span>
                     )}
                   </button>
 
-                  {/* Reply button */}
-                  <button
-                    className="text-xs font-semibold px-2 py-1.5 sm:px-1 sm:py-0.5 rounded-md transition-all duration-200 active:scale-95"
-                    style={{ 
-                      color: "var(--color-muted-foreground, #64748b)",
-                      minHeight: '32px',
-                      minWidth: '40px'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'var(--color-secondary, #f1f5f9)';
-                      e.currentTarget.style.color = 'var(--color-foreground, #0f172a)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = 'var(--color-muted-foreground, #64748b)';
-                    }}
-                  >
-                    Reply
-                  </button>
-
-                  {/* Delete button (only for comment author) */}
+                  {/* Delete Button (only for comment author) */}
                   {user?._id === comment.authorId._id && (
                     <button
                       onClick={() => handleDeleteComment(comment._id)}
-                      className="text-xs font-semibold px-2 py-1.5 sm:px-1 sm:py-0.5 rounded-md opacity-70 group-hover:opacity-100 transition-all duration-200 active:scale-95"
-                      style={{
-                        color: "var(--color-muted-foreground, #64748b)",
-                        minHeight: '32px',
-                        minWidth: '40px'
-                      }}
+                      className="opacity-0 group-hover:opacity-100 p-1 rounded transition-all duration-200 hover:bg-red-100 dark:hover:bg-red-900/20"
+                      style={{ color: "var(--color-muted-foreground, #64748b)" }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
-                        e.currentTarget.style.color = 'var(--color-destructive, #ef4444)';
+                        e.currentTarget.style.color = "var(--color-destructive, #ef4444)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.color = 'var(--color-muted-foreground, #64748b)';
+                        e.currentTarget.style.color = "var(--color-muted-foreground, #64748b)";
                       }}
                     >
-                      Delete
+                      <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
                     </button>
                   )}
                 </div>
