@@ -69,6 +69,24 @@ export const userSchema = new Schema({
     type: String,
     default: "",
   },
+  // Fields for email change
+  pendingEmail: {
+    type: String,
+    trim: true,
+    validate: {
+      validator: function(v: string) {
+        return !v || validator.isEmail(v);
+      },
+      message: "Pending email is not valid",
+    },
+  },
+  emailChangeToken: {
+    type: String,
+    default: "",
+  },
+  emailChangeTokenExpiry: {
+    type: Date,
+  },
   followersCount: {
     type: Number,
     default: 0,
@@ -82,7 +100,8 @@ export const userSchema = new Schema({
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;
-  delete obj.verificationToken; // Don't expose verification token
+  delete obj.verificationToken;
+  delete obj.emailChangeToken; // Don't expose change token
   delete obj.__v;
   return obj;
 };
@@ -93,7 +112,14 @@ userSchema.pre("save", async function (next) {
     gmail_remove_dots: false,
   }) || this.email;
 
-  // Trim and normalize names
+  // Normalize pending email if it exists
+  if (this.isModified("pendingEmail") && this.pendingEmail) {
+    this.pendingEmail = validator.trim(this.pendingEmail);
+    this.pendingEmail = validator.normalizeEmail(this.pendingEmail, {
+      gmail_remove_dots: false,
+    }) || this.pendingEmail;
+  }
+
   if (this.isModified("firstName")) {
     this.firstName = this.firstName.trim();
   }
