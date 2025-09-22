@@ -18,6 +18,7 @@ export interface Post {
   liked: boolean;
   likeCount: number;
   following?: boolean;
+  commentsCount?: number;
 }
 
 export interface Comment {
@@ -25,10 +26,14 @@ export interface Comment {
   text: string;
   authorId: User;
   postId: string;
+  parentCommentId?: string;
+  replies?: Comment[];
   createdAt: string;
   updatedAt: string;
   liked: boolean;
   likeCount: number;
+  edited?: boolean;
+  editedAt?: string;
 }
 
 export interface CreatePostData {
