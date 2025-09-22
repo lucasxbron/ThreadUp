@@ -32,9 +32,10 @@ export const FeedFilter: React.FC<FeedFilterProps> = ({ activeFilter, onFilterCh
         );
       case 'users':
         return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-          </svg>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 9v6M23 12h-6" />
+            </svg>
         );
       default:
         return null;
@@ -61,7 +62,7 @@ export const FeedFilter: React.FC<FeedFilterProps> = ({ activeFilter, onFilterCh
             <button
               key={filter.key}
               onClick={() => onFilterChange(filter.key)}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 ${
+              className={`flex items-center sm:space-x-2 px-6 sm:px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 ${
                 activeFilter === filter.key
                   ? 'shadow-sm'
                   : 'hover:shadow-sm'
@@ -90,7 +91,7 @@ export const FeedFilter: React.FC<FeedFilterProps> = ({ activeFilter, onFilterCh
             >
               {getIcon(filter.icon)}
               <span className="hidden sm:inline">{filter.label}</span>
-              <span className="sm:hidden">{filter.label.charAt(0)}</span>
+              {/* <span className="sm:hidden">{filter.label.charAt(0)}</span> */}
             </button>
           ))}
         </div>
