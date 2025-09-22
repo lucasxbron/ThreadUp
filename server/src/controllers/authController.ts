@@ -7,7 +7,8 @@ import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import { createToken } from "../utils/jwt.js";
 import { JwtPayload } from "../types/jwt.js";
-import { sendVerificationEmail } from "../utils/resend.js";
+import { sendVerificationEmail } from "../utils/emails/emailVerification.js";
+import { sendEmailChangeVerification } from "../utils/emails/emailChange.js";
 import crypto from "crypto";
 import mongoose from "mongoose";
 
@@ -473,6 +474,186 @@ export const deleteAccount = async (
       session.endSession();
     }
 
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const requestEmailChange = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { newEmail, password } = req.body;
+    const userId = req.user?._id;
+
+    if (!newEmail || !password) {
+      throw createHttpError(400, "New email and password are required");
+    }
+
+    if (!userId) {
+      throw createHttpError(401, "User not authenticated");
+    }
+
+    // Validate email format
+    if (!validator.isEmail(newEmail)) {
+      throw createHttpError(400, "Invalid email format");
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    // Verify current password
+    const isPasswordValid = await compare(password, user.password);
+    if (!isPasswordValid) {
+      throw createHttpError(400, "Invalid password");
+    }
+
+    // Check if new email is same as current
+    const normalizedNewEmail = validator.normalizeEmail(newEmail, {
+      gmail_remove_dots: false,
+    }) || newEmail;
+
+    if (normalizedNewEmail === user.email) {
+      throw createHttpError(400, "New email must be different from current email");
+    }
+
+    // Check if new email is already taken by another user
+    const existingUser = await User.findOne({ 
+      email: normalizedNewEmail,
+      _id: { $ne: userId }
+    });
+    if (existingUser) {
+      throw createHttpError(400, "Email is already taken");
+    }
+
+    // Check if new email is already pending for this user
+    if (user.pendingEmail === normalizedNewEmail) {
+      throw createHttpError(400, "Email change request already pending for this address");
+    }
+
+    // Generate verification token
+    const emailChangeToken = crypto.randomBytes(32).toString("hex");
+    const tokenExpiry = new Date();
+    tokenExpiry.setHours(tokenExpiry.getHours() + 24); // 24 hours
+
+    // Update user with pending email change
+    user.pendingEmail = normalizedNewEmail;
+    user.emailChangeToken = emailChangeToken;
+    user.emailChangeTokenExpiry = tokenExpiry;
+    await user.save();
+
+    // Send verification email to new address
+    const userName = `${user.firstName} ${user.lastName}`;
+    await sendEmailChangeVerification(
+      normalizedNewEmail,
+      user.email,
+      emailChangeToken,
+      userName
+    );
+
+    res.status(200).json({
+      message: "Email change verification sent. Please check your new email address to confirm the change."
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const verifyEmailChange = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { token } = req.query;
+
+    if (!token || typeof token !== "string") {
+      throw createHttpError(400, "Invalid verification token");
+    }
+
+    const user = await User.findOne({ 
+      emailChangeToken: token,
+      emailChangeTokenExpiry: { $gt: new Date() }
+    });
+
+    if (!user) {
+      throw createHttpError(400, "Invalid or expired verification token");
+    }
+
+    if (!user.pendingEmail) {
+      throw createHttpError(400, "No pending email change found");
+    }
+
+    // Check if the pending email is still available
+    const existingUser = await User.findOne({ 
+      email: user.pendingEmail,
+      _id: { $ne: user._id }
+    });
+    if (existingUser) {
+      throw createHttpError(400, "Email is no longer available");
+    }
+
+    // Update user's email
+    user.email = user.pendingEmail;
+    user.pendingEmail = undefined;
+    user.emailChangeToken = "";
+    user.emailChangeTokenExpiry = undefined;
+    await user.save();
+
+    res.status(200).json({
+      message: "Email address successfully updated",
+      user: {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        email: user.email,
+        verified: user.verified,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        followersCount: user.followersCount || 0,
+        followingCount: user.followingCount || 0,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const cancelEmailChange = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.user?._id;
+
+    if (!userId) {
+      throw createHttpError(401, "User not authenticated");
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      throw createHttpError(404, "User not found");
+    }
+
+    if (!user.pendingEmail) {
+      throw createHttpError(400, "No pending email change to cancel");
+    }
+
+    // Clear pending email change
+    user.pendingEmail = undefined;
+    user.emailChangeToken = "";
+    user.emailChangeTokenExpiry = undefined;
+    await user.save();
+
+    res.status(200).json({
+      message: "Email change request cancelled successfully"
+    });
   } catch (error) {
     next(error);
   }
