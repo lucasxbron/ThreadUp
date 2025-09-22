@@ -16,9 +16,21 @@ const commentSchema = new Schema({
     required: true,
     maxlength: 200,
   },
+  parentCommentId: {
+    type: Schema.Types.ObjectId,
+    ref: "Comment",
+    default: null,
+  },
   likeCount: {
     type: Number,
     default: 0,
+  },
+  edited: {
+    type: Boolean,
+    default: false,
+  },
+  editedAt: {
+    type: Date,
   },
 }, {
   timestamps: true,
