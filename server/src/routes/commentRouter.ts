@@ -17,6 +17,7 @@ const optionalAuth = async (req: any, res: any, next: any) => {
 
 // Protected routes (authentication required)
 router.post("/post/:postId", verifyToken, commentController.createComment);
+router.put("/:id", verifyToken, commentController.updateComment);
 router.delete("/:id", verifyToken, commentController.deleteComment);
 
 // Public routes with optional authentication for like status
