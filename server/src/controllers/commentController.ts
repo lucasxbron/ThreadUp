@@ -7,7 +7,7 @@ import CommentLike from "../models/commentLike.js";
 export const createComment = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { postId } = req.params;
-    const { text } = req.body;
+    const { text, parentCommentId } = req.body; // Extract parentCommentId from request body
 
     if (!text || text.trim().length === 0) {
       throw createHttpError(400, "Comment text is required");
@@ -18,10 +18,20 @@ export const createComment = async (req: Request, res: Response, next: NextFunct
       throw createHttpError(404, "Post not found");
     }
 
+    // Validate parent comment if provided
+    if (parentCommentId) {
+      const parentComment = await Comment.findById(parentCommentId);
+      if (!parentComment) {
+        throw createHttpError(404, "Parent comment not found");
+      }
+    }
+
+    // Create comment with parentCommentId
     const newComment = await Comment.create({
       postId,
       authorId: req.user?._id,
       text: text.trim(),
+      parentCommentId: parentCommentId || null,
     });
 
     const populatedComment = await Comment.findById(newComment._id)
@@ -79,6 +89,58 @@ export const getCommentsByPost = async (req: Request, res: Response, next: NextF
     }));
 
     res.status(200).json({ comments: commentsWithLikeStatus });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateComment = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const { text } = req.body;
+
+    if (!text || text.trim().length === 0) {
+      throw createHttpError(400, "Comment text is required");
+    }
+
+    const comment = await Comment.findById(id);
+    if (!comment) {
+      throw createHttpError(404, "Comment not found");
+    }
+
+    if (comment.authorId.toString() !== req.user?._id?.toString()) {
+      throw createHttpError(403, "Not authorized to edit this comment");
+    }
+
+    const updatedComment = await Comment.findByIdAndUpdate(
+      id,
+      { 
+        text: text.trim(),
+        edited: true,
+        editedAt: new Date()
+      },
+      { new: true }
+    ).populate('authorId', 'firstName lastName username').lean();
+
+    // Add like status for the editing user
+    let liked = false;
+    if (req.user?._id) {
+      const existingLike = await CommentLike.findOne({ 
+        userId: req.user._id, 
+        commentId: id 
+      });
+      liked = !!existingLike;
+    }
+
+    const commentWithLikeStatus = {
+      ...updatedComment,
+      liked
+    };
+
+    res.status(200).json({
+      message: "Comment updated successfully",
+      comment: commentWithLikeStatus
+    });
   } catch (error) {
     next(error);
   }
