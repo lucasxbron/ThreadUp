@@ -11,6 +11,9 @@ export interface User {
   updatedAt: string;
   followersCount?: number;
   followingCount?: number;
+  pendingEmail?: string;
+  emailChangeToken?: string;
+  emailChangeTokenExpiry?: string;
 }
 
 export interface AuthState {
