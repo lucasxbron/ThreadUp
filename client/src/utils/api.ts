@@ -147,9 +147,21 @@ class ApiClient {
     return this.makeRequest(`/api/comments/post/${postId}`);
   }
 
-  async createComment(postId: string, text: string) {
+  async createComment(postId: string, text: string, parentCommentId?: string) {
+    const body: any = { text };
+    if (parentCommentId) {
+      body.parentCommentId = parentCommentId;
+    }
+    
     return this.makeRequest(`/api/comments/post/${postId}`, {
       method: "POST",
+      body: JSON.stringify(body),
+    });
+  }
+
+  async updateComment(commentId: string, text: string) {
+    return this.makeRequest(`/api/comments/${commentId}`, {
+      method: "PUT",
       body: JSON.stringify({ text }),
     });
   }
