@@ -155,12 +155,25 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-muted-foreground);
+  background: var(--color-border);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted-foreground);
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: var(--color-muted);
+}
+
+.dark ::-webkit-scrollbar-thumb {
   background: var(--color-border);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted-foreground);
 }
 
 /* Loading animation */
