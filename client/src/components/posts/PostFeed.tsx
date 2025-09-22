@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { Post } from '@/types/post.types';
+import { useAuth } from '@/contexts/AuthContext';
 import { apiClient } from '@/utils/api';
 import { PostCard } from './PostCard';
 import { CreatePost } from './CreatePost';
+import { FeedFilter, FeedFilterType } from './FeedFilter';
 
 interface PostsResponse {
   posts: Post[];
+  filter: string;
   pagination?: {
     currentPage: number;
     totalPages: number;
@@ -21,10 +24,13 @@ export const PostFeed: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [activeFilter, setActiveFilter] = useState<FeedFilterType>('recent');
+  
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     loadPosts();
-  }, []);
+  }, [activeFilter]);
 
   // Listen for refresh events from header create post modal
   useEffect(() => {
@@ -34,13 +40,13 @@ export const PostFeed: React.FC = () => {
 
     window.addEventListener('refreshPosts', handleRefresh);
     return () => window.removeEventListener('refreshPosts', handleRefresh);
-  }, []);
+  }, [activeFilter]);
 
   const loadPosts = async () => {
     setLoading(true);
     setError('');
     
-    const response = await apiClient.getPosts();
+    const response = await apiClient.getFilteredPosts(activeFilter);
     
     if (response.data) {
       const postsData = response.data as PostsResponse;
@@ -50,6 +56,10 @@ export const PostFeed: React.FC = () => {
     }
     
     setLoading(false);
+  };
+
+  const handleFilterChange = (filter: FeedFilterType) => {
+    setActiveFilter(filter);
   };
 
   const handlePostUpdate = () => {
@@ -77,6 +87,37 @@ export const PostFeed: React.FC = () => {
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto space-y-4 md:space-y-6">
+        {/* Feed Filter Skeleton */}
+        <div 
+          className="rounded-lg md:rounded-xl p-4 shadow-sm border"
+          style={{
+            backgroundColor: 'var(--color-card, #ffffff)',
+            borderColor: 'var(--color-border, #e2e8f0)'
+          }}
+        >
+          <div className="animate-pulse">
+            <div className="flex items-center justify-between mb-3">
+              <div 
+                className="h-6 w-16 rounded"
+                style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
+              ></div>
+              <div className="flex space-x-2">
+                {[...Array(3)].map((_, i) => (
+                  <div 
+                    key={i}
+                    className="h-8 w-20 rounded-lg"
+                    style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
+                  ></div>
+                ))}
+              </div>
+            </div>
+            <div 
+              className="h-4 w-3/4 rounded"
+              style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
+            ></div>
+          </div>
+        </div>
+
         {/* Create post skeleton */}
         <div 
           className="rounded-lg md:rounded-xl p-3 md:p-4 shadow-sm border"
@@ -125,7 +166,7 @@ export const PostFeed: React.FC = () => {
                     style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                   ></div>
                   <div 
-                    className="h-2 md:h-3 rounded w-1/3"
+                    className="h-3 rounded w-1/6"
                     style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                   ></div>
                 </div>
@@ -186,24 +227,17 @@ export const PostFeed: React.FC = () => {
             </svg>
             <div className="flex-1">
               <h3 
-                className="text-sm font-medium"
+                className="text-sm font-medium mb-1"
                 style={{ color: 'var(--color-destructive, #ef4444)' }}
               >
-                Error loading posts
+                Error Loading Posts
               </h3>
               <p 
-                className="text-sm mt-1"
-                style={{ color: 'rgba(239, 68, 68, 0.8)' }}
+                className="text-sm"
+                style={{ color: 'var(--color-destructive, #ef4444)' }}
               >
                 {error}
               </p>
-              <button
-                onClick={loadPosts}
-                className="mt-3 text-sm font-medium underline hover:opacity-80 active:opacity-60 transition-opacity"
-                style={{ color: 'var(--color-destructive, #ef4444)' }}
-              >
-                Try again
-              </button>
             </div>
           </div>
         </div>
@@ -213,7 +247,16 @@ export const PostFeed: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto space-y-4 md:space-y-6">
-      <CreatePost onPostCreated={handlePostUpdate} />
+      {/* Feed Filter */}
+      <FeedFilter 
+        activeFilter={activeFilter} 
+        onFilterChange={handleFilterChange} 
+      />
+
+      {/* Create Post - Only show for authenticated users */}
+      {isAuthenticated && (
+        <CreatePost onPostCreated={handlePostUpdate} />
+      )}
       
       {posts.length === 0 ? (
         <div 
@@ -236,13 +279,18 @@ export const PostFeed: React.FC = () => {
             className="text-base md:text-lg font-medium mb-2"
             style={{ color: 'var(--color-foreground, #0f172a)' }}
           >
-            No posts yet
+            {activeFilter === 'following' ? 'No posts from followed users' : 'No posts yet'}
           </h3>
           <p 
             className="text-sm"
             style={{ color: 'var(--color-muted-foreground, #64748b)' }}
           >
-            Be the first to share something with the community!
+            {activeFilter === 'following' 
+              ? 'Follow some users to see their posts here!'
+              : activeFilter === 'trending'
+              ? 'No trending posts at the moment. Check back later!'
+              : 'Be the first to share something with the community!'
+            }
           </p>
         </div>
       ) : (
@@ -251,7 +299,7 @@ export const PostFeed: React.FC = () => {
             key={post._id}
             post={post}
             onPostUpdate={handlePostUpdate}
-            onFollowUpdate={handleFollowUpdate} // Pass the follow update handler
+            onFollowUpdate={handleFollowUpdate}
           />
         ))
       )}
