@@ -7,10 +7,12 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/Button';
 import { NoSSR } from '@/components/ui/NoSSR';
 import { CreatePostModal } from '@/components/posts/CreatePostModal';
+import { usePathname } from 'next/navigation';
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const { theme } = useTheme();
+  const pathname = usePathname();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [createPostOpen, setCreatePostOpen] = useState(false);
@@ -53,6 +55,9 @@ export const Header: React.FC = () => {
   const getFullName = (firstName: string, lastName: string) => {
     return `${firstName} ${lastName}`;
   };
+
+  // Check if create post button should be shown (only on home page)
+  const shouldShowCreatePost = isAuthenticated && pathname === '/';
 
   const ThemeToggle = () => {
     const { theme, toggleTheme } = useTheme();
@@ -177,8 +182,8 @@ export const Header: React.FC = () => {
                 <ThemeToggle />
               </NoSSR>
 
-              {/* Create Post Button - Only show for authenticated users */}
-              {isAuthenticated && (
+              {/* Create Post Button - Only show on home page for authenticated users */}
+              {shouldShowCreatePost && (
                 <button
                   onClick={() => setCreatePostOpen(true)}
                   className="p-2 rounded-lg transition-all duration-200 cursor-pointer hover:scale-105 transform"
@@ -230,23 +235,34 @@ export const Header: React.FC = () => {
                       }
                     }}
                   >
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
-                      <span className="text-white text-xs sm:text-sm font-semibold">
-                        {user?.firstName && user?.lastName 
-                          ? getInitials(user.firstName, user.lastName)
-                          : user?.username?.charAt(0).toUpperCase()
-                        }
-                      </span>
+                    {/* Avatar */}
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
+                      <div 
+                        className="w-full h-full rounded-full flex items-center justify-center"
+                        style={{ backgroundColor: 'var(--color-card, #ffffff)' }}
+                      >
+                        <span 
+                          className="text-[10px] sm:text-xs font-bold"
+                          style={{ color: 'var(--color-card-foreground, #0f172a)' }}
+                        >
+                          {user?.firstName && user?.lastName 
+                            ? getInitials(user.firstName, user.lastName)
+                            : user?.username?.charAt(0).toUpperCase() || '?'
+                          }
+                        </span>
+                      </div>
                     </div>
+                    
                     <span 
                       className="text-sm font-medium hidden md:block max-w-[120px] truncate"
                       style={{ color: 'inherit' }}
                     >
                       {user?.firstName && user?.lastName 
                         ? getFullName(user.firstName, user.lastName)
-                        : user?.username
+                        : user?.username || 'User'
                       }
                     </span>
+                    
                     <svg 
                       className={`w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} 
                       fill="none" 
@@ -273,14 +289,24 @@ export const Header: React.FC = () => {
                         style={{ borderColor: 'var(--color-border, #e2e8f0)' }}
                       >
                         <div className="flex items-center space-x-3">
-                          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md">
-                            <span className="text-white text-lg font-semibold">
-                              {user?.firstName && user?.lastName 
-                                ? getInitials(user.firstName, user.lastName)
-                                : user?.username?.charAt(0).toUpperCase()
-                              }
-                            </span>
+                          {/* Dropdown Avatar*/}
+                          <div className="w-12 h-12 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-1">
+                            <div 
+                              className="w-full h-full rounded-full flex items-center justify-center"
+                              style={{ backgroundColor: 'var(--color-card, #ffffff)' }}
+                            >
+                              <span 
+                                className="text-sm font-bold"
+                                style={{ color: 'var(--color-card-foreground, #0f172a)' }}
+                              >
+                                {user?.firstName && user?.lastName 
+                                  ? getInitials(user.firstName, user.lastName)
+                                  : user?.username?.charAt(0).toUpperCase() || '?'
+                                }
+                              </span>
+                            </div>
                           </div>
+                          
                           <div className="flex-1 min-w-0">
                             <p 
                               className="text-base font-semibold truncate"
@@ -288,14 +314,14 @@ export const Header: React.FC = () => {
                             >
                               {user?.firstName && user?.lastName 
                                 ? getFullName(user.firstName, user.lastName)
-                                : user?.username
+                                : user?.username || 'User'
                               }
                             </p>
                             <p 
                               className="text-sm truncate"
                               style={{ color: 'var(--color-muted-foreground, #64748b)' }}
                             >
-                              @{user?.username}
+                              @{user?.username || 'unknown'}
                             </p>
                           </div>
                         </div>
