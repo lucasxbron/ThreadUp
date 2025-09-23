@@ -163,23 +163,42 @@ export const deletePost = async (req: Request, res: Response, next: NextFunction
       throw createHttpError(404, "Post not found");
     }
 
+    // Check if the user is the author of the post
     if (post.authorId.toString() !== req.user?._id) {
       throw createHttpError(403, "Not authorized to delete this post");
     }
 
     // Delete image from Cloudinary if exists
     if (post.imagePublicId) {
-      const { deleteFromCloudinary } = await import("../utils/cloudinary.js");
-      await deleteFromCloudinary(post.imagePublicId);
+      try {
+        await deleteFromCloudinary(post.imagePublicId);
+      } catch (cloudinaryError) {
+        console.error("Failed to delete image from Cloudinary:", cloudinaryError);
+        // Continue with post deletion even if image deletion fails
+      }
     }
 
-    // Delete related comments and likes
+    // Delete all comment likes for comments on this post
+    const postComments = await Comment.find({ postId: id });
+    const commentIds = postComments.map(comment => comment._id);
+    
+    if (commentIds.length > 0) {
+      await CommentLike.deleteMany({ commentId: { $in: commentIds } });
+    }
+
+    // Delete all comments related to this post
     await Comment.deleteMany({ postId: id });
+    
+    // Delete all likes for this post
     await Like.deleteMany({ postId: id });
     
+    // Delete post
     await Post.findByIdAndDelete(id);
 
-    res.status(200).json({ message: "Post deleted successfully" });
+    res.status(200).json({ 
+      message: "Post deleted successfully",
+      deletedPostId: id 
+    });
   } catch (error) {
     next(error);
   }
