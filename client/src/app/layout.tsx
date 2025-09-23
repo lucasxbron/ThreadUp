@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { FollowProvider } from "@/contexts/FollowContext";
+import { ToastProvider } from "@/contexts/ToastContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,9 +34,11 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <FollowProvider>
-              <div className="min-h-screen flex flex-col">
-                {children}
-              </div>
+              <ToastProvider>
+                <div className="min-h-screen flex flex-col">
+                  {children}
+                </div>
+              </ToastProvider>
             </FollowProvider>
           </AuthProvider>
         </ThemeProvider>
