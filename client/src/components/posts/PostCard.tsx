@@ -9,6 +9,7 @@ import { useToast } from '@/contexts/ToastContext';
 import { apiClient } from '@/utils/api';
 import { CommentSection } from './CommentSection';
 import { ImageModal } from '@/components/ui/ImageModal';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 
 interface PostCardProps {
   post: Post;
@@ -37,6 +38,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollow
   const { user, isAuthenticated } = useAuth();
   const { getFollowState, toggleFollow, updateFollowState } = useFollow();
   const { showToast } = useToast();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Get follow state from global context
   const globalFollowState = getFollowState(post.authorId._id);
@@ -140,11 +142,9 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollow
   };
 
   const handleDelete = async () => {
-    if (deleteLoading) return;
-    if (!confirm('Are you sure you want to delete this post?')) return;
-    
-    setDeleteLoading(true);
+      setDeleteLoading(true);
     setShowActionsMenu(false);
+    setShowDeleteModal(false);
     
     const response = await apiClient.deletePost(post._id);
     
@@ -153,6 +153,11 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollow
     }
     
     setDeleteLoading(false);
+  };
+
+  const handleDeleteClick = () => {
+    setShowActionsMenu(false);
+    setShowDeleteModal(true);
   };
 
 const handleCopyLink = async () => {
@@ -310,7 +315,7 @@ const handleCopyLink = async () => {
           <div className="flex items-center space-x-1">
             {canDelete && (
               <button
-                onClick={handleDelete}
+                onClick={handleDeleteClick}
                 disabled={deleteLoading}
                 className="p-1.5 sm:p-2 rounded-full transition-colors duration-200"
                 style={{ 
@@ -403,7 +408,7 @@ const handleCopyLink = async () => {
                         style={{ backgroundColor: 'var(--color-border, #e2e8f0)' }}
                       />
                       <button
-                        onClick={handleDelete}
+                        onClick={handleDeleteClick}
                         disabled={deleteLoading}
                         className="w-full flex items-center px-4 py-3 text-sm transition-colors duration-200 disabled:opacity-50"
                         style={{
@@ -610,6 +615,19 @@ const handleCopyLink = async () => {
           </div>
         )}
       </div>
+
+            {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleDelete}
+        title="Delete Post"
+        message="Are you sure you want to delete this post? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        loading={deleteLoading}
+      />
 
       {/* Image Modal */}
       <ImageModal
