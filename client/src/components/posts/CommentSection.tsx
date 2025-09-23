@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/utils/api";
 import { Comment } from "@/types/post.types";
 import { EmojiPicker } from "@/components/ui/EmojiPicker";
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 
 interface CommentSectionProps {
   postId: string;
@@ -57,6 +58,17 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
   const commentInputRef = useRef<HTMLInputElement>(null);
 
   const { user, isAuthenticated } = useAuth();
+
+  const [deleteModalState, setDeleteModalState] = useState<{
+    isOpen: boolean;
+    commentId: string | null;
+    isReply: boolean;
+  }>({
+    isOpen: false,
+    commentId: null,
+    isReply: false,
+  });
+  const [deletingComments, setDeletingComments] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     loadComments();
@@ -248,14 +260,37 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
     }
   };
 
-  const handleDeleteComment = async (commentId: string) => {
-    if (!confirm("Are you sure you want to delete this comment?")) return;
+  const handleDeleteComment = async () => {
+    if (!deleteModalState.commentId) return;
+
+    const commentId = deleteModalState.commentId;
+    setDeletingComments(prev => new Set([...prev, commentId]));
 
     const response = await apiClient.deleteComment(commentId);
 
     if (response.data || response.message) {
       await loadComments();
     }
+
+    setDeletingComments(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(commentId);
+      return newSet;
+    });
+    
+    setDeleteModalState({
+      isOpen: false,
+      commentId: null,
+      isReply: false,
+    });
+  };
+
+  const handleDeleteClick = (commentId: string, isReply: boolean = false) => {
+    setDeleteModalState({
+      isOpen: true,
+      commentId,
+      isReply,
+    });
   };
 
   const handleCommentLike = async (commentId: string) => {
@@ -380,6 +415,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
     const isReplying = replyStates[comment._id];
     const isEditing = editStates[comment._id];
     const showReplyEmojiPicker = replyEmojiPickers[comment._id];
+    const isDeleting = deletingComments.has(comment._id);
 
     return (
       <div key={comment._id} className="space-y-3">
@@ -626,7 +662,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                 {/* Delete button - only for comment author */}
                 {user?._id === comment.authorId._id && (
                   <button
-                    onClick={() => handleDeleteComment(comment._id)}
+                    onClick={() => handleDeleteClick(comment._id, isReply)}
                     className="text-xs transition-all duration-200 hover:scale-105"
                     style={{
                       color: "var(--color-destructive, #ef4444)",
@@ -913,6 +949,19 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
         onClose={() => setShowEmojiPicker(false)}
         onEmojiSelect={handleEmojiSelect}
         triggerRef={emojiButtonRef}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={deleteModalState.isOpen}
+        onClose={() => setDeleteModalState({ isOpen: false, commentId: null, isReply: false })}
+        onConfirm={handleDeleteComment}
+        title={`Delete ${deleteModalState.isReply ? 'Reply' : 'Comment'}`}
+        message={`Are you sure you want to delete this ${deleteModalState.isReply ? 'reply' : 'comment'}? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        loading={deleteModalState.commentId ? deletingComments.has(deleteModalState.commentId) : false}
       />
 
       {/* Comments list */}
