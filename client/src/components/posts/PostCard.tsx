@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Post } from '@/types/post.types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useFollow } from '@/contexts/FollowContext';
+import { useToast } from '@/contexts/ToastContext';
 import { apiClient } from '@/utils/api';
 import { CommentSection } from './CommentSection';
 import { ImageModal } from '@/components/ui/ImageModal';
@@ -29,9 +30,13 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollow
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [showActionsMenu, setShowActionsMenu] = useState(false);
+  const actionsMenuRef = useRef<HTMLDivElement>(null);
+  const actionsButtonRef = useRef<HTMLButtonElement>(null);
   
   const { user, isAuthenticated } = useAuth();
   const { getFollowState, toggleFollow, updateFollowState } = useFollow();
+  const { showToast } = useToast();
 
   // Get follow state from global context
   const globalFollowState = getFollowState(post.authorId._id);
@@ -55,6 +60,28 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollow
     setLiked(Boolean(post.liked));
     setLikeCount(post.likeCount || 0);
   }, [post.liked, post.likeCount, post._id]);
+
+  // Close actions menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        actionsMenuRef.current &&
+        !actionsMenuRef.current.contains(event.target as Node) &&
+        actionsButtonRef.current &&
+        !actionsButtonRef.current.contains(event.target as Node)
+      ) {
+        setShowActionsMenu(false);
+      }
+    };
+
+    if (showActionsMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showActionsMenu]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -117,6 +144,8 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollow
     if (!confirm('Are you sure you want to delete this post?')) return;
     
     setDeleteLoading(true);
+    setShowActionsMenu(false);
+    
     const response = await apiClient.deletePost(post._id);
     
     if (response.data || response.message) {
@@ -125,6 +154,27 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollow
     
     setDeleteLoading(false);
   };
+
+const handleCopyLink = async () => {
+    const postUrl = `${window.location.origin}/post/${post._id}`;
+    
+    try {
+      await navigator.clipboard.writeText(postUrl);
+      setShowActionsMenu(false);
+      showToast('Post link copied to clipboard!', 'success');
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = postUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setShowActionsMenu(false);
+      showToast('Post link copied to clipboard!', 'success');
+    }
+  };
+
 
   const canDelete = user?._id === post.authorId._id;
   const isOwnPost = user?._id === post.authorId._id;
@@ -262,8 +312,19 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollow
               <button
                 onClick={handleDelete}
                 disabled={deleteLoading}
-                className="p-1.5 sm:p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors duration-200"
-                style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                className="p-1.5 sm:p-2 rounded-full transition-colors duration-200"
+                style={{ 
+                  color: 'var(--color-muted-foreground, #64748b)',
+                  backgroundColor: 'transparent'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                  e.currentTarget.style.color = 'var(--color-destructive, #ef4444)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = 'var(--color-muted-foreground, #64748b)';
+                }}
               >
                 {deleteLoading ? (
                   <div 
@@ -277,14 +338,109 @@ export const PostCard: React.FC<PostCardProps> = ({ post, onPostUpdate, onFollow
                 )}
               </button>
             )}
-            <button 
-              className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors duration-200"
-              style={{ color: 'var(--color-muted-foreground, #64748b)' }}
-            >
-              <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-              </svg>
-            </button>
+            
+            {/* Three dots menu button */}
+            <div className="relative">
+              <button
+                ref={actionsButtonRef}
+                onClick={() => setShowActionsMenu(!showActionsMenu)}
+                className="p-1.5 sm:p-2 rounded-full transition-colors duration-200"
+                style={{ 
+                  color: 'var(--color-muted-foreground, #64748b)',
+                  backgroundColor: 'transparent'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--color-secondary, #f1f5f9)';
+                  e.currentTarget.style.color = 'var(--color-foreground, #0f172a)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = 'var(--color-muted-foreground, #64748b)';
+                }}
+              >
+                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                </svg>
+              </button>
+
+              {/* Actions Dropdown Menu */}
+              {showActionsMenu && (
+                <div
+                  ref={actionsMenuRef}
+                  className="absolute right-0 top-full mt-1 w-48 rounded-lg shadow-lg border z-50 overflow-hidden"
+                  style={{
+                    backgroundColor: 'var(--color-card, #ffffff)',
+                    borderColor: 'var(--color-border, #e2e8f0)',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+                  }}
+                >
+                  {/* Copy Link */}
+                  <button
+                    onClick={handleCopyLink}
+                    className="w-full flex items-center px-4 py-3 text-sm transition-colors duration-200"
+                    style={{
+                      color: 'var(--color-foreground, #0f172a)',
+                      backgroundColor: 'transparent'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--color-secondary, #f1f5f9)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
+                  >
+                    <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    Copy link to post
+                  </button>
+
+                  {/* Delete Post - only for own posts */}
+                  {canDelete && (
+                    <>
+                      <div 
+                        className="h-px"
+                        style={{ backgroundColor: 'var(--color-border, #e2e8f0)' }}
+                      />
+                      <button
+                        onClick={handleDelete}
+                        disabled={deleteLoading}
+                        className="w-full flex items-center px-4 py-3 text-sm transition-colors duration-200 disabled:opacity-50"
+                        style={{
+                          color: 'var(--color-destructive, #ef4444)',
+                          backgroundColor: 'transparent'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!deleteLoading) {
+                            e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                      >
+                        {deleteLoading ? (
+                          <>
+                            <div 
+                              className="animate-spin rounded-full h-4 w-4 border border-t-transparent mr-3"
+                              style={{ borderColor: 'var(--color-destructive, #ef4444)' }}
+                            />
+                            Deleting...
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Delete post
+                          </>
+                        )}
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
