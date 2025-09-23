@@ -6,7 +6,8 @@ import Comment from "../models/comment.js";
 import Like from "../models/like.js";
 import Follow from "../models/follow.js";
 import config from "../config/config.js";
-import { uploadToCloudinary } from "../utils/cloudinary.js";
+import { deleteFromCloudinary, uploadToCloudinary } from "../utils/cloudinary.js";
+import CommentLike from "../models/commentLike.js";
 
 export const createPost = async (req: Request, res: Response, next: NextFunction) => {
   const { text } = req.body;
