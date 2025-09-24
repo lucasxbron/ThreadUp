@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useFollow } from '@/contexts/FollowContext';
 import { apiClient } from '@/utils/api';
 import { User } from '@/types/user.types';
+import { Avatar } from '@/components/ui/Avatar';
 
 interface SuggestedUser extends User {
   interactionScore: number;
@@ -97,11 +98,6 @@ export const AllSuggestionsModal: React.FC<AllSuggestionsModalProps> = ({
         );
       }
     }
-  };
-
-  // Get user initials for avatar
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
   // Get full name
@@ -250,19 +246,14 @@ export const AllSuggestionsModal: React.FC<AllSuggestionsModalProps> = ({
                      }}>
                   {/* Avatar */}
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 rounded-full p-0.5">
-                      <div
-                        className="w-full h-full rounded-full flex items-center justify-center"
-                        style={{ backgroundColor: "var(--color-card, #ffffff)" }}
-                      >
-                        <span
-                          className="text-sm font-bold"
-                          style={{ color: "var(--color-card-foreground, #0f172a)" }}
-                        >
-                          {getInitials(suggestion.firstName, suggestion.lastName)}
-                        </span>
-                      </div>
-                    </div>
+                    <Avatar 
+                      user={{
+                        firstName: suggestion.firstName,
+                        lastName: suggestion.lastName,
+                        avatarUrl: suggestion.avatarUrl,
+                      }} 
+                      size="lg"
+                    />
                   </div>
 
                   {/* User Info */}

@@ -5,6 +5,7 @@ import { User } from "@/types/user.types";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFollow } from "@/contexts/FollowContext";
 import { apiClient } from "@/utils/api";
+import { Avatar } from "@/components/ui/Avatar";
 import { AllSuggestionsModal } from "./AllSuggestionsModal";
 
 interface SuggestedUser extends User {
@@ -91,11 +92,6 @@ export const SuggestionsCard: React.FC = () => {
         loadSuggestions();
       }, 1000);
     }
-  };
-
-  // Get user initials for avatar
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
   // Get full name
@@ -234,14 +230,21 @@ export const SuggestionsCard: React.FC = () => {
               </p>
             </div>
           ) : (
-            /* Suggestions List */
-            <div className="space-y-3">
+             <div className="space-y-3">
               {suggestions.map((suggestion) => {
                 const reason = getSuggestionReason(suggestion.interactionScore);
                 const globalState = getFollowState(suggestion._id);
                 const isFollowing =
                   globalState?.isFollowing ?? suggestion.isFollowing;
                 const isLoading = globalState?.isLoading ?? false;
+
+                // Debug log to see what data each suggestion has
+                console.log('Suggestion user data:', {
+                  id: suggestion._id,
+                  firstName: suggestion.firstName,
+                  lastName: suggestion.lastName,
+                  avatarUrl: suggestion.avatarUrl,
+                });
 
                 return (
                   <div
@@ -250,26 +253,14 @@ export const SuggestionsCard: React.FC = () => {
                   >
                     {/* Avatar */}
                     <div className="relative flex-shrink-0">
-                      <div className="w-10 h-10 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
-                        <div
-                          className="w-full h-full rounded-full flex items-center justify-center"
-                          style={{
-                            backgroundColor: "var(--color-card, #ffffff)",
-                          }}
-                        >
-                          <span
-                            className="text-xs font-semibold"
-                            style={{
-                              color: "var(--color-card-foreground, #0f172a)",
-                            }}
-                          >
-                            {getInitials(
-                              suggestion.firstName,
-                              suggestion.lastName
-                            )}
-                          </span>
-                        </div>
-                      </div>
+                      <Avatar 
+                        user={{
+                          firstName: suggestion.firstName,
+                          lastName: suggestion.lastName,
+                          avatarUrl: suggestion.avatarUrl,     
+                        }} 
+                        size="md"
+                      />
                       {/* Indicator for followers */}
                       {suggestion.interactionScore >= 10 && (
                         <div
@@ -283,13 +274,13 @@ export const SuggestionsCard: React.FC = () => {
                       )}
                     </div>
 
-                    {/* User Info */}
+                    {/* Rest of the suggestion item remains the same */}
                     <div className="flex-1 min-w-0">
                       <p
                         className="text-sm font-semibold truncate"
                         style={{ color: "var(--color-card-foreground, #0f172a)" }}
                       >
-                        {getFullName(suggestion.firstName, suggestion.lastName)}
+                        {getFullName(suggestion.firstName || '', suggestion.lastName || '')}
                       </p>
                       <p
                         className="text-xs truncate"
@@ -297,7 +288,7 @@ export const SuggestionsCard: React.FC = () => {
                           color: "var(--color-muted-foreground, #64748b)",
                         }}
                       >
-                        @{suggestion.username}
+                        @{suggestion.username || 'unknown'}
                       </p>
                       {/* Show interaction hint */}
                       <p
