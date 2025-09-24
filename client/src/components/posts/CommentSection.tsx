@@ -5,7 +5,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/utils/api";
 import { Comment } from "@/types/post.types";
 import { EmojiPicker } from "@/components/ui/EmojiPicker";
-import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { ConfirmationModal } from "@/components/ui/ConfirmationModal";
+import { Avatar } from "@/components/ui/Avatar";
 
 interface CommentSectionProps {
   postId: string;
@@ -68,7 +69,9 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
     commentId: null,
     isReply: false,
   });
-  const [deletingComments, setDeletingComments] = useState<Set<string>>(new Set());
+  const [deletingComments, setDeletingComments] = useState<Set<string>>(
+    new Set()
+  );
 
   useEffect(() => {
     loadComments();
@@ -264,7 +267,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
     if (!deleteModalState.commentId) return;
 
     const commentId = deleteModalState.commentId;
-    setDeletingComments(prev => new Set([...prev, commentId]));
+    setDeletingComments((prev) => new Set([...prev, commentId]));
 
     const response = await apiClient.deleteComment(commentId);
 
@@ -272,12 +275,12 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
       await loadComments();
     }
 
-    setDeletingComments(prev => {
+    setDeletingComments((prev) => {
       const newSet = new Set(prev);
       newSet.delete(commentId);
       return newSet;
     });
-    
+
     setDeleteModalState({
       isOpen: false,
       commentId: null,
@@ -403,10 +406,6 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
     }
   };
 
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
-  };
-
   const getFullName = (firstName: string, lastName: string) => {
     return `${firstName} ${lastName}`;
   };
@@ -432,24 +431,14 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
           }
         >
           {/* Avatar */}
-          <div className="relative flex-shrink-0">
-            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
-              <div
-                className="w-full h-full rounded-full flex items-center justify-center"
-                style={{ backgroundColor: "var(--color-card, #ffffff)" }}
-              >
-                <span
-                  className="text-xs font-bold"
-                  style={{ color: "var(--color-card-foreground, #0f172a)" }}
-                >
-                  {getInitials(
-                    comment.authorId.firstName,
-                    comment.authorId.lastName
-                  )}
-                </span>
-              </div>
-            </div>
-          </div>
+          <Avatar 
+            user={{
+              firstName: comment.authorId.firstName,
+              lastName: comment.authorId.lastName,
+              avatarUrl: comment.authorId.avatarUrl,
+            }} 
+            size="sm" 
+          />
 
           {/* Comment content */}
           <div className="flex-1 min-w-0">
@@ -687,20 +676,17 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
             {isReplying && (
               <div className="mt-3 space-y-2">
                 <div className="flex items-start space-x-2">
-                  <div className="w-5 h-5 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5 flex-shrink-0 mt-2">
-                    <div
-                      className="w-full h-full rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: "var(--color-card, #ffffff)" }}
-                    >
-                      <span
-                        className="text-[10px] font-bold"
-                        style={{
-                          color: "var(--color-card-foreground, #0f172a)",
-                        }}
-                      >
-                        {user && getInitials(user.firstName, user.lastName)}
-                      </span>
-                    </div>
+                  <div className="flex-shrink-0 mt-2">
+                    {user && (
+                      <Avatar 
+                        user={{
+                          firstName: user.firstName,
+                          lastName: user.lastName,
+                          avatarUrl: user.avatarUrl,
+                        }} 
+                        size="xs" 
+                      />
+                    )}
                   </div>
 
                   <div className="flex-1 relative">
@@ -848,21 +834,16 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
         onSubmit={handleSubmit}
         className="flex items-center space-x-2 sm:space-x-3"
       >
-        <div className="relative flex-shrink-0">
+        <div className="flex-shrink-0">
           {user && (
-            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
-              <div
-                className="w-full h-full rounded-full flex items-center justify-center"
-                style={{ backgroundColor: "var(--color-card, #ffffff)" }}
-              >
-                <span
-                  className="text-xs font-bold"
-                  style={{ color: "var(--color-card-foreground, #0f172a)" }}
-                >
-                  {getInitials(user.firstName, user.lastName)}
-                </span>
-              </div>
-            </div>
+            <Avatar 
+              user={{
+                firstName: user.firstName,
+                lastName: user.lastName,
+                avatarUrl: user.avatarUrl,
+              }} 
+              size="sm" 
+            />
           )}
         </div>
 
@@ -954,14 +935,26 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
       {/* Delete Confirmation Modal */}
       <ConfirmationModal
         isOpen={deleteModalState.isOpen}
-        onClose={() => setDeleteModalState({ isOpen: false, commentId: null, isReply: false })}
+        onClose={() =>
+          setDeleteModalState({
+            isOpen: false,
+            commentId: null,
+            isReply: false,
+          })
+        }
         onConfirm={handleDeleteComment}
-        title={`Delete ${deleteModalState.isReply ? 'Reply' : 'Comment'}`}
-        message={`Are you sure you want to delete this ${deleteModalState.isReply ? 'reply' : 'comment'}? This action cannot be undone.`}
+        title={`Delete ${deleteModalState.isReply ? "Reply" : "Comment"}`}
+        message={`Are you sure you want to delete this ${
+          deleteModalState.isReply ? "reply" : "comment"
+        }? This action cannot be undone.`}
         confirmText="Delete"
         cancelText="Cancel"
         variant="danger"
-        loading={deleteModalState.commentId ? deletingComments.has(deleteModalState.commentId) : false}
+        loading={
+          deleteModalState.commentId
+            ? deletingComments.has(deleteModalState.commentId)
+            : false
+        }
       />
 
       {/* Comments list */}

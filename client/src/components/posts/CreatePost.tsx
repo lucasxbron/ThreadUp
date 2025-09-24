@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/utils/api";
 import { Button } from "@/components/ui/Button";
 import { EmojiPicker } from "@/components/ui/EmojiPicker";
+import { Avatar } from "@/components/ui/Avatar";
 
 interface CreatePostProps {
   onPostCreated: () => void;
@@ -89,16 +90,6 @@ export const CreatePost: React.FC<CreatePostProps> = ({ onPostCreated }) => {
     }
   };
 
-  // Get user initials for avatar
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
-  };
-
-  // Get full name
-  const getFullName = (firstName: string, lastName: string) => {
-    return `${firstName} ${lastName}`;
-  };
-
   const handleEmojiSelect = (emoji: string) => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -141,23 +132,17 @@ export const CreatePost: React.FC<CreatePostProps> = ({ onPostCreated }) => {
       >
         <div className="flex space-x-2 sm:space-x-3">
           {/* Avatar */}
-          <div className="relative flex-shrink-0">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
-              <div
-                className="w-full h-full rounded-full flex items-center justify-center"
-                style={{ backgroundColor: "var(--color-card, #ffffff)" }}
-              >
-                <span
-                  className="text-xs sm:text-sm font-semibold"
-                  style={{ color: "var(--color-card-foreground, #0f172a)" }}
-                >
-                  {user?.firstName && user?.lastName
-                    ? getInitials(user.firstName, user.lastName)
-                    : user?.username?.charAt(0).toUpperCase()}
-                </span>
-              </div>
-            </div>
-          </div>
+          {user && (
+            <Avatar
+              user={{
+                firstName: user.firstName,
+                lastName: user.lastName,
+                avatarUrl: user.avatarUrl,
+              }}
+              size="sm"
+              className="sm:w-10 sm:h-10"
+            />
+          )}
 
           <div className="flex-1 min-w-0">
             <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">

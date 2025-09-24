@@ -6,6 +6,7 @@ import { apiClient } from '@/utils/api';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { EmojiPicker } from '@/components/ui/EmojiPicker';
+import { Avatar } from '../ui/Avatar';
 
 interface CreatePostModalProps {
   isOpen: boolean;
@@ -127,16 +128,6 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
     onClose();
   };
 
-  // Get user initials for avatar
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
-  };
-
-  // Get full name
-  const getFullName = (firstName: string, lastName: string) => {
-    return `${firstName} ${lastName}`;
-  };
-
   return (
     <>
       {/* Global CSS for placeholder styling */}
@@ -174,32 +165,27 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
           {/* User Info */}
           <div className="flex items-center space-x-3">
             <div className="relative flex-shrink-0">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
-                <div
-                  className="w-full h-full rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: 'var(--color-card, #ffffff)' }}
-                >
-                  <span
-                    className="text-sm sm:text-base font-semibold"
-                    style={{ color: 'var(--color-card-foreground, #0f172a)' }}
-                  >
-                    {user && getInitials(user.firstName, user.lastName)}
-                  </span>
-                </div>
-              </div>
+              <Avatar 
+                user={{
+                  firstName: user?.firstName || '',
+                  lastName: user?.lastName || '',
+                  avatarUrl: user?.avatarUrl,
+                }} 
+                size="md"
+              />
             </div>
             <div>
-              <p
-                className="font-medium text-sm sm:text-base"
-                style={{ color: 'var(--color-card-foreground, #0f172a)' }}
+              <h4 
+                className="font-medium text-base"
+                style={{ color: 'var(--color-foreground, #0f172a)' }}
               >
-                {user && getFullName(user.firstName, user.lastName)}
-              </p>
-              <p
-                className="text-xs sm:text-sm"
+                {user ? `${user.firstName} ${user.lastName}` : 'Loading...'}
+              </h4>
+              <p 
+                className="text-sm"
                 style={{ color: 'var(--color-muted-foreground, #64748b)' }}
               >
-                @{user?.username}
+                @{user?.username || 'loading'}
               </p>
             </div>
           </div>
