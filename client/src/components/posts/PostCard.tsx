@@ -10,6 +10,7 @@ import { apiClient } from '@/utils/api';
 import { CommentSection } from './CommentSection';
 import { ImageModal } from '@/components/ui/ImageModal';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { Avatar } from '@/components/ui/Avatar';
 
 interface PostCardProps {
   post: Post;
@@ -184,11 +185,6 @@ const handleCopyLink = async () => {
   const canDelete = user?._id === post.authorId._id;
   const isOwnPost = user?._id === post.authorId._id;
 
-  // Get user initials for avatar
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
-  };
-
   // Get full name
   const getFullName = (firstName: string, lastName: string) => {
     return `${firstName} ${lastName}`;
@@ -207,19 +203,15 @@ const handleCopyLink = async () => {
         <div className="flex items-center justify-between p-3 sm:p-4 pb-2 sm:pb-3">
           <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
             <div className="relative flex-shrink-0">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
-                <div 
-                  className="w-full h-full rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: 'var(--color-card, #ffffff)' }}
-                >
-                  <span 
-                    className="text-xs sm:text-sm font-semibold"
-                    style={{ color: 'var(--color-card-foreground, #0f172a)' }}
-                  >
-                    {getInitials(post.authorId.firstName, post.authorId.lastName)}
-                  </span>
-                </div>
-              </div>
+              <Avatar 
+                user={{
+                  firstName: post.authorId.firstName,
+                  lastName: post.authorId.lastName,
+                  avatarUrl: post.authorId.avatarUrl
+                }} 
+                size="md" 
+                className="w-8 h-8 sm:w-10 sm:h-10"
+              />
             </div>
             <div className="flex flex-col min-w-0 flex-1">
               <div className="flex items-center space-x-2">
