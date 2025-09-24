@@ -7,6 +7,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/Button';
 import { NoSSR } from '@/components/ui/NoSSR';
 import { CreatePostModal } from '@/components/posts/CreatePostModal';
+import { Avatar } from '@/components/ui/Avatar';
 import { usePathname } from 'next/navigation';
 
 export const Header: React.FC = () => {
@@ -44,11 +45,6 @@ export const Header: React.FC = () => {
   const handleLogout = async () => {
     await logout();
     setDropdownOpen(false);
-  };
-
-  // Get user initials for avatar
-  const getInitials = (firstName: string, lastName: string) => {
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
   // Get full name
@@ -236,22 +232,15 @@ export const Header: React.FC = () => {
                     }}
                   >
                     {/* Avatar */}
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-0.5">
-                      <div 
-                        className="w-full h-full rounded-full flex items-center justify-center"
-                        style={{ backgroundColor: 'var(--color-card, #ffffff)' }}
-                      >
-                        <span 
-                          className="text-[10px] sm:text-xs font-bold"
-                          style={{ color: 'var(--color-card-foreground, #0f172a)' }}
-                        >
-                          {user?.firstName && user?.lastName 
-                            ? getInitials(user.firstName, user.lastName)
-                            : user?.username?.charAt(0).toUpperCase() || '?'
-                          }
-                        </span>
-                      </div>
-                    </div>
+                    <Avatar 
+                      user={{
+                        firstName: user?.firstName || '',
+                        lastName: user?.lastName || '',
+                        avatarUrl: user?.avatarUrl,
+                      }} 
+                      size="sm"
+                      className="w-7 h-7 sm:w-8 sm:h-8"
+                    />
                     
                     <span 
                       className="text-sm font-medium hidden md:block max-w-[120px] truncate"
@@ -289,23 +278,16 @@ export const Header: React.FC = () => {
                         style={{ borderColor: 'var(--color-border, #e2e8f0)' }}
                       >
                         <div className="flex items-center space-x-3">
-                          {/* Dropdown Avatar*/}
-                          <div className="w-12 h-12 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-1">
-                            <div 
-                              className="w-full h-full rounded-full flex items-center justify-center"
-                              style={{ backgroundColor: 'var(--color-card, #ffffff)' }}
-                            >
-                              <span 
-                                className="text-sm font-bold"
-                                style={{ color: 'var(--color-card-foreground, #0f172a)' }}
-                              >
-                                {user?.firstName && user?.lastName 
-                                  ? getInitials(user.firstName, user.lastName)
-                                  : user?.username?.charAt(0).toUpperCase() || '?'
-                                }
-                              </span>
-                            </div>
-                          </div>
+                          {/* Dropdown Avatar */}
+                          <Avatar 
+                            user={{
+                              firstName: user?.firstName || '',
+                              lastName: user?.lastName || '',
+                              avatarUrl: user?.avatarUrl,
+                            }} 
+                            size="lg"
+                            className="w-12 h-12"
+                          />
                           
                           <div className="flex-1 min-w-0">
                             <p 
@@ -449,7 +431,7 @@ export const Header: React.FC = () => {
         onClose={() => setCreatePostOpen(false)}
         onPostCreated={() => {
           setCreatePostOpen(false);
-          // Trigger a refresh of the post feed if we're on the home page
+          // Trigger a refresh of the post feed if on home page
           window.dispatchEvent(new CustomEvent('refreshPosts'));
         }}
       />
