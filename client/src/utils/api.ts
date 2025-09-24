@@ -296,6 +296,34 @@ class ApiClient {
       body: formData,
     });
   }
+  
+   async uploadAvatar(formData: FormData) {
+    formData.append('type', 'profile');
+    return this.makeRequest("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+  }
+
+  async updateUserAvatar(avatarUrl: string, avatarPublicId: string) {
+    return this.makeRequest("/api/auth/profile", {
+      method: "PUT",
+      body: JSON.stringify({ 
+        avatarUrl, 
+        avatarPublicId 
+      }),
+    });
+  }
+
+  async deleteAvatar() {
+    return this.makeRequest("/api/auth/profile", {
+      method: "PUT",
+      body: JSON.stringify({ 
+        avatarUrl: null, 
+        avatarPublicId: null 
+      }),
+    });
+  }
 }
 
 export const apiClient = new ApiClient();
