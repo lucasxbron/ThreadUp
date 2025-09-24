@@ -6,6 +6,8 @@ export interface User {
   email: string;
   followersCount?: number;
   followingCount?: number;
+  avatarUrl?: string;
+  avatarPublicId?: string;
 }
 
 export interface Post {
