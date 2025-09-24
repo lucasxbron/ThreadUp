@@ -33,7 +33,8 @@ export const createPost = async (req: Request, res: Response, next: NextFunction
       imagePublicId,
     });
 
-    const populatedPost = await Post.findById(newPost._id).populate("authorId", "firstName lastName username");
+    const populatedPost = await Post.findById(newPost._id)
+    .populate("authorId", "firstName lastName username avatarUrl");
 
     res.status(201).json({
       message: "Post successfully created",
@@ -51,7 +52,7 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
     const skip = (page - 1) * limit;
 
     const posts = await Post.find()
-      .populate("authorId", "firstName lastName username followersCount")
+      .populate("authorId", "firstName lastName username followersCount avatarUrl")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -113,7 +114,8 @@ export const getPostById = async (req: Request, res: Response, next: NextFunctio
   const { id } = req.params;
 
   try {
-    const post = await Post.findById(id).populate("authorId", "firstName lastName username followersCount");
+    const post = await Post.findById(id)
+      .populate("authorId", "firstName lastName username followersCount avatarUrl");
 
     if (!post) {
       throw createHttpError(404, "Post not found");
@@ -246,7 +248,7 @@ export const getUserPosts = async (req: Request, res: Response, next: NextFuncti
     }
 
     const posts = await Post.find({ authorId: userId })
-      .populate("authorId", "firstName lastName username followersCount")
+      .populate("authorId", "firstName lastName username followersCount avatarUrl")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -396,25 +398,24 @@ export const getFilteredPosts = async (req: Request, res: Response, next: NextFu
           totalPosts = 0;
         } else {
           posts = await Post.find({ authorId: { $in: followingIds } })
-            .populate("authorId", "firstName lastName username followersCount")
+            .populate("authorId", "firstName lastName username followersCount avatarUrl")
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
-            .lean(); // Add .lean() to return plain objects
-
+            .lean();
           totalPosts = await Post.countDocuments({ authorId: { $in: followingIds } });
         }
         break;
 
       case 'recent':
       default:
-        // Default recent posts (existing logic)
+        // Default recent posts
         posts = await Post.find()
-          .populate("authorId", "firstName lastName username followersCount")
+          .populate("authorId", "firstName lastName username followersCount avatarUrl")
           .sort({ createdAt: -1 })
           .skip(skip)
           .limit(limit)
-          .lean(); // Add .lean() to return plain objects
+          .lean();
 
         totalPosts = await Post.countDocuments();
         break;
