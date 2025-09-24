@@ -180,6 +180,8 @@ export const login = async (
         updatedAt: user.updatedAt,
         followersCount: user.followersCount || 0,
         followingCount: user.followingCount || 0,
+        avatarUrl: user.avatarUrl,
+        avatarPublicId: user.avatarPublicId,
       },
     });
   } catch (error) {
@@ -259,22 +261,33 @@ export const updateOwnProfile = async (
   next: NextFunction
 ) => {
   try {
-    const { firstName, lastName, username } = req.body;
+    const { firstName, lastName, username, avatarUrl, avatarPublicId } =
+      req.body;
 
     const updateData: any = {};
 
     if (firstName) updateData.firstName = firstName.trim();
     if (lastName) updateData.lastName = lastName.trim();
     if (username) {
-      // Check if username is taken by another user
+      // Check if username is already taken by another user
       const existingUser = await User.findOne({
-        username: username.toLowerCase(),
+        username: username.trim().toLowerCase(),
         _id: { $ne: req.user?._id },
       });
+
       if (existingUser) {
-        throw createHttpError(409, "Username is already taken");
+        throw createHttpError(400, "Username already taken");
       }
+
       updateData.username = username.trim().toLowerCase();
+    }
+
+    // Handle avatar updates
+    if (avatarUrl !== undefined) {
+      updateData.avatarUrl = avatarUrl;
+    }
+    if (avatarPublicId !== undefined) {
+      updateData.avatarPublicId = avatarPublicId;
     }
 
     if (Object.keys(updateData).length === 0) {
@@ -284,11 +297,15 @@ export const updateOwnProfile = async (
     const updatedUser = await User.findByIdAndUpdate(
       req.user?._id,
       updateData,
-      { new: true }
+      { new: true, runValidators: true }
     ).select("-password");
 
+    if (!updatedUser) {
+      throw createHttpError(404, "User not found");
+    }
+
     res.status(200).json({
-      message: "Profile updated",
+      message: "Profile updated successfully",
       user: updatedUser,
     });
   } catch (error) {
@@ -305,7 +322,10 @@ export const changePassword = async (
     const { currentPassword, newPassword } = req.body;
 
     if (!currentPassword || !newPassword) {
-      throw createHttpError(400, "Current password and new password are required");
+      throw createHttpError(
+        400,
+        "Current password and new password are required"
+      );
     }
 
     const user = await User.findById(req.user?._id);
@@ -314,20 +334,28 @@ export const changePassword = async (
     }
 
     // Verify current password
-    const isCurrentPasswordValid = await compare(currentPassword, user.password);
+    const isCurrentPasswordValid = await compare(
+      currentPassword,
+      user.password
+    );
     if (!isCurrentPasswordValid) {
       throw createHttpError(400, "Current password is incorrect");
     }
 
     // Validate new password strength
-    if (!validator.isStrongPassword(newPassword, {
-      minLength: 8,
-      minNumbers: 1,
-      minSymbols: 1,
-      minUppercase: 1,
-      minLowercase: 1,
-    })) {
-      throw createHttpError(400, "New password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 number, and 1 symbol");
+    if (
+      !validator.isStrongPassword(newPassword, {
+        minLength: 8,
+        minNumbers: 1,
+        minSymbols: 1,
+        minUppercase: 1,
+        minLowercase: 1,
+      })
+    ) {
+      throw createHttpError(
+        400,
+        "New password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 number, and 1 symbol"
+      );
     }
 
     // Update password (will be hashed by pre-save middleware)
@@ -335,7 +363,7 @@ export const changePassword = async (
     await user.save();
 
     res.status(200).json({
-      message: "Password changed successfully"
+      message: "Password changed successfully",
     });
   } catch (error) {
     next(error);
@@ -384,7 +412,7 @@ export const deleteAccount = async (
 
       // Get all user's posts to delete associated data
       const userPosts = await Post.find({ authorId: userId }).session(session);
-      const postIds = userPosts.map(post => post._id);
+      const postIds = userPosts.map((post) => post._id);
 
       // Delete all comments on user's posts
       await Comment.deleteMany({ postId: { $in: postIds } }).session(session);
@@ -393,14 +421,22 @@ export const deleteAccount = async (
       await Like.deleteMany({ postId: { $in: postIds } }).session(session);
 
       // Delete all comment likes on comments from user's posts
-      const commentsOnUserPosts = await Comment.find({ postId: { $in: postIds } }).session(session);
-      const commentIds = commentsOnUserPosts.map(comment => comment._id);
-      await CommentLike.deleteMany({ commentId: { $in: commentIds } }).session(session);
+      const commentsOnUserPosts = await Comment.find({
+        postId: { $in: postIds },
+      }).session(session);
+      const commentIds = commentsOnUserPosts.map((comment) => comment._id);
+      await CommentLike.deleteMany({ commentId: { $in: commentIds } }).session(
+        session
+      );
 
       // Delete all user's comments on other posts
-      const userComments = await Comment.find({ authorId: userId }).session(session);
-      const userCommentIds = userComments.map(comment => comment._id);
-      await CommentLike.deleteMany({ commentId: { $in: userCommentIds } }).session(session);
+      const userComments = await Comment.find({ authorId: userId }).session(
+        session
+      );
+      const userCommentIds = userComments.map((comment) => comment._id);
+      await CommentLike.deleteMany({
+        commentId: { $in: userCommentIds },
+      }).session(session);
       await Comment.deleteMany({ authorId: userId }).session(session);
 
       // Delete all user's likes on posts
@@ -410,16 +446,17 @@ export const deleteAccount = async (
       await CommentLike.deleteMany({ userId }).session(session);
 
       // Delete all follow relationships
-      await Follow.deleteMany({ 
-        $or: [
-          { followerId: userId },
-          { followingId: userId }
-        ]
+      await Follow.deleteMany({
+        $or: [{ followerId: userId }, { followingId: userId }],
       }).session(session);
 
       // Update follower/following counts for affected users
-      const followersToUpdate = await Follow.find({ followingId: userId }).session(session);
-      const followingToUpdate = await Follow.find({ followerId: userId }).session(session);
+      const followersToUpdate = await Follow.find({
+        followingId: userId,
+      }).session(session);
+      const followingToUpdate = await Follow.find({
+        followerId: userId,
+      }).session(session);
 
       // Update follower counts for users who were following the deleted user
       for (const follow of followersToUpdate) {
@@ -446,7 +483,10 @@ export const deleteAccount = async (
           try {
             await deleteFromCloudinary(post.imagePublicId);
           } catch (error) {
-            console.warn(`Failed to delete image ${post.imagePublicId}:`, error);
+            console.warn(
+              `Failed to delete image ${post.imagePublicId}:`,
+              error
+            );
             // Continue with deletion even if image deletion fails
           }
         }
@@ -463,9 +503,9 @@ export const deleteAccount = async (
       res.clearCookie("token");
 
       res.status(200).json({
-        message: "Account and all associated data have been permanently deleted"
+        message:
+          "Account and all associated data have been permanently deleted",
       });
-
     } catch (error) {
       // Rollback the transaction on error
       await session.abortTransaction();
@@ -473,7 +513,6 @@ export const deleteAccount = async (
     } finally {
       session.endSession();
     }
-
   } catch (error) {
     next(error);
   }
@@ -513,18 +552,22 @@ export const requestEmailChange = async (
     }
 
     // Check if new email is same as current
-    const normalizedNewEmail = validator.normalizeEmail(newEmail, {
-      gmail_remove_dots: false,
-    }) || newEmail;
+    const normalizedNewEmail =
+      validator.normalizeEmail(newEmail, {
+        gmail_remove_dots: false,
+      }) || newEmail;
 
     if (normalizedNewEmail === user.email) {
-      throw createHttpError(400, "New email must be different from current email");
+      throw createHttpError(
+        400,
+        "New email must be different from current email"
+      );
     }
 
     // Check if new email is already taken by another user
-    const existingUser = await User.findOne({ 
+    const existingUser = await User.findOne({
       email: normalizedNewEmail,
-      _id: { $ne: userId }
+      _id: { $ne: userId },
     });
     if (existingUser) {
       throw createHttpError(400, "Email is already taken");
@@ -532,7 +575,10 @@ export const requestEmailChange = async (
 
     // Check if new email is already pending for this user
     if (user.pendingEmail === normalizedNewEmail) {
-      throw createHttpError(400, "Email change request already pending for this address");
+      throw createHttpError(
+        400,
+        "Email change request already pending for this address"
+      );
     }
 
     // Generate verification token
@@ -556,7 +602,8 @@ export const requestEmailChange = async (
     );
 
     res.status(200).json({
-      message: "Email change verification sent. Please check your new email address to confirm the change."
+      message:
+        "Email change verification sent. Please check your new email address to confirm the change.",
     });
   } catch (error) {
     next(error);
@@ -575,9 +622,9 @@ export const verifyEmailChange = async (
       throw createHttpError(400, "Invalid verification token");
     }
 
-    const user = await User.findOne({ 
+    const user = await User.findOne({
       emailChangeToken: token,
-      emailChangeTokenExpiry: { $gt: new Date() }
+      emailChangeTokenExpiry: { $gt: new Date() },
     });
 
     if (!user) {
@@ -589,9 +636,9 @@ export const verifyEmailChange = async (
     }
 
     // Check if the pending email is still available
-    const existingUser = await User.findOne({ 
+    const existingUser = await User.findOne({
       email: user.pendingEmail,
-      _id: { $ne: user._id }
+      _id: { $ne: user._id },
     });
     if (existingUser) {
       throw createHttpError(400, "Email is no longer available");
@@ -652,7 +699,7 @@ export const cancelEmailChange = async (
     await user.save();
 
     res.status(200).json({
-      message: "Email change request cancelled successfully"
+      message: "Email change request cancelled successfully",
     });
   } catch (error) {
     next(error);
