@@ -9,6 +9,9 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { PasswordChangeCard } from '@/components/profile/PasswordChangeCard';
 import { DeleteAccountCard } from '@/components/profile/DeleteAccountCard';
 import { EmailChangeCard } from '@/components/profile/EmailChangeCard';
+import { AvatarUploadCard } from '@/components/profile/AvatarUploadCard';
+import { Avatar } from '@/components/ui/Avatar';
+import { ImageModal } from '@/components/ui/ImageModal';
 import Link from 'next/link';
 
 export default function ProfilePage() {
@@ -22,6 +25,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showImageModal, setShowImageModal] = useState(false);
 
   // Update form data when user changes
   useEffect(() => {
@@ -106,18 +110,6 @@ export default function ProfilePage() {
     } catch (error) {
       return 'Unknown';
     }
-  };
-
-  // Get user initials for avatar
-  const getInitials = (firstName: string, lastName: string) => {
-    if (!firstName || !lastName) return '??';
-    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
-  };
-
-  // Get full name
-  const getFullName = (firstName: string, lastName: string) => {
-    if (!firstName || !lastName) return 'Loading...';
-    return `${firstName} ${lastName}`;
   };
 
   // Simple loading check - only check auth loading and user existence
@@ -361,22 +353,15 @@ export default function ProfilePage() {
                   <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
                     {/* Avatar */}
                     <div className="relative">
-                      <div className="w-24 h-24 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full p-1.5 shadow-lg">
-                        <div 
-                          className="w-full h-full rounded-full flex items-center justify-center"
-                          style={{ backgroundColor: 'var(--color-card, #ffffff)' }}
-                        >
-                          <span 
-                            className="text-2xl font-bold"
-                            style={{ color: 'var(--color-card-foreground, #0f172a)' }}
-                          >
-                            {user.firstName && user.lastName 
-                              ? getInitials(user.firstName, user.lastName)
-                              : user.username?.charAt(0).toUpperCase() || '?'
-                            }
-                          </span>
-                        </div>
-                      </div>
+                      <Avatar 
+                        user={{
+                          firstName: user.firstName,
+                          lastName: user.lastName,
+                          avatarUrl: user.avatarUrl,
+                        }}
+                        size="xl" 
+                        onClick={user.avatarUrl ? () => setShowImageModal(true) : undefined}
+                      />
                     </div>
 
                     {/* User Info */}
@@ -386,7 +371,7 @@ export default function ProfilePage() {
                         style={{ color: 'var(--color-foreground, #0f172a)' }}
                       >
                         {user.firstName && user.lastName 
-                          ? getFullName(user.firstName, user.lastName)
+                          ? `${user.firstName} ${user.lastName}`
                           : user.username || 'Unknown'
                         }
                       </h2>
@@ -538,6 +523,8 @@ export default function ProfilePage() {
                 </div>
               </div>
 
+              {/* Avatar Upload Card */}
+              <AvatarUploadCard />
               {/* Email Change Card */}
               <EmailChangeCard />
               {/* Password Change Card */}
@@ -682,6 +669,15 @@ export default function ProfilePage() {
             </form>
           </Modal>
         </div>
+                 {/* Full Size Image Modal */}
+          {user.avatarUrl && (
+            <ImageModal
+              isOpen={showImageModal}
+              onClose={() => setShowImageModal(false)}
+              imageUrl={user.avatarUrl}
+              alt={`${user.firstName} ${user.lastName}'s profile picture`}
+            />
+          )}
       </ProtectedRoute>
     </>
   );
