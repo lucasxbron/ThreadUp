@@ -7,7 +7,7 @@ import CommentLike from "../models/commentLike.js";
 export const createComment = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { postId } = req.params;
-    const { text, parentCommentId } = req.body; // Extract parentCommentId from request body
+    const { text, parentCommentId } = req.body;
 
     if (!text || text.trim().length === 0) {
       throw createHttpError(400, "Comment text is required");
@@ -18,7 +18,6 @@ export const createComment = async (req: Request, res: Response, next: NextFunct
       throw createHttpError(404, "Post not found");
     }
 
-    // Validate parent comment if provided
     if (parentCommentId) {
       const parentComment = await Comment.findById(parentCommentId);
       if (!parentComment) {
@@ -26,7 +25,6 @@ export const createComment = async (req: Request, res: Response, next: NextFunct
       }
     }
 
-    // Create comment with parentCommentId
     const newComment = await Comment.create({
       postId,
       authorId: req.user?._id,
@@ -35,10 +33,9 @@ export const createComment = async (req: Request, res: Response, next: NextFunct
     });
 
     const populatedComment = await Comment.findById(newComment._id)
-      .populate('authorId', 'firstName lastName username')
+      .populate('authorId', 'firstName lastName username avatarUrl')
       .lean();
 
-    // Add like status for the creating user
     const commentWithLikeStatus = {
       ...populatedComment,
       likeCount: 0,
@@ -64,15 +61,13 @@ export const getCommentsByPost = async (req: Request, res: Response, next: NextF
     }
 
     const comments = await Comment.find({ postId })
-      .populate('authorId', 'firstName lastName username')
+      .populate('authorId', 'firstName lastName username avatarUrl')
       .sort({ createdAt: 1 })
       .lean();
 
-    // Add like status for each comment
     const commentsWithLikeStatus = await Promise.all(comments.map(async (comment) => {
       let liked = false;
       
-      // Only check like status if user is authenticated
       if (req.user?._id) {
         const existingLike = await CommentLike.findOne({ 
           userId: req.user._id, 
@@ -120,9 +115,8 @@ export const updateComment = async (req: Request, res: Response, next: NextFunct
         editedAt: new Date()
       },
       { new: true }
-    ).populate('authorId', 'firstName lastName username').lean();
+    ).populate('authorId', 'firstName lastName username avatarUrl').lean();
 
-    // Add like status for the editing user
     let liked = false;
     if (req.user?._id) {
       const existingLike = await CommentLike.findOne({ 
