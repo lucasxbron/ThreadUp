@@ -69,7 +69,6 @@ export const userSchema = new Schema({
     type: String,
     default: "",
   },
-  // Fields for email change
   pendingEmail: {
     type: String,
     trim: true,
@@ -94,6 +93,14 @@ export const userSchema = new Schema({
   followingCount: {
     type: Number,
     default: 0,
+  },
+  avatarUrl: {
+    type: String,
+    default: null,
+  },
+  avatarPublicId: {
+    type: String,
+    default: null,
   },
 }, { timestamps: true });
 
