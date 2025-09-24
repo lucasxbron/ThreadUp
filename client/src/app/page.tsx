@@ -9,6 +9,7 @@ import { SuggestionsCard } from "@/components/profile/SuggestionsCard";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { FollowersCard } from "@/components/profile/FollowersCard";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading, user } = useAuth();
@@ -52,11 +53,6 @@ export default function HomePage() {
                 <div className="h-48 bg-gray-300 dark:bg-gray-400 rounded-lg"></div>
                 <div className="h-48 bg-gray-300 dark:bg-gray-400 rounded-lg"></div>
               </div>
-            </div>
-
-            {/* Right Side Placeholder */}
-            <div className="hidden xl:block w-80 flex-shrink-0">
-              {/* Future: Suggestions, trending topics, etc. */}
             </div>
           </div>
         </div>
@@ -544,28 +540,13 @@ export default function HomePage() {
                 <PostFeed />
               </div>
 
-              {/* Right Side - What's happening (Hidden on mobile) */}
-              <div className="hidden xl:block w-80 flex-shrink-0">
-                {/* Future: Trending topics, activity feed, etc. */}
-                <div
-                  className="rounded-xl shadow-sm border p-6"
-                  style={{
-                    backgroundColor: "var(--color-card, #ffffff)",
-                    borderColor: "var(--color-border, #e2e8f0)",
-                  }}
-                >
-                  <h3
-                    className="font-semibold text-lg mb-4"
-                    style={{ color: "var(--color-card-foreground, #0f172a)" }}
-                  >
-                    What's happening
-                  </h3>
-                  <p
-                    className="text-sm"
-                    style={{ color: "var(--color-muted-foreground, #64748b)" }}
-                  >
-                    Coming soon...
-                  </p>
+              {/* Right Sidebar */}
+              <div className="hidden lg:block">
+                <div className="sticky top-20 space-y-6">
+                  {/* Followers/Following Card */}
+                  {isAuthenticated && user && (
+                    <FollowersCard />
+                  )}
                 </div>
               </div>
             </div>
