@@ -112,7 +112,7 @@ export const getFollowers = async (req: Request, res: Response, next: NextFuncti
     }
 
     const followers = await Follow.find({ followingId: userId })
-      .populate('followerId', 'firstName lastName username followersCount followingCount')
+      .populate('followerId', 'firstName lastName username followersCount followingCount avatarUrl')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -151,7 +151,7 @@ export const getFollowing = async (req: Request, res: Response, next: NextFuncti
     }
 
     const following = await Follow.find({ followerId: userId })
-      .populate('followingId', 'firstName lastName username followersCount followingCount')
+      .populate('followingId', 'firstName lastName username followersCount followingCount avatarUrl')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -200,7 +200,7 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
     // Initialize suggestion candidates
     const suggestionCandidates = new Map();
 
-    // 1. Find users who liked current user's posts
+    // Find users who liked current user's posts
     if (postIds.length > 0) {
       const likersAggregation = await Like.aggregate([
         { $match: { postId: { $in: postIds } } },
@@ -212,7 +212,7 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
         },
         { $match: { _id: { $nin: followingIds.map(id => new mongoose.Types.ObjectId(id)) } } },
         { $sort: { interactionCount: -1 } },
-        { $limit: limit * 3 } // Get more potential candidates
+        { $limit: limit * 3 }
       ]);
 
       likersAggregation.forEach(item => {
@@ -223,7 +223,7 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
       console.log(`Found ${likersAggregation.length} users who liked posts`);
     }
 
-    // 2. Find users who commented on current user's posts
+    // Find users who commented on current user's posts
     if (postIds.length > 0) {
       const commentersAggregation = await Comment.aggregate([
         { $match: { postId: { $in: postIds } } },
@@ -247,7 +247,7 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
       console.log(`Found ${commentersAggregation.length} users who commented on posts`);
     }
 
-    // 3. Find users who are following the current user (but current user isn't following back)
+    // Find users who are following the current user (but current user isn't following back)
     const followersOfCurrentUser = await Follow.find({ 
       followingId: userId,
       followerId: { $nin: followingIds.map(id => new mongoose.Types.ObjectId(id)) }
@@ -315,7 +315,7 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
     // Get full user details
     const suggestedUsers = await User.find({ 
       _id: { $in: allSuggestionIds.map(id => new mongoose.Types.ObjectId(id)) } 
-    }).select('firstName lastName username followersCount followingCount createdAt');
+    }).select('firstName lastName username followersCount followingCount avatarUrl avatarPublicId createdAt')
 
     // Check follow status for each suggestion
     const suggestionsWithFollowStatus = await Promise.all(
