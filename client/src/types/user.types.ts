@@ -14,6 +14,8 @@ export interface User {
   pendingEmail?: string;
   emailChangeToken?: string;
   emailChangeTokenExpiry?: string;
+  avatarUrl?: string;
+  avatarPublicId?: string;
 }
 
 export interface AuthState {
