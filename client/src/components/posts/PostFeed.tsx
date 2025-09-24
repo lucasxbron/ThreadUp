@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Post } from '@/types/post.types';
-import { useAuth } from '@/contexts/AuthContext';
-import { apiClient } from '@/utils/api';
 import { PostCard } from './PostCard';
 import { CreatePost } from './CreatePost';
 import { FeedFilter, FeedFilterType } from './FeedFilter';
+import { useAuth } from '@/contexts/AuthContext';
+import { apiClient } from '@/utils/api';
+import { Post } from '@/types/post.types';
 
 interface PostsResponse {
   posts: Post[];
@@ -23,39 +23,72 @@ interface PostsResponse {
 export const PostFeed: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState('');
   const [activeFilter, setActiveFilter] = useState<FeedFilterType>('recent');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMorePosts, setHasMorePosts] = useState(false);
+  const [totalPosts, setTotalPosts] = useState(0);
   
   const { isAuthenticated } = useAuth();
 
+  const POSTS_PER_PAGE = 15; // Show 15 posts initially, then load more
+
   useEffect(() => {
-    loadPosts();
+    loadPosts(true); // Reset posts when filter changes
   }, [activeFilter]);
 
   // Listen for refresh events from header create post modal
   useEffect(() => {
     const handleRefresh = () => {
-      loadPosts();
+      loadPosts(true); // Reset posts when refreshing
     };
 
     window.addEventListener('refreshPosts', handleRefresh);
     return () => window.removeEventListener('refreshPosts', handleRefresh);
   }, [activeFilter]);
 
-  const loadPosts = async () => {
-    setLoading(true);
+  const loadPosts = async (reset: boolean = false) => {
+    const isInitialLoad = reset || currentPage === 1;
+    
+    if (isInitialLoad) {
+      setLoading(true);
+      setPosts([]);
+      setCurrentPage(1);
+    } else {
+      setLoadingMore(true);
+    }
+    
     setError('');
     
-    const response = await apiClient.getFilteredPosts(activeFilter);
+    const pageToLoad = reset ? 1 : currentPage;
+    const response = await apiClient.getFilteredPosts(activeFilter, pageToLoad, POSTS_PER_PAGE);
     
     if (response.data) {
       const postsData = response.data as PostsResponse;
-      setPosts(postsData.posts || []);
+      const newPosts = postsData.posts || [];
+      
+      if (reset) {
+        setPosts(newPosts);
+      } else {
+        setPosts(prevPosts => [...prevPosts, ...newPosts]);
+      }
+      
+      // Update pagination state
+      setHasMorePosts(postsData.pagination?.hasNext ?? false);
+      setTotalPosts(postsData.pagination?.totalPosts ?? 0);
+      
+      if (!reset) {
+        setCurrentPage(prevPage => prevPage + 1);
+      } else {
+        setCurrentPage(2); // Next page to load
+      }
     } else if (response.error) {
       setError(response.error);
     }
     
     setLoading(false);
+    setLoadingMore(false);
   };
 
   const handleFilterChange = (filter: FeedFilterType) => {
@@ -63,7 +96,13 @@ export const PostFeed: React.FC = () => {
   };
 
   const handlePostUpdate = () => {
-    loadPosts();
+    loadPosts(true); // Reset and reload posts
+  };
+
+  const handleLoadMore = () => {
+    if (!loadingMore && hasMorePosts) {
+      loadPosts(false);
+    }
   };
 
   const handleFollowUpdate = (userId: string, newFollowingStatus: boolean, newFollowerCount: number) => {
@@ -105,7 +144,7 @@ export const PostFeed: React.FC = () => {
                 {[...Array(3)].map((_, i) => (
                   <div 
                     key={i}
-                    className="h-8 w-20 rounded-lg"
+                    className="h-8 w-20 rounded"
                     style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                   ></div>
                 ))}
@@ -119,30 +158,28 @@ export const PostFeed: React.FC = () => {
         </div>
 
         {/* Create post skeleton */}
-        <div 
-          className="rounded-lg md:rounded-xl p-3 md:p-4 shadow-sm border"
-          style={{
-            backgroundColor: 'var(--color-card, #ffffff)',
-            borderColor: 'var(--color-border, #e2e8f0)'
-          }}
-        >
-          <div className="animate-pulse flex space-x-2 md:space-x-3">
-            <div 
-              className="w-8 h-8 md:w-10 md:h-10 rounded-full"
-              style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
-            ></div>
-            <div className="flex-1 space-y-2">
+        {isAuthenticated && (
+          <div 
+            className="rounded-lg md:rounded-xl p-3 md:p-4 shadow-sm border"
+            style={{
+              backgroundColor: 'var(--color-card, #ffffff)',
+              borderColor: 'var(--color-border, #e2e8f0)'
+            }}
+          >
+            <div className="animate-pulse flex space-x-2 md:space-x-3">
               <div 
-                className="h-3 md:h-4 rounded w-3/4"
+                className="w-8 h-8 md:w-10 md:h-10 rounded-full"
                 style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
               ></div>
-              <div 
-                className="h-3 md:h-4 rounded w-1/2"
-                style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
-              ></div>
+              <div className="flex-1 space-y-2">
+                <div 
+                  className="h-3 md:h-4 rounded w-3/4"
+                  style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
+                ></div>
+              </div>
             </div>
           </div>
-        </div>
+        )}
         
         {/* Post skeletons */}
         {[...Array(3)].map((_, i) => (
@@ -157,27 +194,27 @@ export const PostFeed: React.FC = () => {
             <div className="animate-pulse">
               <div className="flex space-x-2 md:space-x-3 mb-3 md:mb-4">
                 <div 
-                  className="w-8 h-8 md:w-10 md:h-10 rounded-full"
+                  className="w-10 h-10 rounded-full"
                   style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                 ></div>
-                <div className="flex-1 space-y-1">
+                <div className="flex-1 space-y-2">
                   <div 
-                    className="h-3 md:h-4 rounded w-1/4"
+                    className="h-4 w-3/4 rounded"
                     style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                   ></div>
                   <div 
-                    className="h-3 rounded w-1/6"
+                    className="h-3 w-1/2 rounded"
                     style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                   ></div>
                 </div>
               </div>
               <div className="space-y-2 mb-3 md:mb-4">
                 <div 
-                  className="h-3 md:h-4 rounded w-full"
+                  className="h-4 w-full rounded"
                   style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                 ></div>
                 <div 
-                  className="h-3 md:h-4 rounded w-3/4"
+                  className="h-4 w-3/4 rounded"
                   style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                 ></div>
               </div>
@@ -187,15 +224,15 @@ export const PostFeed: React.FC = () => {
               ></div>
               <div className="flex space-x-3 md:space-x-4">
                 <div 
-                  className="h-5 md:h-6 rounded w-5 md:w-6"
+                  className="h-8 w-16 rounded"
                   style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                 ></div>
                 <div 
-                  className="h-5 md:h-6 rounded w-5 md:w-6"
+                  className="h-8 w-16 rounded"
                   style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                 ></div>
                 <div 
-                  className="h-5 md:h-6 rounded w-5 md:w-6"
+                  className="h-8 w-16 rounded"
                   style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
                 ></div>
               </div>
@@ -294,14 +331,86 @@ export const PostFeed: React.FC = () => {
           </p>
         </div>
       ) : (
-        posts.map((post) => (
-          <PostCard
-            key={post._id}
-            post={post}
-            onPostUpdate={handlePostUpdate}
-            onFollowUpdate={handleFollowUpdate}
-          />
-        ))
+        <>
+          {/* Posts List */}
+          {posts.map((post) => (
+            <PostCard
+              key={post._id}
+              post={post}
+              onPostUpdate={handlePostUpdate}
+              onFollowUpdate={handleFollowUpdate}
+            />
+          ))}
+
+          {/* Load More Button */}
+          {hasMorePosts && (
+            <div className="flex justify-center py-6">
+              <button
+                onClick={handleLoadMore}
+                disabled={loadingMore}
+                className="px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                style={{
+                  backgroundColor: loadingMore 
+                    ? 'var(--color-muted, #f1f5f9)' 
+                    : 'var(--color-primary, #3b82f6)',
+                  color: loadingMore 
+                    ? 'var(--color-muted-foreground, #64748b)' 
+                    : 'white',
+                  border: 'none',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!loadingMore) {
+                    e.currentTarget.style.backgroundColor = 'var(--color-primary-600, #2563eb)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.4)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!loadingMore) {
+                    e.currentTarget.style.backgroundColor = 'var(--color-primary, #3b82f6)';
+                    e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+                  }
+                }}
+              >
+                {loadingMore ? (
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                    </svg>
+                    <span>Loading more posts...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <span>Load more posts</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                )}
+              </button>
+            </div>
+          )}
+
+          {/* End of posts indicator */}
+          {!hasMorePosts && posts.length > 0 && (
+            <div className="text-center py-8">
+              <div 
+                className="inline-flex items-center px-4 py-2 rounded-full text-sm"
+                style={{
+                  backgroundColor: 'var(--color-secondary, #f1f5f9)',
+                  color: 'var(--color-muted-foreground, #64748b)',
+                  border: '1px solid var(--color-border, #e2e8f0)'
+                }}
+              >
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                You've seen all {totalPosts} posts
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
