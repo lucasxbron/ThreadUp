@@ -144,7 +144,8 @@ export const SuggestionsCard: React.FC = () => {
             >
               Suggestions for you
             </h3>
-            {!loading && suggestions.length > 0 && (
+            {/* Show reload button when not loading (regardless of suggestions length) */}
+            {!loading && (
               <button
                 onClick={loadSuggestions}
                 className="text-xs opacity-60 hover:opacity-100 transition-opacity"
@@ -274,7 +275,7 @@ export const SuggestionsCard: React.FC = () => {
                       )}
                     </div>
 
-                    {/* Rest of the suggestion item remains the same */}
+                    {/* User Info */}
                     <div className="flex-1 min-w-0">
                       <p
                         className="text-sm font-semibold truncate"
