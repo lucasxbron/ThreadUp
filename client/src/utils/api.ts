@@ -324,6 +324,19 @@ class ApiClient {
       }),
     });
   }
+
+  async submitContactForm(data: {
+  name: string;
+  email: string;
+  subject: string;
+  customSubject?: string;
+  message: string;
+}) {
+  return this.makeRequest("/api/contact", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
 }
 
 export const apiClient = new ApiClient();
