@@ -47,8 +47,8 @@ export const submitContactForm = async (req: Request, res: Response, next: NextF
       email: email.trim().toLowerCase(),
       subject: finalSubject,
       message: message.trim(),
-      userAgent: req.get('User-Agent') || 'Unknown',
-      ip: req.ip || req.connection.remoteAddress || 'Unknown'
+      // userAgent: req.get('User-Agent') || 'Unknown',
+      // ip: req.ip || req.connection.remoteAddress || 'Unknown'
     });
 
     res.status(200).json({
