@@ -67,11 +67,11 @@ export default function HomePage() {
         <Header />
 
         {/* Main Content */}
-        <div className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="flex-1 min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] lg:min-h-0 flex items-center justify-center px-4 py-8 lg:py-8">
           <div className="max-w-6xl mx-auto w-full">
             <div className="flex flex-col-reverse lg:flex-row items-center justify-center gap-8 lg:gap-16">
-              {/* Left Side - Mockup/Visual (Bottom on mobile) */}
-              <div className="flex-1 max-w-md">
+              {/* Left Side - Mockup/Visual (hidden on mobile) */}
+              <div className="flex-1 max-w-md hidden sm:block">
                 <div className="relative">
                   {/* Realistic Phone Frame */}
                   <div className="mx-auto w-80 h-[600px] relative">
