@@ -308,26 +308,26 @@ export default function HomePage() {
                   </li>
                   <li>
                     <Link
-                      href="/careers"
+                      href="/team"
                       className="hover:text-foreground transition-colors cursor-pointer"
                     >
-                      Careers
+                      Team
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/press"
+                      href="/updates"
                       className="hover:text-foreground transition-colors cursor-pointer"
                     >
-                      Press
+                      What's New
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/blog"
+                      href="/developers"
                       className="hover:text-foreground transition-colors cursor-pointer"
                     >
-                      Blog
+                      Developers
                     </Link>
                   </li>
                 </ul>
@@ -416,7 +416,7 @@ export default function HomePage() {
                 <div className="flex justify-center sm:justify-start space-x-4 mb-4">
                   {/* X (Twitter) */}
                   <Link
-                    href="#"
+                    href="/coming-soon"
                     className="text-muted-foreground hover:text-foreground cursor-pointer"
                   >
                     <span className="sr-only">X</span>
@@ -431,7 +431,7 @@ export default function HomePage() {
 
                   {/* Instagram */}
                   <Link
-                    href="#"
+                    href="/coming-soon"
                     className="text-muted-foreground hover:text-foreground cursor-pointer"
                   >
                     <span className="sr-only">Instagram</span>
@@ -450,7 +450,7 @@ export default function HomePage() {
 
                   {/* YouTube */}
                   <Link
-                    href="#"
+                    href="/coming-soon"
                     className="text-muted-foreground hover:text-foreground cursor-pointer"
                   >
                     <span className="sr-only">YouTube</span>
@@ -469,7 +469,7 @@ export default function HomePage() {
 
                   {/* Facebook */}
                   <Link
-                    href="#"
+                    href="/coming-soon"
                     className="text-muted-foreground hover:text-foreground cursor-pointer"
                   >
                     <span className="sr-only">Facebook</span>
