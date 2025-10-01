@@ -34,7 +34,7 @@ export const createPost = async (req: Request, res: Response, next: NextFunction
     });
 
     const populatedPost = await Post.findById(newPost._id)
-    .populate("authorId", "firstName lastName username avatarUrl");
+    .populate("authorId", "firstName lastName username avatarUrl roles");
 
     res.status(201).json({
       message: "Post successfully created",
@@ -52,7 +52,7 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
     const skip = (page - 1) * limit;
 
     const posts = await Post.find()
-      .populate("authorId", "firstName lastName username followersCount avatarUrl")
+      .populate("authorId", "firstName lastName username followersCount avatarUrl roles")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -115,7 +115,7 @@ export const getPostById = async (req: Request, res: Response, next: NextFunctio
 
   try {
     const post = await Post.findById(id)
-      .populate("authorId", "firstName lastName username followersCount avatarUrl");
+      .populate("authorId", "firstName lastName username followersCount avatarUrl roles");
 
     if (!post) {
       throw createHttpError(404, "Post not found");
@@ -166,8 +166,11 @@ export const deletePost = async (req: Request, res: Response, next: NextFunction
       throw createHttpError(404, "Post not found");
     }
 
-    // Check if the user is the author of the post
-    if (post.authorId.toString() !== req.user?._id) {
+    // Check if the user is the author of the post OR has admin privileges
+    const isAuthor = post.authorId.toString() === req.user?._id;
+    const isAdmin = req.user?.roles?.includes("ADMIN");
+
+    if (!isAuthor && !isAdmin) {
       throw createHttpError(403, "Not authorized to delete this post");
     }
 
@@ -199,8 +202,9 @@ export const deletePost = async (req: Request, res: Response, next: NextFunction
     await Post.findByIdAndDelete(id);
 
     res.status(200).json({ 
-      message: "Post deleted successfully",
-      deletedPostId: id 
+      message: isAdmin && !isAuthor ? "Post deleted by admin" : "Post deleted successfully",
+      deletedPostId: id,
+      deletedByAdmin: isAdmin && !isAuthor
     });
   } catch (error) {
     next(error);
@@ -248,7 +252,7 @@ export const getUserPosts = async (req: Request, res: Response, next: NextFuncti
     }
 
     const posts = await Post.find({ authorId: userId })
-      .populate("authorId", "firstName lastName username followersCount avatarUrl")
+      .populate("authorId", "firstName lastName username followersCount avatarUrl roles")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -398,7 +402,7 @@ export const getFilteredPosts = async (req: Request, res: Response, next: NextFu
           totalPosts = 0;
         } else {
           posts = await Post.find({ authorId: { $in: followingIds } })
-            .populate("authorId", "firstName lastName username followersCount avatarUrl")
+            .populate("authorId", "firstName lastName username followersCount avatarUrl roles")
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
@@ -411,7 +415,7 @@ export const getFilteredPosts = async (req: Request, res: Response, next: NextFu
       default:
         // Default recent posts
         posts = await Post.find()
-          .populate("authorId", "firstName lastName username followersCount avatarUrl")
+          .populate("authorId", "firstName lastName username followersCount avatarUrl roles")
           .sort({ createdAt: -1 })
           .skip(skip)
           .limit(limit)
