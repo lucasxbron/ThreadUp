@@ -8,6 +8,7 @@ export interface User {
   followingCount?: number;
   avatarUrl?: string;
   avatarPublicId?: string;
+  roles?: string[];
 }
 
 export interface Post {
