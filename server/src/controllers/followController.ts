@@ -112,7 +112,7 @@ export const getFollowers = async (req: Request, res: Response, next: NextFuncti
     }
 
     const followers = await Follow.find({ followingId: userId })
-      .populate('followerId', 'firstName lastName username followersCount followingCount avatarUrl')
+      .populate('followerId', 'firstName lastName username followersCount followingCount avatarUrl roles')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -151,7 +151,7 @@ export const getFollowing = async (req: Request, res: Response, next: NextFuncti
     }
 
     const following = await Follow.find({ followerId: userId })
-      .populate('followingId', 'firstName lastName username followersCount followingCount avatarUrl')
+      .populate('followingId', 'firstName lastName username followersCount followingCount avatarUrl roles')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -315,7 +315,7 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
     // Get full user details
     const suggestedUsers = await User.find({ 
       _id: { $in: allSuggestionIds.map(id => new mongoose.Types.ObjectId(id)) } 
-    }).select('firstName lastName username followersCount followingCount avatarUrl avatarPublicId createdAt')
+    }).select('firstName lastName username followersCount followingCount avatarUrl avatarPublicId createdAt roles')
 
     // Check follow status for each suggestion
     const suggestionsWithFollowStatus = await Promise.all(

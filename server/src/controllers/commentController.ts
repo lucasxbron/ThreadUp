@@ -33,7 +33,7 @@ export const createComment = async (req: Request, res: Response, next: NextFunct
     });
 
     const populatedComment = await Comment.findById(newComment._id)
-      .populate('authorId', 'firstName lastName username avatarUrl')
+      .populate('authorId', 'firstName lastName username avatarUrl roles')
       .lean();
 
     const commentWithLikeStatus = {
@@ -61,7 +61,7 @@ export const getCommentsByPost = async (req: Request, res: Response, next: NextF
     }
 
     const comments = await Comment.find({ postId })
-      .populate('authorId', 'firstName lastName username avatarUrl')
+      .populate('authorId', 'firstName lastName username avatarUrl roles')
       .sort({ createdAt: 1 })
       .lean();
 
@@ -115,7 +115,7 @@ export const updateComment = async (req: Request, res: Response, next: NextFunct
         editedAt: new Date()
       },
       { new: true }
-    ).populate('authorId', 'firstName lastName username avatarUrl').lean();
+    ).populate('authorId', 'firstName lastName username avatarUrl roles').lean();
 
     let liked = false;
     if (req.user?._id) {
@@ -149,7 +149,11 @@ export const deleteComment = async (req: Request, res: Response, next: NextFunct
       throw createHttpError(404, "Comment not found");
     }
 
-    if (comment.authorId.toString() !== req.user?._id?.toString()) {
+    // Check if the user is the author of the comment OR has admin privileges
+    const isAuthor = comment.authorId.toString() === req.user?._id?.toString();
+    const isAdmin = req.user?.roles?.includes("ADMIN");
+
+    if (!isAuthor && !isAdmin) {
       throw createHttpError(403, "Not authorized to delete comment");
     }
 
@@ -159,7 +163,10 @@ export const deleteComment = async (req: Request, res: Response, next: NextFunct
     // Delete the comment
     await Comment.findByIdAndDelete(id);
 
-    res.status(200).json({ message: "Comment successfully deleted" });
+    res.status(200).json({ 
+      message: isAdmin && !isAuthor ? "Comment deleted by admin" : "Comment successfully deleted",
+      deletedByAdmin: isAdmin && !isAuthor
+    });
   } catch (error) {
     next(error);
   }
