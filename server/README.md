@@ -1,753 +1,291 @@
-# ThreadUp Social Media API - Postman Testing Manual
+# ThreadUp Backend Server
 
-## Prerequisites
+A modern social media platform backend built with Node.js, Express, MongoDB, and TypeScript.
 
-### Backend Setup
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Create `.env` file with:
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js (v18 or higher)
+- MongoDB (local or Atlas)
+- npm or yarn
+
+### Installation
+```bash
+# Clone the repository
+git clone <repository-url>
+cd ThreadUp/server
+
+# Install dependencies
+npm install
+
+# Create environment file
+cp .env.example .env
+# Configure your environment variables
+
+# Start MongoDB service (if local)
+sudo systemctl start mongod
+
+# Create temp directory
+mkdir -p temp/uploads
+
+# Start development server
+npm run dev
 ```
+
+## 🔧 Environment Variables
+
+Create a `.env` file in the server root with:
+
+```env
 PORT=3005
 MONGODB_URL=mongodb://localhost:27017/threadup
 JWT_SECRET=your-super-secret-jwt-key-here
 RESEND_API_KEY=your-resend-api-key
-FRONTEND_URL=http://localhost:3005
+FRONTEND_URL=http://localhost:3000
 CLOUDINARY_CLOUD_NAME=your-cloud-name
 CLOUDINARY_API_KEY=your-api-key
 CLOUDINARY_API_SECRET=your-api-secret
 ```
-4. Start MongoDB service
-5. Create temp directory: `mkdir -p temp/uploads`
-6. Start server: `npm run dev`
 
-### Postman Environment Setup
-Create a new Postman environment called **"ThreadUp Social Media"** with these variables:
-- `baseUrl`: `http://localhost:3005`
-- `token`: (leave empty - will be set automatically)
-- `postId`: (leave empty - will be set automatically)
-- `commentId`: (leave empty - will be set automatically)
-
----
-
-## API Endpoints
-
-### AUTH:
-- `POST /api/auth/register` ← Create account (requires email verification)
-- `GET /api/auth/verify-email` ← Verify email address
-- `POST /api/auth/resend-verification` ← Resend verification email
-- `POST /api/auth/login` ← Login (sets JWT)
-- `POST /api/auth/logout` ← Logout
-- `GET /api/auth/profile` ← Get own profile (protected)
-- `PUT /api/auth/profile` ← Update profile (protected)
-
-### POSTS:
-- `GET /api/posts` ← Get feed (public)
-- `GET /api/posts/:id` ← Get specific post (public)
-- `POST /api/posts` ← Create post with optional image (protected)
-- `DELETE /api/posts/:id` ← Delete own post (protected)
-
-### COMMENTS:
-- `GET /api/comments/post/:postId` ← Get comments (public)
-- `POST /api/comments/post/:postId` ← Add comment (protected)
-- `DELETE /api/comments/:id` ← Delete own comment (protected)
-
-### LIKES:
-- `GET /api/likes/post/:postId` ← Get like status (public)
-- `POST /api/likes/post/:postId` ← Toggle like (protected)
-
-### UPLOAD:
-- `POST /api/upload/profile` ← Upload profile image (protected)
-- `POST /api/upload/post` ← Upload post image (protected)
-- `POST /api/upload` ← General file upload (protected)
-- `POST /api/upload/multiple` ← Upload multiple files (protected)
-
----
-
-## Complete Test Collection (50 Tests)
-
-### 1. Register First User
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/auth/register`  
-**Headers:** `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "username": "testuser",
-  "email": "test@example.com",
-  "password": "TestUser123!"
-}
-```
-**Expected:** Status 201 - User registered, verification email sent
-**Note:** Check your email for verification link (including spam folder)
-
-### 2. Register Second User
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/auth/register`  
-**Headers:** `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "username": "testuser2",
-  "email": "test2@example.com",
-  "password": "TestUser123!"
-}
-```
-**Expected:** Status 201 - User successfully registered
-
-### 3. Test Registration with Invalid Data
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/auth/register`  
-**Headers:** `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "username": "test",
-  "email": "invalid-email",
-  "password": "weak"
-}
-```
-**Expected:** Status 400 - Validation error
-
-### 4. Test Duplicate Registration
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/auth/register`  
-**Headers:** `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "username": "testuser",
-  "email": "test@example.com",
-  "password": "TestUser123!"
-}
-```
-**Expected:** Status 409 - Email already registered
-
-### 5. Verify Email Address  
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/auth/verify-email?token=YOUR_VERIFICATION_TOKEN`  
-**Expected:** Status 200 - Email verified successfully
-**Note:** Get the token from the verification email
-
-### 6. Resend Verification Email
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/auth/resend-verification`  
-**Headers:** `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "email": "test@example.com"
-}
-```
-**Expected:** Status 200 - Verification email resent
-
-### 7. Try Login Before Email Verification
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/auth/login`  
-**Headers:** `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "email": "test2@example.com",
-  "password": "TestUser123!"
-}
-```
-**Expected:** Status 401 - Please verify your email before logging in
-
-### 8. Login First User (After Verification)
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/auth/login`  
-**Headers:** `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "email": "test@example.com",
-  "password": "TestUser123!"
-}
-```
-**Expected:** Status 200 - Login successful with token
-**Note:** This should automatically set the `token` environment variable
-
-### 9. Test Login with Invalid Credentials
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/auth/login`  
-**Headers:** `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "email": "test@example.com",
-  "password": "wrongpassword"
-}
-```
-**Expected:** Status 401 - Invalid credentials
-
-### 10. Get Own Profile
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/auth/profile`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Expected:** Status 200 - User profile returned (without password)
-
-### 11. Update Profile
-**Method:** `PUT`  
-**URL:** `{{baseUrl}}/api/auth/profile`  
-**Headers:** 
-- `Authorization: Bearer {{token}}`
-- `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "username": "UpdatedUsername"
-}
-```
-**Expected:** Status 200 - Profile updated successfully
-
-### 12. Test Unauthorized Profile Access
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/auth/profile`  
-**Headers:** (No Authorization header)  
-**Expected:** Status 401 - Token missing
-
-### 13. Create Post (Text Only)
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/posts`  
-**Headers:** 
-- `Authorization: Bearer {{token}}`
-- `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "text": "This is my first post! 🚀 #ThreadUp"
-}
-```
-**Expected:** Status 201 - Post created successfully
-**Note:** This should automatically set the `postId` environment variable
-
-### 14. Create Post with Image (Integrated Upload)
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/posts`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Body:** `form-data`
-- `text`: "Check out this amazing photo! 📸"
-- `image`: [Select image file]
-**Expected:** Status 201 - Post with image created successfully  
-**Note:** Image automatically uploaded to Cloudinary in 'post-images' folder
-
-### 15. Create Additional Posts for Feed
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/posts`  
-**Headers:** 
-- `Authorization: Bearer {{token}}`
-- `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "text": "Second post for more content! 📝 What do you think about social media?"
-}
-```
-**Expected:** Status 201 - Post created
-
-### 16. Test Empty Post Creation
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/posts`  
-**Headers:** 
-- `Authorization: Bearer {{token}}`
-- `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "text": ""
-}
-```
-**Expected:** Status 400 - Text is required
-
-### 17. Test Unauthorized Post Creation
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/posts`  
-**Headers:** `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "text": "This should fail - no authentication token provided"
-}
-```
-**Expected:** Status 401 - Token missing
-
-### 18. Test Invalid Token Post Creation
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/posts`  
-**Headers:** 
-- `Content-Type: application/json`
-- `Authorization: Bearer invalid_fake_token_12345`  
-**Body:**
-```json
-{
-  "text": "This should fail - invalid token"
-}
-```
-**Expected:** Status 401 - Token invalid
-
-### 19. Get All Posts (Feed)
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/posts`  
-**Expected:** Status 200 - Array of posts with pagination info
-
-### 20. Get Posts with Pagination
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/posts?page=1&limit=2`  
-**Expected:** Status 200 - Maximum 2 posts returned
-
-### 21. Get Specific Post
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/posts/{{postId}}`  
-**Expected:** Status 200 - Single post details
-
-### 22. Get Non-existent Post
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/posts/507f1f77bcf86cd799439011`  
-**Expected:** Status 404 - Post not found
-
-### 23. Like a Post
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/likes/post/{{postId}}`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Expected:** Status 200 - Post liked
-
-### 24. Get Like Status
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/likes/post/{{postId}}`  
-**Expected:** Status 200 - Like status and count
-
-### 25. Unlike Post (Toggle)
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/likes/post/{{postId}}`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Expected:** Status 200 - Post unliked
-
-### 26. Like Post Again
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/likes/post/{{postId}}`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Expected:** Status 200 - Post liked again
-
-### 27. Test Unauthorized Like
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/likes/post/{{postId}}`  
-**Headers:** (No Authorization header)  
-**Expected:** Status 401 - Token missing
-
-### 28. Like Non-existent Post
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/likes/post/507f1f77bcf86cd799439011`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Expected:** Status 404 - Post not found
-
-### 29. Add First Comment
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/comments/post/{{postId}}`  
-**Headers:** 
-- `Authorization: Bearer {{token}}`
-- `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "text": "This is a great post! 👍 Very interesting!"
-}
-```
-**Expected:** Status 201 - Comment created
-**Note:** This should automatically set the `commentId` environment variable
-
-### 30. Add Second Comment
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/comments/post/{{postId}}`  
-**Headers:** 
-- `Authorization: Bearer {{token}}`
-- `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "text": "I agree! 🤔 What do you think about the future?"
-}
-```
-**Expected:** Status 201 - Comment created
-
-### 31. Add Third Comment
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/comments/post/{{postId}}`  
-**Headers:** 
-- `Authorization: Bearer {{token}}`
-- `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "text": "Great discussion here! 💬"
-}
-```
-**Expected:** Status 201 - Comment created
-
-### 32. Test Empty Comment
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/comments/post/{{postId}}`  
-**Headers:** 
-- `Authorization: Bearer {{token}}`
-- `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "text": ""
-}
-```
-**Expected:** Status 400 - Comment text is required
-
-### 33. Test Unauthorized Comment
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/comments/post/{{postId}}`  
-**Headers:** `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "text": "This should fail"
-}
-```
-**Expected:** Status 401 - Token missing
-
-### 34. Comment on Non-existent Post
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/comments/post/507f1f77bcf86cd799439011`  
-**Headers:** 
-- `Authorization: Bearer {{token}}`
-- `Content-Type: application/json`  
-**Body:**
-```json
-{
-  "text": "This should fail"
-}
-```
-**Expected:** Status 404 - Post not found
-
-### 35. Get Comments for Post
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/comments/post/{{postId}}`  
-**Expected:** Status 200 - Array of comments
-
-### 36. Get Comments for Non-existent Post
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/comments/post/507f1f77bcf86cd799439011`  
-**Expected:** Status 404 - Post not found
-
-### 37. Upload Profile Image
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/upload/profile`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Body (form-data):**
-- `profileImage`: [Select an image file]  
-**Expected:** Status 200 - Profile image uploaded to Cloudinary
-**Note:** Image uploaded to 'profile-images' folder
-
-### 38. Upload Post Image (Separate Upload)
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/upload/post`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Body (form-data):**
-- `postImage`: [Select an image file]  
-**Expected:** Status 200 - Post image uploaded to Cloudinary
-**Note:** Image uploaded to 'post-images' folder
-
-### 39. Upload Invalid File Type
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/upload/profile`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Body (form-data):**
-- `profileImage`: [Select a non-image file like .txt or .pdf]  
-**Expected:** Status 400 - Only image files allowed
-
-### 40. Upload Without File
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/upload/profile`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Body (form-data):** (empty)  
-**Expected:** Status 400 - No file uploaded
-
-### 41. Get Updated Feed
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/posts`  
-**Expected:** Status 200 - Updated feed with all posts
-
-### 42. Delete Comment
-**Method:** `DELETE`  
-**URL:** `{{baseUrl}}/api/comments/{{commentId}}`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Expected:** Status 200 - Comment deleted
-
-### 43. Delete Non-existent Comment
-**Method:** `DELETE`  
-**URL:** `{{baseUrl}}/api/comments/507f1f77bcf86cd799439011`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Expected:** Status 404 - Comment not found
-
-### 44. Test Unauthorized Comment Deletion
-**Method:** `DELETE`  
-**URL:** `{{baseUrl}}/api/comments/{{commentId}}`  
-**Headers:** (No Authorization header)  
-**Expected:** Status 401 - Token missing
-
-### 45. Delete Post
-**Method:** `DELETE`  
-**URL:** `{{baseUrl}}/api/posts/{{postId}}`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Expected:** Status 200 - Post deleted
-
-### 46. Delete Non-existent Post
-**Method:** `DELETE`  
-**URL:** `{{baseUrl}}/api/posts/507f1f77bcf86cd799439011`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Expected:** Status 404 - Post not found
-
-### 47. Test Unauthorized Post Deletion
-**Method:** `DELETE`  
-**URL:** `{{baseUrl}}/api/posts/{{postId}}`  
-**Headers:** (No Authorization header)  
-**Expected:** Status 401 - Token missing
-
-### 48. Try to Access Deleted Post
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/posts/{{postId}}`  
-**Expected:** Status 404 - Post not found
-
-### 49. Logout
-**Method:** `POST`  
-**URL:** `{{baseUrl}}/api/auth/logout`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Expected:** Status 200 - Successfully logged out
-
-### 50. Test Access After Logout
-**Method:** `GET`  
-**URL:** `{{baseUrl}}/api/auth/profile`  
-**Headers:** `Authorization: Bearer {{token}}`  
-**Expected:** Status 401 - Token invalid (if using cookie-based auth)
-
----
-
-## Test Execution Order
-
-For best results, run tests in this sequence:
-
-### Phase 1: Authentication & User Management (Tests 1-12)
-1. Register users with email verification
-2. Verify emails and login
-3. Profile management and unauthorized access tests
-
-### Phase 2: Post Management (Tests 13-22)
-1. Create posts with different content types (text-only and with images)
-2. Test validation and authorization
-3. Retrieve posts and pagination
-
-### Phase 3: Social Interactions (Tests 23-41)
-1. Like/unlike functionality
-2. Comment system
-3. File upload functionality
-
-### Phase 4: Content Management & Cleanup (Tests 42-50)
-1. Delete comments and posts
-2. Test access to deleted content
-3. Logout and session management
-
----
-
-## Expected Response Examples
-
-### Successful Registration
-```json
-{
-  "message": "User registered successfully! Please check your email to verify your account.",
-  "user": {
-    "_id": "66c123456789abcdef123456",
-    "username": "testuser",
-    "email": "test@example.com",
-    "verified": false
-  }
-}
-```
-
-### Successful Login
-```json
-{
-  "message": "Successfully logged in",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
-    "_id": "66c123456789abcdef123456",
-    "username": "testuser",
-    "email": "test@example.com",
-    "roles": ["USER"],
-    "permissions": ["VIEWER_USER", "UPDATE_USER"],
-    "verified": true
-  }
-}
-```
-
-### Post Creation Response
-```json
-{
-  "message": "Post successfully created",
-  "post": {
-    "_id": "66c123456789abcdef123457",
-    "authorId": {
-      "_id": "66c123456789abcdef123456",
-      "username": "testuser"
-    },
-    "text": "This is my first post! 🚀 #ThreadUp",
-    "imageUrl": null,
-    "likeCount": 0,
-    "createdAt": "2025-08-18T10:30:00.000Z",
-    "updatedAt": "2025-08-18T10:30:00.000Z"
-  }
-}
-```
-
-### Post with Image Response
-```json
-{
-  "message": "Post successfully created",
-  "post": {
-    "_id": "66c123456789abcdef123457",
-    "authorId": {
-      "_id": "66c123456789abcdef123456",
-      "username": "testuser"
-    },
-    "text": "Check out this amazing photo! 📸",
-    "imageUrl": "https://res.cloudinary.com/your-cloud/image/upload/v1234567890/threadup/post-images/abc123.jpg",
-    "imagePublicId": "threadup/post-images/abc123",
-    "likeCount": 0,
-    "createdAt": "2025-08-18T10:30:00.000Z",
-    "updatedAt": "2025-08-18T10:30:00.000Z"
-  }
-}
-```
-
-### Upload Response
-```json
-{
-  "message": "Profile image uploaded successfully",
-  "profileImage": {
-    "public_id": "threadup/profile-images/def456",
-    "url": "https://res.cloudinary.com/your-cloud/image/upload/v1234567890/threadup/profile-images/def456.jpg",
-    "original_name": "my-avatar.jpg",
-    "size": 245760,
-    "format": "jpg"
-  }
-}
-```
-
-### Feed Response
-```json
-{
-  "posts": [
-    {
-      "_id": "66c123456789abcdef123457",
-      "authorId": {
-        "_id": "66c123456789abcdef123456",
-        "username": "testuser"
-      },
-      "text": "This is my first post! 🚀",
-      "imageUrl": "https://res.cloudinary.com/your-cloud/image/upload/v1234567890/threadup/post-images/abc123.jpg",
-      "likeCount": 1,
-      "commentsCount": 2,
-      "isLiked": true,
-      "createdAt": "2025-08-18T10:30:00.000Z",
-      "updatedAt": "2025-08-18T10:30:00.000Z"
+## 🛡️ Admin Privileges Management
+
+### How to Grant Admin Privileges
+
+To give a user admin privileges manually, you need to update their roles in the MongoDB database. Here are the different ways to do this:
+
+#### Method 1: MongoDB Compass (GUI)
+
+1. **Open MongoDB Compass** and connect to your database
+2. **Navigate to your database** → `users` collection
+3. **Find the user** you want to make admin (search by email or username)
+4. **Click the edit button** (pencil icon) on the user document
+5. **Update the roles field** from:
+   ```json
+   "roles": ["USER"]
+   ```
+   to:
+   ```json
+   "roles": ["USER", "ADMIN"]
+   ```
+6. **Update the permissions field** from:
+   ```json
+   "permissions": ["VIEWER_USER", "UPDATE_USER"]
+   ```
+   to:
+   ```json
+   "permissions": [
+     "VIEWER_USER", 
+     "UPDATE_USER", 
+     "DELETE_ANY_POST", 
+     "DELETE_ANY_COMMENT", 
+     "MODERATE_CONTENT"
+   ]
+   ```
+7. **Click "Update"** to save the changes
+
+#### Method 2: MongoDB Shell
+
+```javascript
+// Connect to your MongoDB instance
+mongo
+
+// Switch to your database (replace 'threadup' with your actual database name)
+use threadup
+
+// Update user by email
+db.users.updateOne(
+  { email: "admin@example.com" }, // Replace with the admin user's email
+  { 
+    $set: { 
+      roles: ["USER", "ADMIN"],
+      permissions: [
+        "VIEWER_USER", 
+        "UPDATE_USER", 
+        "DELETE_ANY_POST", 
+        "DELETE_ANY_COMMENT", 
+        "MODERATE_CONTENT"
+      ]
     }
-  ],
-  "pagination": {
-    "currentPage": 1,
-    "totalPages": 1,
-    "totalPosts": 1,
-    "hasNext": false,
-    "hasPrev": false
   }
-}
+)
+
+// Or update by username
+db.users.updateOne(
+  { username: "adminuser" }, // Replace with the admin user's username
+  { 
+    $set: { 
+      roles: ["USER", "ADMIN"],
+      permissions: [
+        "VIEWER_USER", 
+        "UPDATE_USER", 
+        "DELETE_ANY_POST", 
+        "DELETE_ANY_COMMENT", 
+        "MODERATE_CONTENT"
+      ]
+    }
+  }
+)
 ```
 
-### Common Error Responses
+#### Method 3: Node.js Script
 
-#### Unauthorized (401)
-```json
-{
-  "message": "Token missing",
-  "statusCode": 401
-}
+Create a script file (`make-admin.js`) in your server directory:
+
+```javascript
+import mongoose from 'mongoose';
+import User from './src/models/user.js';
+import config from './src/config/config.js';
+
+const makeUserAdmin = async (identifier, isEmail = true) => {
+  try {
+    // Connect to database
+    await mongoose.connect(config.MONGODB_URL);
+    console.log('Connected to MongoDB');
+
+    // Find user by email or username
+    const query = isEmail ? { email: identifier } : { username: identifier };
+    const user = await User.findOne(query);
+
+    if (!user) {
+      console.log('User not found');
+      return;
+    }
+
+    // Update user roles and permissions
+    user.roles = ["USER", "ADMIN"];
+    user.permissions = [
+      "VIEWER_USER", 
+      "UPDATE_USER", 
+      "DELETE_ANY_POST", 
+      "DELETE_ANY_COMMENT", 
+      "MODERATE_CONTENT"
+    ];
+
+    await user.save();
+
+    console.log(`✅ User ${user.email} (${user.username}) is now an admin!`);
+    console.log('Updated roles:', user.roles);
+    console.log('Updated permissions:', user.permissions);
+
+  } catch (error) {
+    console.error('Error making user admin:', error);
+  } finally {
+    await mongoose.disconnect();
+    console.log('Disconnected from MongoDB');
+  }
+};
+
+// Usage examples:
+// Make user admin by email
+makeUserAdmin('admin@example.com', true);
+
+// Make user admin by username
+// makeUserAdmin('adminusername', false);
 ```
 
-#### Validation Error (400)
-```json
-{
-  "message": "Text is required",
-  "statusCode": 400
-}
+Then run the script:
+
+```bash
+node make-admin.js
 ```
 
-#### Not Found (404)
-```json
-{
-  "message": "Post not found",
-  "statusCode": 404
-}
+#### Method 4: MongoDB Atlas (Cloud)
+
+If you're using MongoDB Atlas:
+
+1. **Go to MongoDB Atlas** dashboard
+2. **Click on "Browse Collections"** for your cluster
+3. **Navigate to your database** → `users` collection
+4. **Find the user** and click the edit button
+5. **Update the roles and permissions** as shown in method 1
+6. **Click "Update"**
+
+### Verification
+
+After making the changes, you can verify the admin privileges work by:
+
+1. **Login as the admin user** in your frontend
+2. **Check that admin badges appear** next to the user's name
+3. **Verify delete buttons appear** on all posts and comments (not just their own)
+4. **Test deleting** someone else's post or comment
+5. **Check the confirmation modals** show admin-specific messaging
+
+### Admin Features
+
+Users with admin privileges will see:
+
+- **Purple admin badge** next to their name in posts and comments
+- **Delete buttons** on all posts and comments throughout the platform
+- **"Delete (Admin)" text** on delete buttons for content they don't own
+- **Admin-specific confirmation messages** when deleting content
+- **Logging indicators** for admin actions
+
+### Important Notes
+
+⚠️ **Security Warning**: Only give admin privileges to trusted users, as they can delete any content on your platform.
+
+✅ **No Restart Required**: Changes take effect immediately - the user just needs to refresh their browser or log out and back in.
+
+🔍 **Verify Success**: You can check if it worked by looking for the purple admin badge next to the user's name in the UI.
+
+## 📚 Documentation
+
+- [API Testing Guide](./POSTMAN_TESTING.md) - Complete Postman testing instructions
+- [API Reference](./docs/API.md) - Detailed API documentation (if you have this)
+- [Database Schema](./docs/SCHEMA.md) - Database models and relationships (if you have this)
+
+## 🏗️ Project Structure
+
+```
+server/
+├── src/
+│   ├── config/          # Configuration files
+│   ├── controllers/     # Route controllers
+│   ├── middleware/      # Custom middleware
+│   ├── models/          # Database models
+│   ├── routes/          # API routes
+│   ├── types/           # TypeScript types
+│   └── utils/           # Utility functions
+├── temp/                # Temporary file storage
+├── public/              # Static files
+└── docs/                # Additional documentation
 ```
 
-#### Conflict (409)
-```json
-{
-  "message": "This email is already registered",
-  "statusCode": 409
-}
+## 🔧 Available Scripts
+
+```bash
+npm run dev        # Start development server
+npm run build      # Build for production
+npm run start      # Start production server
+npm test           # Run tests
+npm run lint       # Run linter
 ```
 
----
+## 🚀 Deployment
 
-## Technical Notes
+### Production Setup
 
-- **Email Verification:** Required for new user registration using Resend.com
-- **Token Expiry:** JWT tokens expire after 15 minutes (900 seconds)
-- **File Uploads:** Maximum 10MB per file, images only (JPEG, PNG, GIF, WEBP)
-- **Cloud Storage:** Cloudinary integration with organized folders:
-  - `profile-images/` - User profile pictures
-  - `post-images/` - Post attachments
-  - `general/` - Other uploads
-- **Integrated Upload:** POST /api/posts supports both text and image in single request
-- **Separate Upload Endpoints:** Available for specific use cases (profile images, etc.)
-- **Text Limits:** Posts max 500 characters, comments max 200 characters
-- **Pagination:** Default 20 posts per page
-- **Security:** All write operations require valid JWT authentication
-- **Database:** MongoDB with proper indexing for performance
-- **Email Templates:** HTML email templates for verification
-- **File Cleanup:** Temporary files automatically deleted after Cloudinary upload
+1. Set production environment variables
+2. Build the application: `npm run build`
+3. Start the server: `npm start`
 
----
+### Environment Variables for Production
 
-## Troubleshooting
-
-### Common Issues:
-1. **401 Errors**: Check if token is properly set in environment variables
-2. **404 Errors**: Verify the correct base URL and port (3005)
-3. **Email Verification**: Check spam folder for verification emails
-4. **File Upload Fails**: Ensure Cloudinary credentials are configured properly
-5. **MongoDB Connection**: Verify MongoDB is running locally
-6. **Server Won't Start**: Check all required environment variables are set
-7. **Image Upload Errors**: Verify file is an image and under 10MB limit
-
-### Required Environment Variables:
-```
+```env
+NODE_ENV=production
 PORT=3005
-MONGODB_URL=mongodb://localhost:27017/threadup
-JWT_SECRET=your-super-secret-jwt-key-here
+MONGODB_URL=your-production-mongodb-url
+JWT_SECRET=your-secure-jwt-secret
 RESEND_API_KEY=your-resend-api-key
-FRONTEND_URL=http://localhost:3005
+FRONTEND_URL=your-frontend-domain
 CLOUDINARY_CLOUD_NAME=your-cloud-name
 CLOUDINARY_API_KEY=your-api-key
 CLOUDINARY_API_SECRET=your-api-secret
 ```
 
-### Debug Tips:
-1. Check server console for detailed error logs
-2. Verify MongoDB connection status
-3. Test with curl commands if Postman issues persist
-4. Ensure `temp/uploads/` directory exists
-5. Verify Cloudinary credentials with a simple test upload
-6. Clear cookies if authentication behaves unexpectedly
+## 📞 Support
+
+For issues and questions:
+- Check the [API Testing Guide](./POSTMAN_TESTING.md)
+- Review server logs for error details
+- Ensure all environment variables are properly configured
