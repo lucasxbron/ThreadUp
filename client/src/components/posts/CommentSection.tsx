@@ -4,9 +4,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/utils/api";
 import { Comment } from "@/types/post.types";
+import { isAdmin } from "@/types/user.types";
 import { EmojiPicker } from "@/components/ui/EmojiPicker";
 import { ConfirmationModal } from "@/components/ui/ConfirmationModal";
 import { Avatar } from "@/components/ui/Avatar";
+import { AdminBadge } from "@/components/ui/AdminBadge";
 
 interface CommentSectionProps {
   postId: string;
@@ -416,6 +418,11 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
     const showReplyEmojiPicker = replyEmojiPickers[comment._id];
     const isDeleting = deletingComments.has(comment._id);
 
+    // Admin delete logic
+    const canDelete = user?._id === comment.authorId._id || isAdmin(user);
+    const isOwnComment = user?._id === comment.authorId._id;
+    const isAdminDelete = isAdmin(user) && !isOwnComment;
+
     return (
       <div key={comment._id} className="space-y-3">
         <div
@@ -431,13 +438,13 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
           }
         >
           {/* Avatar */}
-          <Avatar 
+          <Avatar
             user={{
               firstName: comment.authorId.firstName,
               lastName: comment.authorId.lastName,
               avatarUrl: comment.authorId.avatarUrl,
-            }} 
-            size="sm" 
+            }}
+            size="sm"
           />
 
           {/* Comment content */}
@@ -452,6 +459,12 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                   comment.authorId.lastName
                 )}
               </span>
+
+              {/* Admin Badge */}
+              {isAdmin({ roles: comment.authorId.roles || [] } as any) && (
+                <AdminBadge className="flex-shrink-0" />
+              )}
+
               <span
                 className="text-xs flex-shrink-0"
                 style={{ color: "var(--color-muted-foreground, #64748b)" }}
@@ -627,7 +640,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                 )}
 
                 {/* Edit button - only for comment author */}
-                {user?._id === comment.authorId._id && (
+                {isOwnComment && (
                   <button
                     onClick={() => handleEdit(comment._id, comment.text)}
                     className="text-xs transition-all duration-200 hover:scale-105"
@@ -648,25 +661,34 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                   </button>
                 )}
 
-                {/* Delete button - only for comment author */}
-                {user?._id === comment.authorId._id && (
+                {/* Delete button - for comment author OR admin */}
+                {canDelete && (
                   <button
                     onClick={() => handleDeleteClick(comment._id, isReply)}
-                    className="text-xs transition-all duration-200 hover:scale-105"
+                    disabled={isDeleting}
+                    className="text-xs transition-all duration-200 hover:scale-105 disabled:opacity-50"
                     style={{
                       color: "var(--color-destructive, #ef4444)",
                       backgroundColor: "transparent",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color =
-                        "var(--color-destructive-600, #dc2626)";
+                      if (!isDeleting) {
+                        e.currentTarget.style.color =
+                          "var(--color-destructive-600, #dc2626)";
+                      }
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.color =
-                        "var(--color-destructive, #ef4444)";
+                      if (!isDeleting) {
+                        e.currentTarget.style.color =
+                          "var(--color-destructive, #ef4444)";
+                      }
                     }}
                   >
-                    Delete
+                    {isDeleting
+                      ? "Deleting..."
+                      : isAdminDelete
+                      ? "Delete (Admin)"
+                      : "Delete"}
                   </button>
                 )}
               </div>
@@ -678,13 +700,13 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
                 <div className="flex items-start space-x-2">
                   <div className="flex-shrink-0 mt-2">
                     {user && (
-                      <Avatar 
+                      <Avatar
                         user={{
                           firstName: user.firstName,
                           lastName: user.lastName,
                           avatarUrl: user.avatarUrl,
-                        }} 
-                        size="xs" 
+                        }}
+                        size="xs"
                       />
                     )}
                   </div>
@@ -836,13 +858,13 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
       >
         <div className="flex-shrink-0">
           {user && (
-            <Avatar 
+            <Avatar
               user={{
                 firstName: user.firstName,
                 lastName: user.lastName,
                 avatarUrl: user.avatarUrl,
-              }} 
-              size="sm" 
+              }}
+              size="sm"
             />
           )}
         </div>
@@ -944,9 +966,26 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
         }
         onConfirm={handleDeleteComment}
         title={`Delete ${deleteModalState.isReply ? "Reply" : "Comment"}`}
-        message={`Are you sure you want to delete this ${
-          deleteModalState.isReply ? "reply" : "comment"
-        }? This action cannot be undone.`}
+        message={(() => {
+          if (!deleteModalState.commentId) return "";
+
+          const comment = comments
+            .flatMap((c) => [c, ...(c.replies || [])])
+            .find((c) => c._id === deleteModalState.commentId);
+
+          const isOwnComment = user?._id === comment?.authorId._id;
+          const isAdminDelete = isAdmin(user) && !isOwnComment;
+
+          if (isAdminDelete) {
+            return `Are you sure you want to delete this ${
+              deleteModalState.isReply ? "reply" : "comment"
+            } as an admin? This action cannot be undone and will be logged.`;
+          }
+
+          return `Are you sure you want to delete this ${
+            deleteModalState.isReply ? "reply" : "comment"
+          }? This action cannot be undone.`;
+        })()}
         confirmText="Delete"
         cancelText="Cancel"
         variant="danger"
