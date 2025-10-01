@@ -21,7 +21,7 @@ function getEnvVar(key: string, required: boolean = true): string | undefined {
 }
 
 const config: Config = {
-  PORT: parseInt(process.env.PORT || "3006", 10),
+  PORT: parseInt(process.env.PORT || "3005", 10),
   MONGODB_URL: getEnvVar("MONGODB_URL")!,
   RESEND_API_KEY: getEnvVar("RESEND_API_KEY")!,
   FRONTEND_URL: process.env.FRONTEND_URL || "http://localhost:3000",
