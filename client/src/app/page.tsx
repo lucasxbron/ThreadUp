@@ -315,6 +315,9 @@ export default function HomePage() {
 
                 {/* SuggestionsCard */}
                 <SuggestionsCard />
+
+                {/* FollowersCard */}
+                {isAuthenticated && user && <FollowersCard />}
               </div>
 
               {/* Post Feed - Center */}
@@ -323,14 +326,12 @@ export default function HomePage() {
               </div>
 
               {/* Right Sidebar */}
-              <div className="hidden lg:block">
-                <div className="sticky top-20 space-y-6">
+              {/* <div className="hidden lg:block">
+                <div className="sticky top-20 space-y-6"> */}
                   {/* Followers/Following Card */}
-                  {isAuthenticated && user && (
-                    <FollowersCard />
-                  )}
+                  {/* {isAuthenticated && user && <FollowersCard />}
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </main>
