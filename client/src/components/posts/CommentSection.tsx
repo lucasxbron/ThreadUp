@@ -12,6 +12,7 @@ import { AdminBadge } from "@/components/ui/AdminBadge";
 
 interface CommentSectionProps {
   postId: string;
+  onCommentUpdate?: () => void;
 }
 
 interface CommentsResponse {
@@ -38,7 +39,10 @@ interface EditState {
   submitting: boolean;
 }
 
-export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
+export const CommentSection: React.FC<CommentSectionProps> = ({
+  postId,
+  onCommentUpdate,
+}) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
@@ -190,6 +194,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
     if (response.data) {
       await loadComments();
       setNewComment("");
+      onCommentUpdate?.();
     }
 
     setSubmitting(false);
@@ -218,6 +223,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
 
     if (response.data) {
       await loadComments();
+      onCommentUpdate?.();
       setReplyStates((prev) => {
         const newState = { ...prev };
         delete newState[commentId];
@@ -275,6 +281,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ postId }) => {
 
     if (response.data || response.message) {
       await loadComments();
+      onCommentUpdate?.();
     }
 
     setDeletingComments((prev) => {

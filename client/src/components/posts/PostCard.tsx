@@ -45,6 +45,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   const [showActionsMenu, setShowActionsMenu] = useState(false);
   const actionsMenuRef = useRef<HTMLDivElement>(null);
   const actionsButtonRef = useRef<HTMLButtonElement>(null);
+  const [commentCount, setCommentCount] = useState(0);
 
   const { user, isAuthenticated } = useAuth();
   const { getFollowState, toggleFollow, updateFollowState } = useFollow();
@@ -102,6 +103,10 @@ export const PostCard: React.FC<PostCardProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showActionsMenu]);
+
+  useEffect(() => {
+    loadCommentCount();
+  }, [post._id]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -209,6 +214,25 @@ export const PostCard: React.FC<PostCardProps> = ({
   // Get full name
   const getFullName = (firstName: string, lastName: string) => {
     return `${firstName} ${lastName}`;
+  };
+
+  const loadCommentCount = async () => {
+    try {
+      const response = await apiClient.getComments(post._id);
+      if (response.data) {
+        const commentsData = response.data as any;
+        setCommentCount(commentsData.comments?.length || 0);
+      }
+    } catch (error) {
+      console.error("Error loading comment count:", error);
+    }
+  };
+
+  const handleToggleComments = async () => {
+    if (!showComments) {
+      await loadCommentCount();
+    }
+    setShowComments(!showComments);
   };
 
   return (
@@ -610,7 +634,7 @@ export const PostCard: React.FC<PostCardProps> = ({
 
               {/* Comment Button */}
               <button
-                onClick={() => setShowComments(!showComments)}
+                onClick={handleToggleComments}
                 className="transition-colors duration-200 hover:scale-110"
                 style={{ color: "var(--color-muted-foreground, #64748b)" }}
               >
@@ -682,13 +706,14 @@ export const PostCard: React.FC<PostCardProps> = ({
           )}
 
           {/* View comments button */}
-          {!showComments && (
+          {!showComments && commentCount > 0 && (
             <button
-              onClick={() => setShowComments(true)}
+              onClick={handleToggleComments}
               className="text-sm mt-1 sm:mt-2 transition-colors duration-200"
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
-              View all comments
+              View{" "}
+              {commentCount === 1 ? "1 comment" : `${commentCount} comments`}
             </button>
           )}
         </div>
@@ -702,7 +727,10 @@ export const PostCard: React.FC<PostCardProps> = ({
               backgroundColor: "var(--color-muted, #f1f5f9)",
             }}
           >
-            <CommentSection postId={post._id} />
+            <CommentSection
+              postId={post._id}
+              onCommentUpdate={loadCommentCount} // Pass the function to refresh count
+            />
           </div>
         )}
       </div>
