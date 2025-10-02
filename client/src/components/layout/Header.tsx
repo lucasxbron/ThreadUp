@@ -9,6 +9,8 @@ import { NoSSR } from "@/components/ui/NoSSR";
 import { CreatePostModal } from "@/components/posts/CreatePostModal";
 import { Avatar } from "@/components/ui/Avatar";
 import { usePathname } from "next/navigation";
+import { isAdmin } from "@/types/user.types";
+import { AdminBadge } from "@/components/ui/AdminBadge";
 
 export const Header: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -364,6 +366,44 @@ export const Header: React.FC = () => {
                           </svg>
                           Profile
                         </Link>
+
+                        {/* Admin Link - Only show for admin users */}
+                        {isAdmin(user) && (
+                          <Link
+                            href="/admin"
+                            className="flex items-center px-4 py-4 text-base md:text-sm transition-colors duration-200 cursor-pointer"
+                            style={{
+                              color: "var(--color-muted-foreground, #64748b)",
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor =
+                                "var(--color-secondary, #f1f5f9)";
+                              e.currentTarget.style.color =
+                                "var(--color-foreground, #0f172a)";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor =
+                                "transparent";
+                              e.currentTarget.style.color =
+                                "var(--color-muted-foreground, #64748b)";
+                            }}
+                            onClick={() => setDropdownOpen(false)}
+                          >
+                            <svg
+                              className="w-5 h-5 md:w-4 md:h-4 mr-3"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            Admin
+                            <AdminBadge className="ml-auto scale-75" />
+                          </Link>
+                        )}
 
                         <Link
                           href="/coming-soon"
