@@ -195,7 +195,7 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
     const currentUserPosts = await Post.find({ authorId: userId }).select('_id');
     const postIds = currentUserPosts.map(p => p._id);
 
-    console.log(`Found ${postIds.length} posts for user ${userId}`);
+    // console.log(`Found ${postIds.length} posts for user ${userId}`);
 
     // Initialize suggestion candidates
     const suggestionCandidates = new Map();
@@ -220,7 +220,7 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
         suggestionCandidates.set(userId, (suggestionCandidates.get(userId) || 0) + item.interactionCount);
       });
 
-      console.log(`Found ${likersAggregation.length} users who liked posts`);
+      // console.log(`Found ${likersAggregation.length} users who liked posts`);
     }
 
     // Find users who commented on current user's posts
@@ -244,7 +244,7 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
         suggestionCandidates.set(userId, (suggestionCandidates.get(userId) || 0) + (item.interactionCount * 1.5));
       });
 
-      console.log(`Found ${commentersAggregation.length} users who commented on posts`);
+      // console.log(`Found ${commentersAggregation.length} users who commented on posts`);
     }
 
     // Find users who are following the current user (but current user isn't following back)
@@ -259,7 +259,7 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
       suggestionCandidates.set(followerId, (suggestionCandidates.get(followerId) || 0) + 10);
     });
 
-    console.log(`Found ${followersOfCurrentUser.length} users following current user`);
+    // console.log(`Found ${followersOfCurrentUser.length} users following current user`);
 
     // Get top candidates by interaction score
     const topCandidateIds = Array.from(suggestionCandidates.keys())
@@ -294,7 +294,7 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
       ...randomUsers.map(u => u._id.toString())
     ];
 
-    console.log(`Total suggestion candidates: ${allSuggestionIds.length}`);
+    // console.log(`Total suggestion candidates: ${allSuggestionIds.length}`);
 
     if (allSuggestionIds.length === 0) {
       // If no suggestions found, get some random verified users
@@ -343,7 +343,7 @@ export const getSuggestions = async (req: Request, res: Response, next: NextFunc
       })
       .slice(0, limit);
 
-    console.log(`Returning ${sortedSuggestions.length} suggestions`);
+    // console.log(`Returning ${sortedSuggestions.length} suggestions`);
 
     res.status(200).json({
       suggestions: sortedSuggestions
