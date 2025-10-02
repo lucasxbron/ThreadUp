@@ -152,7 +152,7 @@ class ApiClient {
     if (parentCommentId) {
       body.parentCommentId = parentCommentId;
     }
-    
+
     return this.makeRequest(`/api/comments/post/${postId}`, {
       method: "POST",
       body: JSON.stringify(body),
@@ -296,9 +296,9 @@ class ApiClient {
       body: formData,
     });
   }
-  
-   async uploadAvatar(formData: FormData) {
-    formData.append('type', 'profile');
+
+  async uploadAvatar(formData: FormData) {
+    formData.append("type", "profile");
     return this.makeRequest("/api/upload", {
       method: "POST",
       body: formData,
@@ -308,9 +308,9 @@ class ApiClient {
   async updateUserAvatar(avatarUrl: string, avatarPublicId: string) {
     return this.makeRequest("/api/auth/profile", {
       method: "PUT",
-      body: JSON.stringify({ 
-        avatarUrl, 
-        avatarPublicId 
+      body: JSON.stringify({
+        avatarUrl,
+        avatarPublicId,
       }),
     });
   }
@@ -318,24 +318,43 @@ class ApiClient {
   async deleteAvatar() {
     return this.makeRequest("/api/auth/profile", {
       method: "PUT",
-      body: JSON.stringify({ 
-        avatarUrl: null, 
-        avatarPublicId: null 
+      body: JSON.stringify({
+        avatarUrl: null,
+        avatarPublicId: null,
       }),
     });
   }
 
   async submitContactForm(data: {
-  name: string;
-  email: string;
-  subject: string;
-  customSubject?: string;
-  message: string;
+    name: string;
+    email: string;
+    subject: string;
+    customSubject?: string;
+    message: string;
+  }) {
+    return this.makeRequest("/api/contact", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+
+  // Admin endpoints
+async getAdminLogs(page: number = 1, limit: number = 50, filters?: {
+  action?: string;
+  adminId?: string;
+  targetType?: string;
 }) {
-  return this.makeRequest("/api/contact", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
+  let url = `/api/admin/logs?page=${page}&limit=${limit}`;
+  
+  if (filters?.action) url += `&action=${filters.action}`;
+  if (filters?.adminId) url += `&adminId=${filters.adminId}`;
+  if (filters?.targetType) url += `&targetType=${filters.targetType}`;
+  
+  return this.makeRequest(url);
+}
+
+async getAdminStats() {
+  return this.makeRequest('/api/admin/stats');
 }
 }
 
