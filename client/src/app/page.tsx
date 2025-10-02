@@ -11,6 +11,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { FollowersCard } from "@/components/profile/FollowersCard";
+import Image from "next/image";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading, user } = useAuth();
@@ -169,10 +170,14 @@ export default function HomePage() {
                           <div className="p-4 border-b border-gray-200 dark:border-gray-300">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center space-x-2">
-                                <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                  <span className="text-white font-bold text-xs">
-                                    T
-                                  </span>
+                                <div className="w-7 h-7 flex items-center justify-center">
+                                  <Image
+                                    src="/threadup_icon_gradient.svg"
+                                    alt="ThreadUp"
+                                    width={24}
+                                    height={24}
+                                    className="w-full h-full object-contain"
+                                  />
                                 </div>
                                 <span className="font-bold text-gray-900 dark:text-gray-900 text-sm">
                                   ThreadUp
@@ -239,8 +244,15 @@ export default function HomePage() {
               {/* Right Side - Sign Up Form (Top on mobile) */}
               <div className="flex-1 max-w-sm w-full">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                    <span className="text-white font-bold text-2xl">T</span>
+                  <div className="w-18 h-18 flex items-center justify-center mx-auto mb-4">
+                    <Image
+                      src="/threadup_icon_gradient.svg"
+                      alt="ThreadUp"
+                      width={72}
+                      height={72}
+                      className="w-full h-full object-contain"
+                      priority
+                    />
                   </div>
                   <h1 className="text-4xl font-bold text-foreground mb-4 tracking-tight">
                     ThreadUp
@@ -328,8 +340,8 @@ export default function HomePage() {
               {/* Right Sidebar */}
               {/* <div className="hidden lg:block">
                 <div className="sticky top-20 space-y-6"> */}
-                  {/* Followers/Following Card */}
-                  {/* {isAuthenticated && user && <FollowersCard />}
+              {/* Followers/Following Card */}
+              {/* {isAuthenticated && user && <FollowersCard />}
                 </div>
               </div> */}
             </div>
