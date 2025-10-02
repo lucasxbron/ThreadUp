@@ -650,7 +650,8 @@ export const PostCard: React.FC<PostCardProps> = ({
               </button>
             </div>
 
-            <button
+            {/* Bookmark/Save Button */}
+            {/* <button
               className="transition-colors duration-200"
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
@@ -667,7 +668,7 @@ export const PostCard: React.FC<PostCardProps> = ({
                   d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
                 />
               </svg>
-            </button>
+            </button> */}
           </div>
 
           {/* Like count */}
