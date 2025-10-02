@@ -12,6 +12,7 @@ import commentLikeRoutes from "./routes/commentLikeRouter.js";
 import followRoutes from "./routes/followRouter.js";
 import uploadRoutes from "./routes/uploadRouter.js";
 import contactRoutes from "./routes/contactRouter.js";
+import adminRoutes from "./routes/adminRouter.js";
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use("/api/comment-likes", commentLikeRoutes);
 app.use("/api/follows", followRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.use(errorHandling);
 
