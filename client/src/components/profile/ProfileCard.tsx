@@ -6,6 +6,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/utils/api";
 import { Avatar } from "@/components/ui/Avatar";
 import { ImageModal } from "@/components/ui/ImageModal";
+import { AdminBadge } from "@/components/ui/AdminBadge";
+import { isAdmin } from "@/types/user.types";
 
 interface ProfileCardProps {
   user: User;
@@ -109,12 +111,19 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
           </div>
 
           {/* Full Name */}
-          <h2
-            className="text-lg font-bold mb-1"
-            style={{ color: "var(--color-card-foreground, #0f172a)" }}
-          >
-            {getFullName(user.firstName, user.lastName)}
-          </h2>
+          <div className="flex items-center justify-center mb-1">
+            <h2
+              className="text-lg font-bold"
+              style={{ color: "var(--color-card-foreground, #0f172a)" }}
+            >
+              {getFullName(user.firstName, user.lastName)}
+            </h2>
+            {isAdmin(user) && (
+              <div className="ml-2">
+                <AdminBadge />
+              </div>
+            )}
+          </div>
 
           {/* Username */}
           <p
