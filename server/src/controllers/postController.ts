@@ -6,13 +6,25 @@ import Comment from "../models/comment.js";
 import Like from "../models/like.js";
 import Follow from "../models/follow.js";
 import config from "../config/config.js";
-import { deleteFromCloudinary, uploadToCloudinary } from "../utils/cloudinary.js";
+import {
+  deleteFromCloudinary,
+  uploadToCloudinary,
+} from "../utils/cloudinary.js";
 import CommentLike from "../models/commentLike.js";
+import AdminLog from "../models/adminLog.js";
 
-export const createPost = async (req: Request, res: Response, next: NextFunction) => {
+export const createPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { text } = req.body;
 
   try {
+    if (!req.user?._id) {
+      throw createHttpError(401, "Authentication required");
+    }
+
     if (!text) {
       throw createHttpError(400, "Text is required");
     }
@@ -21,20 +33,22 @@ export const createPost = async (req: Request, res: Response, next: NextFunction
     let imagePublicId = null;
 
     if (req.file) {
-      const result = await uploadToCloudinary(req.file.path, 'post-images');
+      const result = await uploadToCloudinary(req.file.path, "post-images");
       imageUrl = result.secure_url;
       imagePublicId = result.public_id;
     }
 
     const newPost = await Post.create({
       text,
-      authorId: req.user?._id,
+      authorId: req.user._id,
       imageUrl,
       imagePublicId,
     });
 
-    const populatedPost = await Post.findById(newPost._id)
-    .populate("authorId", "firstName lastName username avatarUrl roles");
+    const populatedPost = await Post.findById(newPost._id).populate(
+      "authorId",
+      "firstName lastName username avatarUrl roles"
+    );
 
     res.status(201).json({
       message: "Post successfully created",
@@ -45,14 +59,21 @@ export const createPost = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const getPosts = async (req: Request, res: Response, next: NextFunction) => {
+export const getPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
     const skip = (page - 1) * limit;
 
     const posts = await Post.find()
-      .populate("authorId", "firstName lastName username followersCount avatarUrl roles")
+      .populate(
+        "authorId",
+        "firstName lastName username followersCount avatarUrl roles"
+      )
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -61,39 +82,43 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
     const totalPages = Math.ceil(totalPosts / limit);
 
     // Like status, comment count, and follow status
-    const postsWithExtra = await Promise.all(posts.map(async (post) => {
-      const commentsCount = await Comment.countDocuments({ postId: post._id });
-      
-      let liked = false;
-      let following = false;
-      
-      const userId = req.user?._id;
-      if (userId) {
-        // Check like status
-        const existingLike = await Like.findOne({ 
-          userId: userId, 
-          postId: post._id 
+    const postsWithExtra = await Promise.all(
+      posts.map(async (post) => {
+        const commentsCount = await Comment.countDocuments({
+          postId: post._id,
         });
-        liked = !!existingLike;
 
-        // Check follow status (only if not the user's own post)
-        if (userId !== post.authorId._id.toString()) {
-          const existingFollow = await Follow.findOne({
-            followerId: userId,
-            followingId: post.authorId._id
+        let liked = false;
+        let following = false;
+
+        const userId = req.user?._id;
+        if (userId) {
+          // Check like status
+          const existingLike = await Like.findOne({
+            userId: userId,
+            postId: post._id,
           });
-          following = !!existingFollow;
-        }
-      }
+          liked = !!existingLike;
 
-      return {
-        ...post.toObject(),
-        commentsCount,
-        likeCount: post.likeCount || 0,
-        liked,
-        following
-      };
-    }));
+          // Check follow status (only if not the user's own post)
+          if (userId !== post.authorId._id.toString()) {
+            const existingFollow = await Follow.findOne({
+              followerId: userId,
+              followingId: post.authorId._id,
+            });
+            following = !!existingFollow;
+          }
+        }
+
+        return {
+          ...post.toObject(),
+          commentsCount,
+          likeCount: post.likeCount || 0,
+          liked,
+          following,
+        };
+      })
+    );
 
     res.status(200).json({
       posts: postsWithExtra,
@@ -103,34 +128,40 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
         totalPosts,
         hasNext: page < totalPages,
         hasPrev: page > 1,
-      }
+      },
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getPostById = async (req: Request, res: Response, next: NextFunction) => {
+export const getPostById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { id } = req.params;
 
   try {
-    const post = await Post.findById(id)
-      .populate("authorId", "firstName lastName username followersCount avatarUrl roles");
+    const post = await Post.findById(id).populate(
+      "authorId",
+      "firstName lastName username followersCount avatarUrl roles"
+    );
 
     if (!post) {
       throw createHttpError(404, "Post not found");
     }
 
     const commentsCount = await Comment.countDocuments({ postId: post._id });
-    
+
     let liked = false;
     let following = false;
-    
+
     if (req.user?._id) {
       // Check like status
-      const existingLike = await Like.findOne({ 
-        userId: req.user._id, 
-        postId: post._id 
+      const existingLike = await Like.findOne({
+        userId: req.user._id,
+        postId: post._id,
       });
       liked = !!existingLike;
 
@@ -138,7 +169,7 @@ export const getPostById = async (req: Request, res: Response, next: NextFunctio
       if (req.user._id !== post.authorId._id.toString()) {
         const existingFollow = await Follow.findOne({
           followerId: req.user._id,
-          followingId: post.authorId._id
+          followingId: post.authorId._id,
         });
         following = !!existingFollow;
       }
@@ -149,17 +180,25 @@ export const getPostById = async (req: Request, res: Response, next: NextFunctio
       commentsCount,
       likeCount: post.likeCount || 0,
       liked,
-      following
+      following,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const deletePost = async (req: Request, res: Response, next: NextFunction) => {
+export const deletePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { id } = req.params;
 
   try {
+    if (!req.user?._id) {
+      throw createHttpError(401, "Authentication required");
+    }
+
     const post = await Post.findById(id);
 
     if (!post) {
@@ -167,11 +206,37 @@ export const deletePost = async (req: Request, res: Response, next: NextFunction
     }
 
     // Check if the user is the author of the post OR has admin privileges
-    const isAuthor = post.authorId.toString() === req.user?._id;
-    const isAdmin = req.user?.roles?.includes("ADMIN");
+    const isAuthor = post.authorId.toString() === req.user._id;
+    const isAdmin = req.user.roles?.includes("ADMIN") || false;
 
     if (!isAuthor && !isAdmin) {
       throw createHttpError(403, "Not authorized to delete this post");
+    }
+
+    // Log Admin Action
+    if (isAdmin && !isAuthor) {
+      try {
+        await AdminLog.create({
+          adminId: req.user._id,
+          action: "DELETE_POST",
+          targetType: "POST",
+          targetId: id,
+          targetAuthorId: post.authorId,
+          details: {
+            postText: post.text,
+            imageUrl: post.imageUrl || undefined,
+          },
+          ipAddress: req.ip || req.socket?.remoteAddress || "Unknown",
+          userAgent: req.get("User-Agent") || "Unknown",
+        });
+
+        console.log(
+          `🛡️ ADMIN ACTION: User ${req.user._id} deleted post ${id} by user ${post.authorId}`
+        );
+      } catch (logError) {
+        console.error("Failed to log admin action:", logError);
+        // Continue with deletion even if logging fails
+      }
     }
 
     // Delete image from Cloudinary if exists
@@ -179,32 +244,38 @@ export const deletePost = async (req: Request, res: Response, next: NextFunction
       try {
         await deleteFromCloudinary(post.imagePublicId);
       } catch (cloudinaryError) {
-        console.error("Failed to delete image from Cloudinary:", cloudinaryError);
+        console.error(
+          "Failed to delete image from Cloudinary:",
+          cloudinaryError
+        );
         // Continue with post deletion even if image deletion fails
       }
     }
 
     // Delete all comment likes for comments on this post
     const postComments = await Comment.find({ postId: id });
-    const commentIds = postComments.map(comment => comment._id);
-    
+    const commentIds = postComments.map((comment) => comment._id);
+
     if (commentIds.length > 0) {
       await CommentLike.deleteMany({ commentId: { $in: commentIds } });
     }
 
     // Delete all comments related to this post
     await Comment.deleteMany({ postId: id });
-    
+
     // Delete all likes for this post
     await Like.deleteMany({ postId: id });
-    
+
     // Delete post
     await Post.findByIdAndDelete(id);
 
-    res.status(200).json({ 
-      message: isAdmin && !isAuthor ? "Post deleted by admin" : "Post deleted successfully",
+    res.status(200).json({
+      message:
+        isAdmin && !isAuthor
+          ? "Post deleted by admin"
+          : "Post deleted successfully",
       deletedPostId: id,
-      deletedByAdmin: isAdmin && !isAuthor
+      deletedByAdmin: isAdmin && !isAuthor,
     });
   } catch (error) {
     next(error);
@@ -212,7 +283,11 @@ export const deletePost = async (req: Request, res: Response, next: NextFunction
 };
 
 // Endpoint to get post likes with user details
-export const getPostLikes = async (req: Request, res: Response, next: NextFunction) => {
+export const getPostLikes = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { id } = req.params;
 
   try {
@@ -222,24 +297,28 @@ export const getPostLikes = async (req: Request, res: Response, next: NextFuncti
     }
 
     const likes = await Like.find({ postId: id })
-      .populate('userId', 'firstName lastName username')
+      .populate("userId", "firstName lastName username")
       .sort({ createdAt: -1 })
       .lean();
 
     res.status(200).json({
-      likes: likes.map(like => ({
+      likes: likes.map((like) => ({
         _id: like._id,
         user: like.userId,
-        likedAt: like.createdAt
+        likedAt: like.createdAt,
       })),
-      totalLikes: likes.length
+      totalLikes: likes.length,
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getUserPosts = async (req: Request, res: Response, next: NextFunction) => {
+export const getUserPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { userId } = req.params;
     const page = parseInt(req.query.page as string) || 1;
@@ -252,7 +331,10 @@ export const getUserPosts = async (req: Request, res: Response, next: NextFuncti
     }
 
     const posts = await Post.find({ authorId: userId })
-      .populate("authorId", "firstName lastName username followersCount avatarUrl roles")
+      .populate(
+        "authorId",
+        "firstName lastName username followersCount avatarUrl roles"
+      )
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -261,39 +343,43 @@ export const getUserPosts = async (req: Request, res: Response, next: NextFuncti
     const totalPages = Math.ceil(totalPosts / limit);
 
     // Add like status, comment count, and follow status
-    const postsWithExtra = await Promise.all(posts.map(async (post) => {
-      const commentsCount = await Comment.countDocuments({ postId: post._id });
-      
-      let liked = false;
-      let following = false;
-      
-      const currentUserId = req.user?._id;
-      if (currentUserId) {
-        // Check like status
-        const existingLike = await Like.findOne({ 
-          userId: currentUserId, 
-          postId: post._id 
+    const postsWithExtra = await Promise.all(
+      posts.map(async (post) => {
+        const commentsCount = await Comment.countDocuments({
+          postId: post._id,
         });
-        liked = !!existingLike;
 
-        // Check follow status (only if not the user's own post)
-        if (currentUserId !== post.authorId._id.toString()) {
-          const existingFollow = await Follow.findOne({
-            followerId: currentUserId,
-            followingId: post.authorId._id
+        let liked = false;
+        let following = false;
+
+        const currentUserId = req.user?._id;
+        if (currentUserId) {
+          // Check like status
+          const existingLike = await Like.findOne({
+            userId: currentUserId,
+            postId: post._id,
           });
-          following = !!existingFollow;
-        }
-      }
+          liked = !!existingLike;
 
-      return {
-        ...post.toObject(),
-        commentsCount,
-        likeCount: post.likeCount || 0,
-        liked,
-        following
-      };
-    }));
+          // Check follow status (only if not the user's own post)
+          if (currentUserId !== post.authorId._id.toString()) {
+            const existingFollow = await Follow.findOne({
+              followerId: currentUserId,
+              followingId: post.authorId._id,
+            });
+            following = !!existingFollow;
+          }
+        }
+
+        return {
+          ...post.toObject(),
+          commentsCount,
+          likeCount: post.likeCount || 0,
+          liked,
+          following,
+        };
+      })
+    );
 
     res.status(200).json({
       posts: postsWithExtra,
@@ -304,118 +390,134 @@ export const getUserPosts = async (req: Request, res: Response, next: NextFuncti
         totalPosts,
         hasNext: page < totalPages,
         hasPrev: page > 1,
-      }
+      },
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getFilteredPosts = async (req: Request, res: Response, next: NextFunction) => {
+export const getFilteredPosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
     const skip = (page - 1) * limit;
-    const filter = req.query.filter as string || 'recent';
+    const filter = (req.query.filter as string) || "recent";
     const userId = req.user?._id;
 
     let posts;
     let totalPosts;
 
     switch (filter) {
-      case 'trending':
+      case "trending":
         // Get posts sorted by engagement (likes + comments) within the last 7 days
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-        
+
         posts = await Post.aggregate([
           {
             $match: {
-              createdAt: { $gte: sevenDaysAgo }
-            }
+              createdAt: { $gte: sevenDaysAgo },
+            },
           },
           {
             $lookup: {
-              from: 'comments',
-              localField: '_id',
-              foreignField: 'postId',
-              as: 'comments'
-            }
+              from: "comments",
+              localField: "_id",
+              foreignField: "postId",
+              as: "comments",
+            },
           },
           {
             $addFields: {
               engagementScore: {
                 $add: [
-                  { $ifNull: ['$likeCount', 0] },
-                  { $multiply: [{ $size: '$comments' }, 2] } // Comments worth 2x likes
-                ]
-              }
-            }
+                  { $ifNull: ["$likeCount", 0] },
+                  { $multiply: [{ $size: "$comments" }, 2] }, // Comments worth 2x likes
+                ],
+              },
+            },
           },
           {
-            $sort: { engagementScore: -1, createdAt: -1 }
+            $sort: { engagementScore: -1, createdAt: -1 },
           },
           {
-            $skip: skip
+            $skip: skip,
           },
           {
-            $limit: limit
+            $limit: limit,
           },
           {
             $lookup: {
-              from: 'users',
-              localField: 'authorId',
-              foreignField: '_id',
-              as: 'authorId'
-            }
+              from: "users",
+              localField: "authorId",
+              foreignField: "_id",
+              as: "authorId",
+            },
           },
           {
-            $unwind: '$authorId'
+            $unwind: "$authorId",
           },
           {
             $project: {
-              'authorId.password': 0,
-              'authorId.verificationToken': 0,
-              'authorId.__v': 0,
-              'comments': 0,
-              '__v': 0
-            }
-          }
+              "authorId.password": 0,
+              "authorId.verificationToken": 0,
+              "authorId.__v": 0,
+              comments: 0,
+              __v: 0,
+            },
+          },
         ]);
 
         totalPosts = await Post.countDocuments({
-          createdAt: { $gte: sevenDaysAgo }
+          createdAt: { $gte: sevenDaysAgo },
         });
         break;
 
-      case 'following':
+      case "following":
         if (!userId) {
-          return res.status(401).json({ message: "Authentication required for following feed" });
+          return res
+            .status(401)
+            .json({ message: "Authentication required for following feed" });
         }
 
         // Get users that the current user follows
-        const following = await Follow.find({ followerId: userId }).select('followingId');
-        const followingIds = following.map(f => f.followingId);
+        const following = await Follow.find({ followerId: userId }).select(
+          "followingId"
+        );
+        const followingIds = following.map((f) => f.followingId);
 
         if (followingIds.length === 0) {
           posts = [];
           totalPosts = 0;
         } else {
           posts = await Post.find({ authorId: { $in: followingIds } })
-            .populate("authorId", "firstName lastName username followersCount avatarUrl roles")
+            .populate(
+              "authorId",
+              "firstName lastName username followersCount avatarUrl roles"
+            )
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
             .lean();
-          totalPosts = await Post.countDocuments({ authorId: { $in: followingIds } });
+          totalPosts = await Post.countDocuments({
+            authorId: { $in: followingIds },
+          });
         }
         break;
 
-      case 'recent':
+      case "recent":
       default:
         // Default recent posts
         posts = await Post.find()
-          .populate("authorId", "firstName lastName username followersCount avatarUrl roles")
+          .populate(
+            "authorId",
+            "firstName lastName username followersCount avatarUrl roles"
+          )
           .sort({ createdAt: -1 })
           .skip(skip)
           .limit(limit)
@@ -428,38 +530,42 @@ export const getFilteredPosts = async (req: Request, res: Response, next: NextFu
     const totalPages = Math.ceil(totalPosts / limit);
 
     // Add like status, comment count, and follow status for each post
-    const postsWithExtra = await Promise.all(posts.map(async (post) => {
-      const commentsCount = await Comment.countDocuments({ postId: post._id });
-      
-      let liked = false;
-      let following = false;
-      
-      if (userId) {
-        // Check like status
-        const existingLike = await Like.findOne({ 
-          userId: userId, 
-          postId: post._id 
+    const postsWithExtra = await Promise.all(
+      posts.map(async (post) => {
+        const commentsCount = await Comment.countDocuments({
+          postId: post._id,
         });
-        liked = !!existingLike;
 
-        // Check follow status (only if not the user's own post)
-        if (userId !== post.authorId._id.toString()) {
-          const existingFollow = await Follow.findOne({
-            followerId: userId,
-            followingId: post.authorId._id
+        let liked = false;
+        let following = false;
+
+        if (userId) {
+          // Check like status
+          const existingLike = await Like.findOne({
+            userId: userId,
+            postId: post._id,
           });
-          following = !!existingFollow;
-        }
-      }
+          liked = !!existingLike;
 
-      return {
-        ...post,
-        commentsCount,
-        likeCount: post.likeCount || 0,
-        liked,
-        following
-      };
-    }));
+          // Check follow status (only if not the user's own post)
+          if (userId !== post.authorId._id.toString()) {
+            const existingFollow = await Follow.findOne({
+              followerId: userId,
+              followingId: post.authorId._id,
+            });
+            following = !!existingFollow;
+          }
+        }
+
+        return {
+          ...post,
+          commentsCount,
+          likeCount: post.likeCount || 0,
+          liked,
+          following,
+        };
+      })
+    );
 
     res.status(200).json({
       posts: postsWithExtra,
@@ -470,10 +576,10 @@ export const getFilteredPosts = async (req: Request, res: Response, next: NextFu
         totalPosts,
         hasNext: page < totalPages,
         hasPrev: page > 1,
-      }
+      },
     });
   } catch (error) {
-    console.error('Error in getFilteredPosts:', error);
+    console.error("Error in getFilteredPosts:", error);
     next(error);
   }
 };
