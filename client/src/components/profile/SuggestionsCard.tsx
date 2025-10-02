@@ -34,14 +34,14 @@ export const SuggestionsCard: React.FC = () => {
   const loadSuggestions = async () => {
     try {
       setLoading(true);
-      console.log("Loading suggestions...");
+      // console.log("Loading suggestions...");
       const response = await apiClient.getSuggestions();
 
-      console.log("Suggestions response:", response);
+      // console.log("Suggestions response:", response);
 
       if (response.data) {
         const suggestionsData = response.data as SuggestionsResponse;
-        console.log("Suggestions data:", suggestionsData);
+        // console.log("Suggestions data:", suggestionsData);
 
         // Initialize global follow states for all suggestions
         suggestionsData.suggestions?.forEach((suggestion) => {
@@ -240,12 +240,12 @@ export const SuggestionsCard: React.FC = () => {
                 const isLoading = globalState?.isLoading ?? false;
 
                 // Debug log to see what data each suggestion has
-                console.log('Suggestion user data:', {
-                  id: suggestion._id,
-                  firstName: suggestion.firstName,
-                  lastName: suggestion.lastName,
-                  avatarUrl: suggestion.avatarUrl,
-                });
+                // console.log('Suggestion user data:', {
+                //   id: suggestion._id,
+                //   firstName: suggestion.firstName,
+                //   lastName: suggestion.lastName,
+                //   avatarUrl: suggestion.avatarUrl,
+                // });
 
                 return (
                   <div
