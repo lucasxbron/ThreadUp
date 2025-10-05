@@ -414,15 +414,39 @@ export const getFilteredPosts = async (
 
     switch (filter) {
       case "trending":
-        // Get posts sorted by engagement (likes + comments) within the last 7 days
+        // DECLARE timeFilter variable
+        let timeFilter = {};
+        // Get posts sorted by engagement (likes + comments) within the last 7 days (fallback to 30 days, then all posts)
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
+        // Check if there are posts in the last 7 days
+        const recentPostsCount = await Post.countDocuments({
+          createdAt: { $gte: sevenDaysAgo }
+        });
+
+        if (recentPostsCount < 5) {
+          // If less than 5 posts in 7 days, expand to 30 days
+          const thirtyDaysAgo = new Date();
+          thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+          
+          const monthPostsCount = await Post.countDocuments({
+            createdAt: { $gte: thirtyDaysAgo }
+          });
+
+          if (monthPostsCount >= 5) {
+            timeFilter = { createdAt: { $gte: thirtyDaysAgo } };
+          } else {
+            // If still not enough, show all posts sorted by engagement
+            timeFilter = {};
+          }
+        } else {
+          timeFilter = { createdAt: { $gte: sevenDaysAgo } };
+        }
+
         posts = await Post.aggregate([
           {
-            $match: {
-              createdAt: { $gte: sevenDaysAgo },
-            },
+            $match: timeFilter,
           },
           {
             $lookup: {
@@ -473,9 +497,7 @@ export const getFilteredPosts = async (
           },
         ]);
 
-        totalPosts = await Post.countDocuments({
-          createdAt: { $gte: sevenDaysAgo },
-        });
+        totalPosts = await Post.countDocuments(timeFilter);
         break;
 
       case "following":

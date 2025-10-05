@@ -11,6 +11,7 @@ import { sendVerificationEmail } from "../utils/emails/emailVerification.js";
 import { sendEmailChangeVerification } from "../utils/emails/emailChange.js";
 import crypto from "crypto";
 import mongoose from "mongoose";
+import { sendPasswordResetEmail } from "../utils/emails/passwordReset.js";
 
 const secret = config.JWT_SECRET;
 
@@ -700,6 +701,107 @@ export const cancelEmailChange = async (
 
     res.status(200).json({
       message: "Email change request cancelled successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      throw createHttpError(400, "Email is required");
+    }
+
+    if (!validator.isEmail(email)) {
+      throw createHttpError(400, "Invalid email format");
+    }
+
+    const user = await User.findOne({ email: email.trim() });
+    if (!user) {
+      // Don't reveal if email exists or not for security
+      return res.status(200).json({
+        message: "If an account with that email exists, we've sent a password reset link.",
+      });
+    }
+
+    if (!user.verified) {
+      throw createHttpError(400, "Please verify your email before resetting password");
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const tokenExpiry = new Date();
+    tokenExpiry.setHours(tokenExpiry.getHours() + 1); // 1 hour expiry
+
+    // Update user with reset token
+    user.passwordResetToken = resetToken;
+    user.passwordResetTokenExpiry = tokenExpiry;
+    await user.save();
+
+    // Send reset email
+    const userName = `${user.firstName} ${user.lastName}`;
+    await sendPasswordResetEmail(user.email, resetToken, userName);
+
+    res.status(200).json({
+      message: "If an account with that email exists, we've sent a password reset link.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      throw createHttpError(400, "Reset token and new password are required");
+    }
+
+    // Validate new password strength
+    if (
+      !validator.isStrongPassword(newPassword, {
+        minLength: 8,
+        minNumbers: 1,
+        minSymbols: 1,
+        minUppercase: 1,
+        minLowercase: 1,
+      })
+    ) {
+      throw createHttpError(
+        400,
+        "Password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 number, and 1 symbol"
+      );
+    }
+
+    const user = await User.findOne({
+      passwordResetToken: token,
+      passwordResetTokenExpiry: { $gt: new Date() },
+    });
+
+    if (!user) {
+      throw createHttpError(400, "Invalid or expired reset token");
+    }
+
+    // Update password (will be hashed by pre-save middleware)
+    user.password = newPassword;
+    user.passwordResetToken = "";
+    user.passwordResetTokenExpiry = undefined;
+    await user.save();
+
+    res.status(200).json({
+      message: "Password has been reset successfully. You can now log in with your new password.",
     });
   } catch (error) {
     next(error);
