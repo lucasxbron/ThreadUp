@@ -13,6 +13,8 @@ router.post("/logout", authController.logout);
 router.get("/verify-email", authController.verifyEmail);
 router.post("/resend-verification", authController.resendVerification);
 router.get("/verify-email-change", authController.verifyEmailChange);
+router.post("/forgot-password", authController.forgotPassword);
+router.post("/reset-password", authController.resetPassword);
 
 
 // Protected routes
