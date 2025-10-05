@@ -9,12 +9,12 @@ import { Avatar } from "@/components/ui/Avatar";
 import { AllFollowsModal } from "./AllFollowsModal";
 
 interface FollowerUser {
-  user: User;
+  user: User & { isFollowing: boolean };
   followedAt: string;
 }
 
 interface FollowingUser {
-  user: User;
+  user: User & { isFollowing: boolean };
   followedAt: string;
 }
 
@@ -41,8 +41,10 @@ export const FollowersCard: React.FC = () => {
   const [followingCount, setFollowingCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showAllModal, setShowAllModal] = useState(false);
-  const [modalInitialTab, setModalInitialTab] = useState<'followers' | 'following'>('followers');
-  
+  const [modalInitialTab, setModalInitialTab] = useState<
+    "followers" | "following"
+  >("followers");
+
   const { user, isAuthenticated } = useAuth();
   const { getFollowState, toggleFollow, updateFollowState } = useFollow();
 
@@ -53,58 +55,60 @@ export const FollowersCard: React.FC = () => {
   }, [isAuthenticated, user]);
 
   const loadFollowData = async () => {
-    if (!user) return;
-    
-    try {
-      setLoading(true);
-      
-      // Load followers and following data in parallel
-      const [followersResponse, followingResponse] = await Promise.all([
-        apiClient.getFollowers(user._id, 1, 5),
-        apiClient.getFollowing(user._id, 1, 5)
-      ]);
+  if (!user) return;
 
-      if (followersResponse.data) {
-        const followersData = followersResponse.data as FollowersResponse;
-        setFollowers(followersData.followers || []);
-        setFollowersCount(followersData.pagination?.totalFollowers || 0);
+  try {
+    setLoading(true);
 
-        // Initialize follow states for followers
-        followersData.followers?.forEach((follower) => {
-          updateFollowState(
-            follower.user._id,
-            false, // We'll check this individually
-            follower.user.followersCount || 0
-          );
-        });
-      }
+    const [followersResponse, followingResponse] = await Promise.all([
+      apiClient.getFollowers(user._id, 1, 5),
+      apiClient.getFollowing(user._id, 1, 5),
+    ]);
 
-      if (followingResponse.data) {
-        const followingData = followingResponse.data as FollowingResponse;
-        setFollowing(followingData.following || []);
-        setFollowingCount(followingData.pagination?.totalFollowing || 0);
+    if (followersResponse.data) {
+      const followersData = followersResponse.data as FollowersResponse;
+      setFollowers(followersData.followers || []);
+      setFollowersCount(followersData.pagination?.totalFollowers || 0);
 
-        // Initialize follow states for following users
-        followingData.following?.forEach((followingUser) => {
-          updateFollowState(
-            followingUser.user._id,
-            true, // We are following these users
-            followingUser.user.followersCount || 0
-          );
-        });
-      }
-    } catch (error) {
-      console.error("Error loading follow data:", error);
-    } finally {
-      setLoading(false);
+      // Simple: Use server data with no force update (preserve existing states)
+      followersData.followers?.forEach((follower) => {
+        updateFollowState(
+          follower.user._id,
+          follower.user.isFollowing,
+          follower.user.followersCount || 0,
+          false // Don't force - preserve SuggestionsCard states
+        );
+      });
     }
-  };
 
-  const handleFollow = async (userId: string, isCurrentlyFollowing: boolean) => {
+    if (followingResponse.data) {
+      const followingData = followingResponse.data as FollowingResponse;
+      setFollowing(followingData.following || []);
+      setFollowingCount(followingData.pagination?.totalFollowing || 0);
+
+      // Force update for following (we know we follow them)
+      followingData.following?.forEach((followingUser) => {
+        updateFollowState(
+          followingUser.user._id,
+          true, // We follow them
+          followingUser.user.followersCount || 0,
+          true // Force update
+        );
+      });
+    }
+  } catch (error) {
+    console.error("Error loading follow data:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+  const handleFollow = async (userId: string) => {
     if (!isAuthenticated || !user) {
       return;
     }
 
+    // Always use global state as source of truth
     const globalState = getFollowState(userId);
     const currentFollowerCount = globalState?.followersCount ?? 0;
 
@@ -124,12 +128,12 @@ export const FollowersCard: React.FC = () => {
   };
 
   const handleShowAllFollowers = () => {
-    setModalInitialTab('followers');
+    setModalInitialTab("followers");
     setShowAllModal(true);
   };
 
   const handleShowAllFollowing = () => {
-    setModalInitialTab('following');
+    setModalInitialTab("following");
     setShowAllModal(true);
   };
 
@@ -186,7 +190,7 @@ export const FollowersCard: React.FC = () => {
             <div className="space-y-4">
               {/* Followers Section */}
               <div>
-                <div 
+                <div
                   className="h-4 w-20 rounded animate-pulse mb-3"
                   style={{ backgroundColor: "var(--color-muted, #f1f5f9)" }}
                 ></div>
@@ -195,26 +199,32 @@ export const FollowersCard: React.FC = () => {
                     <div key={i} className="flex items-center space-x-2">
                       <div
                         className="w-8 h-8 rounded-full animate-pulse"
-                        style={{ backgroundColor: "var(--color-muted, #f1f5f9)" }}
+                        style={{
+                          backgroundColor: "var(--color-muted, #f1f5f9)",
+                        }}
                       ></div>
                       <div className="flex-1">
                         <div
                           className="h-3 rounded animate-pulse mb-1"
-                          style={{ backgroundColor: "var(--color-muted, #f1f5f9)" }}
+                          style={{
+                            backgroundColor: "var(--color-muted, #f1f5f9)",
+                          }}
                         ></div>
                         <div
                           className="h-2 rounded animate-pulse w-16"
-                          style={{ backgroundColor: "var(--color-muted, #f1f5f9)" }}
+                          style={{
+                            backgroundColor: "var(--color-muted, #f1f5f9)",
+                          }}
                         ></div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-              
+
               {/* Following Section */}
               <div>
-                <div 
+                <div
                   className="h-4 w-20 rounded animate-pulse mb-3"
                   style={{ backgroundColor: "var(--color-muted, #f1f5f9)" }}
                 ></div>
@@ -223,16 +233,22 @@ export const FollowersCard: React.FC = () => {
                     <div key={i} className="flex items-center space-x-2">
                       <div
                         className="w-8 h-8 rounded-full animate-pulse"
-                        style={{ backgroundColor: "var(--color-muted, #f1f5f9)" }}
+                        style={{
+                          backgroundColor: "var(--color-muted, #f1f5f9)",
+                        }}
                       ></div>
                       <div className="flex-1">
                         <div
                           className="h-3 rounded animate-pulse mb-1"
-                          style={{ backgroundColor: "var(--color-muted, #f1f5f9)" }}
+                          style={{
+                            backgroundColor: "var(--color-muted, #f1f5f9)",
+                          }}
                         ></div>
                         <div
                           className="h-2 rounded animate-pulse w-16"
-                          style={{ backgroundColor: "var(--color-muted, #f1f5f9)" }}
+                          style={{
+                            backgroundColor: "var(--color-muted, #f1f5f9)",
+                          }}
                         ></div>
                       </div>
                     </div>
@@ -257,22 +273,26 @@ export const FollowersCard: React.FC = () => {
                       className="text-xs transition-colors duration-200"
                       style={{ color: "var(--color-primary, #3b82f6)" }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.color = "var(--color-primary-600, #2563eb)";
+                        e.currentTarget.style.color =
+                          "var(--color-primary-600, #2563eb)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.color = "var(--color-primary, #3b82f6)";
+                        e.currentTarget.style.color =
+                          "var(--color-primary, #3b82f6)";
                       }}
                     >
                       See all
                     </button>
                   )}
                 </div>
-                
+
                 {followers.length === 0 ? (
                   <div className="text-center py-4">
                     <p
                       className="text-xs"
-                      style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
                     >
                       No followers yet
                     </p>
@@ -280,8 +300,9 @@ export const FollowersCard: React.FC = () => {
                 ) : (
                   <div className="space-y-2">
                     {followers.slice(0, 3).map((follower) => {
+                      // Use ONLY global state, not server state
                       const globalState = getFollowState(follower.user._id);
-                      const isFollowingThem = globalState?.isFollowing ?? false;
+                      const isFollowingThem = globalState?.isFollowing ?? false; // Default to false if no state
                       const isLoading = globalState?.isLoading ?? false;
 
                       return (
@@ -290,37 +311,45 @@ export const FollowersCard: React.FC = () => {
                           className="flex items-center space-x-2"
                         >
                           <div className="flex-shrink-0">
-                            <Avatar 
+                            <Avatar
                               user={{
                                 firstName: follower.user.firstName,
                                 lastName: follower.user.lastName,
                                 avatarUrl: follower.user.avatarUrl,
-                              }} 
+                              }}
                               size="sm"
                             />
                           </div>
-                          
+
                           <div className="flex-1 min-w-0">
                             <p
                               className="text-xs font-medium truncate"
-                              style={{ color: "var(--color-card-foreground, #0f172a)" }}
+                              style={{
+                                color: "var(--color-card-foreground, #0f172a)",
+                              }}
                             >
-                              {getFullName(follower.user.firstName, follower.user.lastName)}
+                              {getFullName(
+                                follower.user.firstName,
+                                follower.user.lastName
+                              )}
                             </p>
                             <p
                               className="text-xs truncate"
-                              style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                              style={{
+                                color: "var(--color-muted-foreground, #64748b)",
+                              }}
                             >
                               @{follower.user.username}
                             </p>
                           </div>
 
-                          {/* Updated button styling to match SuggestionsCard exactly */}
                           <button
-                            onClick={() => handleFollow(follower.user._id, isFollowingThem)}
+                            onClick={() => handleFollow(follower.user._id)}
                             disabled={isLoading}
                             className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
-                              isFollowingThem ? "cursor-default" : "hover:scale-105"
+                              isFollowingThem
+                                ? "cursor-default"
+                                : "hover:scale-105"
                             }`}
                             style={{
                               minWidth: "64px",
@@ -333,11 +362,9 @@ export const FollowersCard: React.FC = () => {
                             }}
                             onMouseEnter={(e) => {
                               if (!isFollowingThem) {
-                                // Hover effect for "Follow" button (darker blue)
                                 e.currentTarget.style.backgroundColor =
                                   "var(--color-primary-600, #2563eb)";
                               } else {
-                                // Hover effect for "Following" button (darker gray)
                                 e.currentTarget.style.backgroundColor =
                                   "var(--color-secondary-400, #e2e8f0)";
                               }
@@ -389,22 +416,26 @@ export const FollowersCard: React.FC = () => {
                       className="text-xs transition-colors duration-200"
                       style={{ color: "var(--color-primary, #3b82f6)" }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.color = "var(--color-primary-600, #2563eb)";
+                        e.currentTarget.style.color =
+                          "var(--color-primary-600, #2563eb)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.color = "var(--color-primary, #3b82f6)";
+                        e.currentTarget.style.color =
+                          "var(--color-primary, #3b82f6)";
                       }}
                     >
                       See all
                     </button>
                   )}
                 </div>
-                
+
                 {following.length === 0 ? (
                   <div className="text-center py-4">
                     <p
                       className="text-xs"
-                      style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
                     >
                       Not following anyone yet
                     </p>
@@ -417,34 +448,40 @@ export const FollowersCard: React.FC = () => {
                         className="flex items-center space-x-2"
                       >
                         <div className="flex-shrink-0">
-                          <Avatar 
+                          <Avatar
                             user={{
                               firstName: followingUser.user.firstName,
                               lastName: followingUser.user.lastName,
                               avatarUrl: followingUser.user.avatarUrl,
-                            }} 
+                            }}
                             size="sm"
                           />
                         </div>
-                        
+
                         <div className="flex-1 min-w-0">
                           <p
                             className="text-xs font-medium truncate"
-                            style={{ color: "var(--color-card-foreground, #0f172a)" }}
+                            style={{
+                              color: "var(--color-card-foreground, #0f172a)",
+                            }}
                           >
-                            {getFullName(followingUser.user.firstName, followingUser.user.lastName)}
+                            {getFullName(
+                              followingUser.user.firstName,
+                              followingUser.user.lastName
+                            )}
                           </p>
                           <p
                             className="text-xs truncate"
-                            style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                            style={{
+                              color: "var(--color-muted-foreground, #64748b)",
+                            }}
                           >
                             @{followingUser.user.username}
                           </p>
                         </div>
 
-                        {/* Updated button styling to match SuggestionsCard exactly */}
                         <button
-                          onClick={() => handleFollow(followingUser.user._id, true)}
+                          onClick={() => handleFollow(followingUser.user._id)}
                           className="px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 cursor-default hover:scale-105"
                           style={{
                             minWidth: "64px",
@@ -452,7 +489,6 @@ export const FollowersCard: React.FC = () => {
                             color: "var(--color-secondary-foreground, #1f2937)",
                           }}
                           onMouseEnter={(e) => {
-                            // Hover effect for "Following" button (darker gray)
                             e.currentTarget.style.backgroundColor =
                               "var(--color-secondary-400, #e2e8f0)";
                           }}
