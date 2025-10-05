@@ -43,12 +43,13 @@ export const SuggestionsCard: React.FC = () => {
         const suggestionsData = response.data as SuggestionsResponse;
         // console.log("Suggestions data:", suggestionsData);
 
-        // Initialize global follow states for all suggestions
+        // Initialize global follow states for all suggestions - force update since this is authoritative
         suggestionsData.suggestions?.forEach((suggestion) => {
           updateFollowState(
             suggestion._id,
             suggestion.isFollowing,
-            suggestion.followersCount || 0
+            suggestion.followersCount || 0,
+            true // Force update - suggestions API provides authoritative follow status
           );
         });
 
@@ -74,25 +75,13 @@ export const SuggestionsCard: React.FC = () => {
 
     const success = await toggleFollow(userId, currentFollowerCount);
 
-    if (success) {
-      // Update local suggestions state to reflect new follow status
-      const updatedState = getFollowState(userId);
-      if (updatedState) {
-        setSuggestions((prevSuggestions) =>
-          prevSuggestions.map((suggestion) =>
-            suggestion._id === userId
-              ? { ...suggestion, isFollowing: updatedState.isFollowing }
-              : suggestion
-          )
-        );
-      }
-
-      // Refresh suggestions after a delay
-      setTimeout(() => {
-        loadSuggestions();
-      }, 1000);
-    }
-  };
+      if (success) {
+    // Refresh after delay
+    setTimeout(() => {
+      loadSuggestions();
+    }, 1000);
+  }
+};
 
   // Get full name
   const getFullName = (firstName: string, lastName: string) => {
@@ -231,21 +220,13 @@ export const SuggestionsCard: React.FC = () => {
               </p>
             </div>
           ) : (
-             <div className="space-y-3">
+            <div className="space-y-3">
               {suggestions.map((suggestion) => {
                 const reason = getSuggestionReason(suggestion.interactionScore);
                 const globalState = getFollowState(suggestion._id);
                 const isFollowing =
                   globalState?.isFollowing ?? suggestion.isFollowing;
                 const isLoading = globalState?.isLoading ?? false;
-
-                // Debug log to see what data each suggestion has
-                // console.log('Suggestion user data:', {
-                //   id: suggestion._id,
-                //   firstName: suggestion.firstName,
-                //   lastName: suggestion.lastName,
-                //   avatarUrl: suggestion.avatarUrl,
-                // });
 
                 return (
                   <div
@@ -254,12 +235,12 @@ export const SuggestionsCard: React.FC = () => {
                   >
                     {/* Avatar */}
                     <div className="relative flex-shrink-0">
-                      <Avatar 
+                      <Avatar
                         user={{
                           firstName: suggestion.firstName,
                           lastName: suggestion.lastName,
-                          avatarUrl: suggestion.avatarUrl,     
-                        }} 
+                          avatarUrl: suggestion.avatarUrl,
+                        }}
                         size="md"
                       />
                       {/* Indicator for followers */}
@@ -279,9 +260,14 @@ export const SuggestionsCard: React.FC = () => {
                     <div className="flex-1 min-w-0">
                       <p
                         className="text-sm font-semibold truncate"
-                        style={{ color: "var(--color-card-foreground, #0f172a)" }}
+                        style={{
+                          color: "var(--color-card-foreground, #0f172a)",
+                        }}
                       >
-                        {getFullName(suggestion.firstName || '', suggestion.lastName || '')}
+                        {getFullName(
+                          suggestion.firstName || "",
+                          suggestion.lastName || ""
+                        )}
                       </p>
                       <p
                         className="text-xs truncate"
@@ -289,7 +275,7 @@ export const SuggestionsCard: React.FC = () => {
                           color: "var(--color-muted-foreground, #64748b)",
                         }}
                       >
-                        @{suggestion.username || 'unknown'}
+                        @{suggestion.username || "unknown"}
                       </p>
                       {/* Show interaction hint */}
                       <p
@@ -318,11 +304,9 @@ export const SuggestionsCard: React.FC = () => {
                       }}
                       onMouseEnter={(e) => {
                         if (!isFollowing) {
-                          // Hover effect for "Follow" button (darker blue)
                           e.currentTarget.style.backgroundColor =
                             "var(--color-primary-600, #2563eb)";
                         } else {
-                          // Hover effect for "Following" button (darker gray)
                           e.currentTarget.style.backgroundColor =
                             "var(--color-secondary-400, #e2e8f0)";
                         }
@@ -369,8 +353,10 @@ export const SuggestionsCard: React.FC = () => {
                 className="text-sm font-medium w-full text-center transition-colors duration-200 py-2 rounded"
                 style={{ color: "var(--color-primary, #3b82f6)" }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "var(--color-secondary, #f1f5f9)";
-                  e.currentTarget.style.color = "var(--color-primary-600, #2563eb)";
+                  e.currentTarget.style.backgroundColor =
+                    "var(--color-secondary, #f1f5f9)";
+                  e.currentTarget.style.color =
+                    "var(--color-primary-600, #2563eb)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "transparent";
