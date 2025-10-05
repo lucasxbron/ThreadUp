@@ -102,6 +102,7 @@ export const getFollowStatus = async (req: Request, res: Response, next: NextFun
 export const getFollowers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { userId } = req.params;
+    const currentUserId = req.user?._id; // Get the authenticated user's ID
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
     const skip = (page - 1) * limit;
@@ -120,11 +121,32 @@ export const getFollowers = async (req: Request, res: Response, next: NextFuncti
 
     const totalFollowers = await Follow.countDocuments({ followingId: userId });
 
+    // Enhanced: Check if current user follows each follower
+    const followersWithStatus = await Promise.all(
+      followers.map(async (follow) => {
+        let isFollowing = false;
+        
+        // Only check follow status if user is authenticated and it's not their own profile
+        if (currentUserId && currentUserId.toString() !== follow.followerId._id.toString()) {
+          const followRelation = await Follow.findOne({
+            followerId: currentUserId,
+            followingId: follow.followerId._id
+          });
+          isFollowing = !!followRelation;
+        }
+
+        return {
+          user: {
+            ...follow.followerId,
+            isFollowing // Add follow status to user object
+          },
+          followedAt: follow.createdAt
+        };
+      })
+    );
+
     res.status(200).json({
-      followers: followers.map(follow => ({
-        user: follow.followerId,
-        followedAt: follow.createdAt
-      })),
+      followers: followersWithStatus, // Use enhanced data with follow status
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalFollowers / limit),
@@ -141,6 +163,7 @@ export const getFollowers = async (req: Request, res: Response, next: NextFuncti
 export const getFollowing = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { userId } = req.params;
+    const currentUserId = req.user?._id; // Get the authenticated user's ID
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 20;
     const skip = (page - 1) * limit;
@@ -159,11 +182,35 @@ export const getFollowing = async (req: Request, res: Response, next: NextFuncti
 
     const totalFollowing = await Follow.countDocuments({ followerId: userId });
 
+    // Check if current user follows each user in the following list
+    const followingWithStatus = await Promise.all(
+      following.map(async (follow) => {
+        let isFollowing = false;
+        
+        // If viewing someone else's following list, check if current user follows those users
+        if (currentUserId && currentUserId.toString() !== follow.followingId._id.toString()) {
+          const followRelation = await Follow.findOne({
+            followerId: currentUserId,
+            followingId: follow.followingId._id
+          });
+          isFollowing = !!followRelation;
+        } else if (currentUserId && currentUserId.toString() === userId) {
+          // If viewing your own following list, you obviously follow all of them
+          isFollowing = true;
+        }
+
+        return {
+          user: {
+            ...follow.followingId,
+            isFollowing // Add follow status to user object
+          },
+          followedAt: follow.createdAt
+        };
+      })
+    );
+
     res.status(200).json({
-      following: following.map(follow => ({
-        user: follow.followingId,
-        followedAt: follow.createdAt
-      })),
+      following: followingWithStatus, // Use enhanced data with follow status
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalFollowing / limit),
