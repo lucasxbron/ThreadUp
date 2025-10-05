@@ -285,6 +285,20 @@ class ApiClient {
     });
   }
 
+  async forgotPassword(data: { email: string }) {
+  return this.makeRequest("/api/auth/forgot-password", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+async resetPassword(data: { token: string; newPassword: string }) {
+  return this.makeRequest("/api/auth/reset-password", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
   // Upload endpoints
   async uploadFile(
     formData: FormData,
@@ -339,23 +353,29 @@ class ApiClient {
   }
 
   // Admin endpoints
-async getAdminLogs(page: number = 1, limit: number = 50, filters?: {
-  action?: string;
-  adminId?: string;
-  targetType?: string;
-}) {
-  let url = `/api/admin/logs?page=${page}&limit=${limit}`;
-  
-  if (filters?.action) url += `&action=${filters.action}`;
-  if (filters?.adminId) url += `&adminId=${filters.adminId}`;
-  if (filters?.targetType) url += `&targetType=${filters.targetType}`;
-  
-  return this.makeRequest(url);
-}
+  async getAdminLogs(
+    page: number = 1,
+    limit: number = 50,
+    filters?: {
+      action?: string;
+      adminId?: string;
+      targetType?: string;
+    }
+  ) {
+    let url = `/api/admin/logs?page=${page}&limit=${limit}`;
 
-async getAdminStats() {
-  return this.makeRequest('/api/admin/stats');
-}
+    if (filters?.action) url += `&action=${filters.action}`;
+    if (filters?.adminId) url += `&adminId=${filters.adminId}`;
+    if (filters?.targetType) url += `&targetType=${filters.targetType}`;
+
+    return this.makeRequest(url);
+  }
+
+  async getAdminStats() {
+    return this.makeRequest("/api/admin/stats");
+  }
+
+  
 }
 
 export const apiClient = new ApiClient();
