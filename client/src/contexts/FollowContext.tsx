@@ -14,7 +14,7 @@ interface FollowState {
 interface FollowContextType {
   followStates: FollowState;
   toggleFollow: (userId: string, currentFollowersCount: number) => Promise<boolean>;
-  updateFollowState: (userId: string, isFollowing: boolean, followersCount: number) => void;
+  updateFollowState: (userId: string, isFollowing: boolean, followersCount: number, forceUpdate?: boolean) => void; // ADD forceUpdate parameter
   getFollowState: (userId: string) => { isFollowing: boolean; followersCount: number; isLoading: boolean } | null;
 }
 
@@ -23,16 +23,38 @@ const FollowContext = createContext<FollowContextType | undefined>(undefined);
 export const FollowProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [followStates, setFollowStates] = useState<FollowState>({});
 
-  const updateFollowState = useCallback((userId: string, isFollowing: boolean, followersCount: number) => {
-    setFollowStates(prev => ({
+ const updateFollowState = useCallback((
+  userId: string, 
+  isFollowing: boolean, 
+  followersCount: number, 
+  forceUpdate: boolean = false
+) => {
+  setFollowStates(prev => {
+    const existingState = prev[userId];
+    
+    // Don't override existing state unless forced to update
+    if (existingState && !forceUpdate) {
+      return {
+        ...prev,
+        [userId]: {
+          ...existingState,
+          followersCount,
+          isLoading: false
+        }
+      };
+    }
+    
+    // Create new state or force update existing state
+    return {
       ...prev,
       [userId]: {
         isFollowing,
         followersCount,
         isLoading: false
       }
-    }));
-  }, []);
+    };
+  });
+}, []);
 
   const getFollowState = useCallback((userId: string) => {
     return followStates[userId] || null;
