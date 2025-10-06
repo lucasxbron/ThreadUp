@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
@@ -8,7 +8,7 @@ import { apiClient } from "@/utils/api";
 import { useAuth } from "@/contexts/AuthContext";
 import Image from "next/image";
 
-export default function VerifyEmailChangePage() {
+function VerifyEmailChangeContent() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -302,5 +302,43 @@ export default function VerifyEmailChangePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Loading fallback component
+function VerifyEmailChangeFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div
+        className="w-full max-w-sm sm:max-w-md space-y-6 md:space-y-8 p-6 md:p-8 rounded-xl shadow-lg border text-center"
+        style={{
+          backgroundColor: "var(--color-card, #ffffff)",
+          borderColor: "var(--color-border, #e2e8f0)",
+        }}
+      >
+        <div className="flex justify-center mb-4">
+          <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+            <span className="text-white font-bold text-lg md:text-xl">T</span>
+          </div>
+        </div>
+        <div className="animate-spin rounded-full h-8 w-8 mx-auto border-2 border-transparent border-t-blue-600"></div>
+        <div>
+          <h2
+            className="text-xl md:text-2xl font-bold"
+            style={{ color: "var(--color-foreground, #0f172a)" }}
+          >
+            Loading...
+          </h2>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function VerifyEmailChangePage() {
+  return (
+    <Suspense fallback={<VerifyEmailChangeFallback />}>
+      <VerifyEmailChangeContent />
+    </Suspense>
   );
 }
