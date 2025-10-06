@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { apiClient } from '@/utils/api';
-import { AdminBadge } from '@/components/ui/AdminBadge';
+import React, { useState, useEffect } from "react";
+import { apiClient } from "@/utils/api";
+import { AdminBadge } from "@/components/ui/AdminBadge";
 
 interface AdminLog {
   _id: string;
@@ -13,8 +13,8 @@ interface AdminLog {
     username: string;
     email: string;
   };
-  action: 'DELETE_POST' | 'DELETE_COMMENT' | 'MODERATE_CONTENT';
-  targetType: 'POST' | 'COMMENT';
+  action: "DELETE_POST" | "DELETE_COMMENT" | "MODERATE_CONTENT";
+  targetType: "POST" | "COMMENT";
   targetId: string;
   targetAuthorId: {
     _id: string;
@@ -53,17 +53,18 @@ interface AdminLogsResponse {
 export const AdminLogs: React.FC = () => {
   const [logs, setLogs] = useState<AdminLog[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalLogs, setTotalLogs] = useState(0);
   const [hasNext, setHasNext] = useState(false);
   const [hasPrev, setHasPrev] = useState(false);
-  
+  const [visibleIPs, setVisibleIPs] = useState<Set<string>>(new Set());
+
   // Filters
   const [filters, setFilters] = useState({
-    action: '',
-    targetType: '',
+    action: "",
+    targetType: "",
   });
 
   const LOGS_PER_PAGE = 20;
@@ -74,7 +75,7 @@ export const AdminLogs: React.FC = () => {
 
   const loadLogs = async () => {
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       const filterParams = {
@@ -82,7 +83,11 @@ export const AdminLogs: React.FC = () => {
         ...(filters.targetType && { targetType: filters.targetType }),
       };
 
-      const response = await apiClient.getAdminLogs(currentPage, LOGS_PER_PAGE, filterParams);
+      const response = await apiClient.getAdminLogs(
+        currentPage,
+        LOGS_PER_PAGE,
+        filterParams
+      );
 
       if (response.data) {
         const logsData = response.data as AdminLogsResponse;
@@ -92,34 +97,34 @@ export const AdminLogs: React.FC = () => {
         setHasNext(logsData.pagination.hasNext);
         setHasPrev(logsData.pagination.hasPrev);
       } else {
-        setError(response.error || 'Failed to load admin logs');
+        setError(response.error || "Failed to load admin logs");
       }
     } catch (err) {
-      setError('Failed to load admin logs');
+      setError("Failed to load admin logs");
     } finally {
       setLoading(false);
     }
   };
 
   const handleFilterChange = (key: string, value: string) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters((prev) => ({ ...prev, [key]: value }));
     setCurrentPage(1); // Reset to first page when filtering
   };
 
   const clearFilters = () => {
-    setFilters({ action: '', targetType: '' });
+    setFilters({ action: "", targetType: "" });
     setCurrentPage(1);
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
     });
   };
 
@@ -129,35 +134,65 @@ export const AdminLogs: React.FC = () => {
 
   const getActionColor = (action: string) => {
     switch (action) {
-      case 'DELETE_POST':
-        return 'var(--color-destructive, #ef4444)';
-      case 'DELETE_COMMENT':
-        return 'var(--color-orange, #f97316)';
-      case 'MODERATE_CONTENT':
-        return 'var(--color-yellow, #eab308)';
+      case "DELETE_POST":
+        return "var(--color-destructive, #ef4444)";
+      case "DELETE_COMMENT":
+        return "var(--color-orange, #f97316)";
+      case "MODERATE_CONTENT":
+        return "var(--color-yellow, #eab308)";
       default:
-        return 'var(--color-muted-foreground, #64748b)';
+        return "var(--color-muted-foreground, #64748b)";
     }
   };
 
   const getActionIcon = (action: string) => {
     switch (action) {
-      case 'DELETE_POST':
+      case "DELETE_POST":
         return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            />
           </svg>
         );
-      case 'DELETE_COMMENT':
+      case "DELETE_COMMENT":
         return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+            />
           </svg>
         );
-      case 'MODERATE_CONTENT':
+      case "MODERATE_CONTENT":
         return (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+            />
           </svg>
         );
       default:
@@ -169,12 +204,12 @@ export const AdminLogs: React.FC = () => {
     return (
       <div className="space-y-4">
         {[...Array(5)].map((_, i) => (
-          <div 
+          <div
             key={i}
             className="rounded-lg border p-4 animate-pulse"
             style={{
-              backgroundColor: 'var(--color-card, #ffffff)',
-              borderColor: 'var(--color-border, #e2e8f0)'
+              backgroundColor: "var(--color-card, #ffffff)",
+              borderColor: "var(--color-border, #e2e8f0)",
             }}
           >
             <div className="flex items-center space-x-4">
@@ -190,41 +225,53 @@ export const AdminLogs: React.FC = () => {
     );
   }
 
+  const toggleIPVisibility = (logId: string) => {
+    setVisibleIPs((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(logId)) {
+        newSet.delete(logId);
+      } else {
+        newSet.add(logId);
+      }
+      return newSet;
+    });
+  };
+
   return (
     <div className="space-y-6">
       {/* Header with Stats */}
-      <div 
+      <div
         className="rounded-lg border p-4"
         style={{
-          backgroundColor: 'var(--color-card, #ffffff)',
-          borderColor: 'var(--color-border, #e2e8f0)'
+          backgroundColor: "var(--color-card, #ffffff)",
+          borderColor: "var(--color-border, #e2e8f0)",
         }}
       >
         <div className="flex items-center justify-between">
           <div>
-            <h2 
+            <h2
               className="text-lg font-semibold"
-              style={{ color: 'var(--color-foreground, #0f172a)' }}
+              style={{ color: "var(--color-foreground, #0f172a)" }}
             >
               Admin Activity Logs
             </h2>
-            <p 
+            <p
               className="text-sm"
-              style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+              style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               Track all administrative actions and content moderation
             </p>
           </div>
           <div className="text-right">
-            <div 
+            <div
               className="text-2xl font-bold"
-              style={{ color: 'var(--color-foreground, #0f172a)' }}
+              style={{ color: "var(--color-foreground, #0f172a)" }}
             >
               {totalLogs.toLocaleString()}
             </div>
-            <div 
+            <div
               className="text-xs"
-              style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+              style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               Total Actions
             </div>
@@ -233,31 +280,31 @@ export const AdminLogs: React.FC = () => {
       </div>
 
       {/* Filters */}
-      <div 
+      <div
         className="rounded-lg border p-4"
         style={{
-          backgroundColor: 'var(--color-card, #ffffff)',
-          borderColor: 'var(--color-border, #e2e8f0)'
+          backgroundColor: "var(--color-card, #ffffff)",
+          borderColor: "var(--color-border, #e2e8f0)",
         }}
       >
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 sm:space-x-4">
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
             {/* Action Filter */}
             <div>
-              <label 
+              <label
                 className="block text-xs font-medium mb-1"
-                style={{ color: 'var(--color-foreground, #0f172a)' }}
+                style={{ color: "var(--color-foreground, #0f172a)" }}
               >
                 Action
               </label>
               <select
                 value={filters.action}
-                onChange={(e) => handleFilterChange('action', e.target.value)}
+                onChange={(e) => handleFilterChange("action", e.target.value)}
                 className="px-3 py-2 rounded border text-sm"
                 style={{
-                  backgroundColor: 'var(--color-card, #ffffff)',
-                  borderColor: 'var(--color-border, #e2e8f0)',
-                  color: 'var(--color-foreground, #0f172a)'
+                  backgroundColor: "var(--color-card, #ffffff)",
+                  borderColor: "var(--color-border, #e2e8f0)",
+                  color: "var(--color-foreground, #0f172a)",
                 }}
               >
                 <option value="">All Actions</option>
@@ -269,20 +316,22 @@ export const AdminLogs: React.FC = () => {
 
             {/* Target Type Filter */}
             <div>
-              <label 
+              <label
                 className="block text-xs font-medium mb-1"
-                style={{ color: 'var(--color-foreground, #0f172a)' }}
+                style={{ color: "var(--color-foreground, #0f172a)" }}
               >
                 Target Type
               </label>
               <select
                 value={filters.targetType}
-                onChange={(e) => handleFilterChange('targetType', e.target.value)}
+                onChange={(e) =>
+                  handleFilterChange("targetType", e.target.value)
+                }
                 className="px-3 py-2 rounded border text-sm"
                 style={{
-                  backgroundColor: 'var(--color-card, #ffffff)',
-                  borderColor: 'var(--color-border, #e2e8f0)',
-                  color: 'var(--color-foreground, #0f172a)'
+                  backgroundColor: "var(--color-card, #ffffff)",
+                  borderColor: "var(--color-border, #e2e8f0)",
+                  color: "var(--color-foreground, #0f172a)",
                 }}
               >
                 <option value="">All Types</option>
@@ -298,9 +347,9 @@ export const AdminLogs: React.FC = () => {
               onClick={clearFilters}
               className="px-4 py-2 text-sm rounded border transition-colors"
               style={{
-                backgroundColor: 'transparent',
-                borderColor: 'var(--color-border, #e2e8f0)',
-                color: 'var(--color-muted-foreground, #64748b)'
+                backgroundColor: "transparent",
+                borderColor: "var(--color-border, #e2e8f0)",
+                color: "var(--color-muted-foreground, #64748b)",
               }}
             >
               Clear Filters
@@ -311,12 +360,12 @@ export const AdminLogs: React.FC = () => {
 
       {/* Error State */}
       {error && (
-        <div 
+        <div
           className="rounded-lg border p-4 text-center"
           style={{
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-            borderColor: 'rgba(239, 68, 68, 0.3)',
-            color: 'var(--color-destructive, #ef4444)'
+            backgroundColor: "rgba(239, 68, 68, 0.1)",
+            borderColor: "rgba(239, 68, 68, 0.3)",
+            color: "var(--color-destructive, #ef4444)",
           }}
         >
           <p className="text-sm font-medium">{error}</p>
@@ -324,8 +373,8 @@ export const AdminLogs: React.FC = () => {
             onClick={loadLogs}
             className="mt-2 px-4 py-2 text-sm rounded transition-colors"
             style={{
-              backgroundColor: 'var(--color-destructive, #ef4444)',
-              color: 'white'
+              backgroundColor: "var(--color-destructive, #ef4444)",
+              color: "white",
             }}
           >
             Retry
@@ -335,51 +384,60 @@ export const AdminLogs: React.FC = () => {
 
       {/* Logs List */}
       {logs.length === 0 && !loading ? (
-        <div 
+        <div
           className="rounded-lg border p-8 text-center"
           style={{
-            backgroundColor: 'var(--color-card, #ffffff)',
-            borderColor: 'var(--color-border, #e2e8f0)'
+            backgroundColor: "var(--color-card, #ffffff)",
+            borderColor: "var(--color-border, #e2e8f0)",
           }}
         >
-          <svg className="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-               style={{ color: 'var(--color-muted-foreground, #64748b)' }}>
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <svg
+            className="w-12 h-12 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            style={{ color: "var(--color-muted-foreground, #64748b)" }}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
           </svg>
-          <h3 
+          <h3
             className="text-lg font-medium mb-2"
-            style={{ color: 'var(--color-foreground, #0f172a)' }}
+            style={{ color: "var(--color-foreground, #0f172a)" }}
           >
             No logs found
           </h3>
-          <p 
+          <p
             className="text-sm"
-            style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+            style={{ color: "var(--color-muted-foreground, #64748b)" }}
           >
-            {(filters.action || filters.targetType) 
-              ? 'No admin actions match your current filters.'
-              : 'No admin actions have been logged yet.'
-            }
+            {filters.action || filters.targetType
+              ? "No admin actions match your current filters."
+              : "No admin actions have been logged yet."}
           </p>
         </div>
       ) : (
         <div className="space-y-3">
           {logs.map((log) => (
-            <div 
+            <div
               key={log._id}
               className="rounded-lg border p-4 hover:shadow-sm transition-shadow"
               style={{
-                backgroundColor: 'var(--color-card, #ffffff)',
-                borderColor: 'var(--color-border, #e2e8f0)'
+                backgroundColor: "var(--color-card, #ffffff)",
+                borderColor: "var(--color-border, #e2e8f0)",
               }}
             >
               <div className="flex items-start space-x-4">
                 {/* Action Icon */}
-                <div 
+                <div
                   className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-                  style={{ 
+                  style={{
                     backgroundColor: `${getActionColor(log.action)}20`,
-                    color: getActionColor(log.action)
+                    color: getActionColor(log.action),
                   }}
                 >
                   {getActionIcon(log.action)}
@@ -388,57 +446,125 @@ export const AdminLogs: React.FC = () => {
                 {/* Log Details */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2 mb-1">
-                    <span 
+                    <span
                       className="font-medium"
-                      style={{ color: 'var(--color-foreground, #0f172a)' }}
+                      style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
                       {getFullName(log.adminId.firstName, log.adminId.lastName)}
                     </span>
                     <AdminBadge className="scale-75" />
-                    <span 
+                    <span
                       className="text-sm"
                       style={{ color: getActionColor(log.action) }}
                     >
-                      {log.action.replace('_', ' ').toLowerCase()}
+                      {log.action.replace("_", " ").toLowerCase()}
                     </span>
                   </div>
 
-                  <div 
+                  <div
                     className="text-sm mb-2"
-                    style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                    style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
-                    {log.targetType === 'POST' ? 'post' : 'comment'} by{' '}
+                    {log.targetType === "POST" ? "post" : "comment"} by{" "}
                     <span className="font-medium">
-                      {getFullName(log.targetAuthorId.firstName, log.targetAuthorId.lastName)}
-                    </span>
-                    {' '}(@{log.targetAuthorId.username})
+                      {getFullName(
+                        log.targetAuthorId.firstName,
+                        log.targetAuthorId.lastName
+                      )}
+                    </span>{" "}
+                    (@{log.targetAuthorId.username})
                   </div>
 
                   {/* Content Preview */}
                   {(log.details.postText || log.details.commentText) && (
-                    <div 
+                    <div
                       className="text-sm p-2 rounded border-l-4 mb-2"
                       style={{
-                        backgroundColor: 'var(--color-muted, #f1f5f9)',
-                        borderLeftColor: getActionColor(log.action)
+                        backgroundColor: "var(--color-muted, #f1f5f9)",
+                        borderLeftColor: getActionColor(log.action),
                       }}
                     >
-                      <p 
+                      <p
                         className="truncate"
-                        style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                        style={{
+                          color: "var(--color-muted-foreground, #64748b)",
+                        }}
                       >
                         "{log.details.postText || log.details.commentText}"
                       </p>
                     </div>
                   )}
 
-                  <div 
+                  <div
                     className="text-xs flex items-center space-x-4"
-                    style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+                    style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
                     <span>{formatDate(log.createdAt)}</span>
                     {log.ipAddress && (
-                      <span>IP: {log.ipAddress}</span>
+                      <div className="flex items-center space-x-2">
+                        <span>
+                          IP:{" "}
+                          {visibleIPs.has(log._id)
+                            ? log.ipAddress
+                            : "•••.•••.•••.•••"}
+                        </span>
+                        <button
+                          onClick={() => toggleIPVisibility(log._id)}
+                          className="text-xs px-2 py-1 rounded border transition-colors hover:bg-opacity-80"
+                          style={{
+                            backgroundColor: visibleIPs.has(log._id)
+                              ? "rgba(239, 68, 68, 0.1)"
+                              : "rgba(59, 130, 246, 0.1)",
+                            borderColor: visibleIPs.has(log._id)
+                              ? "rgba(239, 68, 68, 0.3)"
+                              : "rgba(59, 130, 246, 0.3)",
+                            color: visibleIPs.has(log._id)
+                              ? "var(--color-destructive, #ef4444)"
+                              : "var(--color-primary, #3b82f6)",
+                          }}
+                          title={
+                            visibleIPs.has(log._id)
+                              ? "Hide IP address"
+                              : "Show IP address"
+                          }
+                        >
+                          {visibleIPs.has(log._id) ? (
+                            <svg
+                              className="w-3 h-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                              />
+                            </svg>
+                          ) : (
+                            <svg
+                              className="w-3 h-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                              />
+                            </svg>
+                          )}
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -451,42 +577,46 @@ export const AdminLogs: React.FC = () => {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <div 
+          <div
             className="text-sm"
-            style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+            style={{ color: "var(--color-muted-foreground, #64748b)" }}
           >
-            Showing {((currentPage - 1) * LOGS_PER_PAGE) + 1} to {Math.min(currentPage * LOGS_PER_PAGE, totalLogs)} of {totalLogs} logs
+            Showing {(currentPage - 1) * LOGS_PER_PAGE + 1} to{" "}
+            {Math.min(currentPage * LOGS_PER_PAGE, totalLogs)} of {totalLogs}{" "}
+            logs
           </div>
 
           <div className="flex items-center space-x-2">
             <button
-              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={!hasPrev || loading}
               className="px-3 py-2 text-sm rounded border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
-                backgroundColor: 'var(--color-card, #ffffff)',
-                borderColor: 'var(--color-border, #e2e8f0)',
-                color: 'var(--color-foreground, #0f172a)'
+                backgroundColor: "var(--color-card, #ffffff)",
+                borderColor: "var(--color-border, #e2e8f0)",
+                color: "var(--color-foreground, #0f172a)",
               }}
             >
               Previous
             </button>
 
-            <span 
+            <span
               className="px-3 py-2 text-sm"
-              style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+              style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               {currentPage} of {totalPages}
             </span>
 
             <button
-              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+              }
               disabled={!hasNext || loading}
               className="px-3 py-2 text-sm rounded border transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
-                backgroundColor: 'var(--color-card, #ffffff)',
-                borderColor: 'var(--color-border, #e2e8f0)',
-                color: 'var(--color-foreground, #0f172a)'
+                backgroundColor: "var(--color-card, #ffffff)",
+                borderColor: "var(--color-border, #e2e8f0)",
+                color: "var(--color-foreground, #0f172a)",
               }}
             >
               Next
