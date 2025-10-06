@@ -13,14 +13,19 @@ export default function PostPage() {
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [mounted, setMounted] = useState(false);
 
   const postId = params?.id as string;
 
   useEffect(() => {
-    if (postId) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && postId) {
       loadPost();
     }
-  }, [postId]);
+  }, [mounted, postId]);
 
   const loadPost = async () => {
     try {
@@ -39,22 +44,19 @@ export default function PostPage() {
     }
   };
 
-  const handlePostUpdate = () => {
-    loadPost();
-  };
-
   const handlePostDeleted = () => {
-    // Redirect to home page after post deletion
     router.push('/');
   };
+
+  if (!mounted) {
+    return null;
+  }
 
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main
-          className="flex-1 transition-colors duration-300"
-        >
+        <main className="flex-1 transition-colors duration-300">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="animate-pulse">
               <div 
@@ -106,9 +108,7 @@ export default function PostPage() {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main
-          className="flex-1 flex items-center justify-center transition-colors duration-300"
-        >
+        <main className="flex-1 flex items-center justify-center transition-colors duration-300">
           <div className="text-center space-y-4">
             <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center" 
                  style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)' }}>
@@ -122,7 +122,7 @@ export default function PostPage() {
               Post Not Found
             </h1>
             <p className="text-sm" style={{ color: 'var(--color-muted-foreground, #64748b)' }}>
-              {error || 'The post you\'re looking for doesn\'t exist or has been deleted.'}
+              {error || 'The post you&apos;re looking for doesn&apos;t exist or has been deleted.'}
             </p>
             <button
               onClick={() => router.push('/')}
@@ -149,13 +149,11 @@ export default function PostPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main
-        className="flex-1 transition-colors duration-300"
-      >
+      <main className="flex-1 transition-colors duration-300">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <PostCard
             post={post}
-            onPostUpdate={handlePostDeleted} // Redirect on deletion
+            onPostUpdate={handlePostDeleted}
             onFollowUpdate={(userId, newFollowingStatus, newFollowerCount) => {
               if (post.authorId._id === userId) {
                 setPost(prev => prev ? {
