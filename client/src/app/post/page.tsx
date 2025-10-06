@@ -1,21 +1,22 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { PostCard } from '@/components/posts/PostCard';
 import { apiClient } from '@/utils/api';
 import { Post } from '@/types/post.types';
 
 export default function PostPage() {
-  const params = useParams();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [mounted, setMounted] = useState(false);
 
-  const postId = params?.id as string;
+  // Get post ID from query parameter
+  const postId = searchParams?.get('id');
 
   useEffect(() => {
     setMounted(true);
@@ -24,10 +25,19 @@ export default function PostPage() {
   useEffect(() => {
     if (mounted && postId) {
       loadPost();
+    } else if (mounted && !postId) {
+      setError('No post ID provided');
+      setLoading(false);
     }
   }, [mounted, postId]);
 
   const loadPost = async () => {
+    if (!postId) {
+      setError('Invalid post ID');
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await apiClient.getPostById(postId);
