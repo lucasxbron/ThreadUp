@@ -160,9 +160,9 @@ export const login = async (
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // ✅ 7 days (same as JWT)
+      sameSite: "none",        // Changed from "strict" to "none"
+      secure: true,            // Changed from conditional to always true
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days (same as JWT)
     });
 
     res.status(200).json({
