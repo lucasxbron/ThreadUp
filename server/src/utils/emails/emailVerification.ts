@@ -8,7 +8,8 @@ export const sendVerificationEmail = async (
   verificationToken: string
 ) => {
   // const verifyLink = `http://localhost:${config.PORT}/api/auth/verify-email?token=${verificationToken}`;
-  const verifyLink = `http://localhost:3000/verify-email?token=${verificationToken}`;
+  // const verifyLink = `http://localhost:3000/verify-email?token=${verificationToken}`;
+  const verifyLink = `${config.FRONTEND_URL}/verify-email?token=${verificationToken}`;
 
   try {
     const { data, error } = await resend.emails.send({

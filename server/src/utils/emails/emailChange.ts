@@ -9,7 +9,8 @@ export const sendEmailChangeVerification = async (
   verificationToken: string,
   userName: string
 ) => {
-  const verifyLink = `http://localhost:3000/verify-email-change?token=${verificationToken}`;
+  // const verifyLink = `http://localhost:3000/verify-email-change?token=${verificationToken}`;
+  const verifyLink = `${config.FRONTEND_URL}/verify-email-change?token=${verificationToken}`;
 
   try {
     const { data, error } = await resend.emails.send({
