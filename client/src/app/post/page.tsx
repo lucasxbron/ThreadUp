@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
 import { PostCard } from '@/components/posts/PostCard';
 import { apiClient } from '@/utils/api';
 import { Post } from '@/types/post.types';
 
-export default function PostPage() {
+function PostPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [post, setPost] = useState<Post | null>(null);
@@ -180,5 +180,66 @@ export default function PostPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+// Loading fallback component
+function PostPageFallback() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-1 transition-colors duration-300">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="animate-pulse">
+            <div 
+              className="rounded-xl p-6 shadow-sm border"
+              style={{
+                backgroundColor: 'var(--color-card, #ffffff)',
+                borderColor: 'var(--color-border, #e2e8f0)'
+              }}
+            >
+              <div className="flex space-x-3 mb-4">
+                <div 
+                  className="w-10 h-10 rounded-full"
+                  style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
+                ></div>
+                <div className="flex-1 space-y-2">
+                  <div 
+                    className="h-4 w-3/4 rounded"
+                    style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
+                  ></div>
+                  <div 
+                    className="h-3 w-1/2 rounded"
+                    style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
+                  ></div>
+                </div>
+              </div>
+              <div 
+                className="h-20 w-full rounded mb-4"
+                style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
+              ></div>
+              <div className="flex space-x-4">
+                <div 
+                  className="h-8 w-16 rounded"
+                  style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
+                ></div>
+                <div 
+                  className="h-8 w-16 rounded"
+                  style={{ backgroundColor: 'var(--color-muted, #f1f5f9)' }}
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default function PostPage() {
+  return (
+    <Suspense fallback={<PostPageFallback />}>
+      <PostPageContent />
+    </Suspense>
   );
 }
