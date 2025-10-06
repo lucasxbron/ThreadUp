@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true,
-    domains: ['res.cloudinary.com'], // Keep this for development
+    domains: ['res.cloudinary.com'],
     remotePatterns: [
       {
         protocol: 'https',
