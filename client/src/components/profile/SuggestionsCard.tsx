@@ -75,13 +75,13 @@ export const SuggestionsCard: React.FC = () => {
 
     const success = await toggleFollow(userId, currentFollowerCount);
 
-      if (success) {
-    // Refresh after delay
-    setTimeout(() => {
-      loadSuggestions();
-    }, 1000);
-  }
-};
+    if (success) {
+      // Refresh after delay
+      setTimeout(() => {
+        loadSuggestions();
+      }, 1000);
+    }
+  };
 
   // Get full name
   const getFullName = (firstName: string, lastName: string) => {
@@ -369,7 +369,7 @@ export const SuggestionsCard: React.FC = () => {
           )}
 
           {/* Debug Info (remove in production) */}
-          {process.env.NODE_ENV === "development" && suggestions.length > 0 && (
+          {/* {process.env.NODE_ENV === "development" && suggestions.length > 0 && (
             <div
               className="mt-4 pt-3 border-t text-xs"
               style={{
@@ -391,7 +391,7 @@ export const SuggestionsCard: React.FC = () => {
                 </div>
               </details>
             </div>
-          )}
+          )} */}
         </div>
       </div>
 
