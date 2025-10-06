@@ -48,6 +48,8 @@ export const Header: React.FC = () => {
   const handleLogout = async () => {
     await logout();
     setDropdownOpen(false);
+    // Redirect to base URL after logout with complete reload
+    window.location.href = "/";
   };
 
   // Get full name
