@@ -137,7 +137,6 @@ export default function PrivacyPolicyPage() {
       <Header />
       <main
         className="flex-1 transition-colors duration-300"
-        style={{ backgroundColor: "var(--color-background, #ffffff)" }}
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           {/* Header Section */}
@@ -446,7 +445,7 @@ export default function PrivacyPolicyPage() {
           <div
             className="rounded-2xl border p-8 mb-12"
             style={{
-              backgroundColor: "rgba(168, 85, 247, 0.05)",
+              backgroundColor: "rgba(168, 85, 247, 0.2)",
               borderColor: "rgba(168, 85, 247, 0.2)",
             }}
           >
@@ -675,8 +674,8 @@ export default function PrivacyPolicyPage() {
           <div
             className="rounded-2xl border p-8 mb-12"
             style={{
-              backgroundColor: "rgba(34, 197, 94, 0.05)",
-              borderColor: "rgba(34, 197, 94, 0.2)",
+              backgroundColor: "rgba(59, 130, 246, 0.05)",
+              borderColor: "rgba(59, 130, 246, 0.2)",
             }}
           >
             <h2

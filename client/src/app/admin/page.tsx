@@ -129,7 +129,6 @@ export default function AdminPage() {
         
         <main 
           className="flex-1 transition-colors duration-300"
-          style={{ backgroundColor: 'var(--color-background, #ffffff)' }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             {/* Header */}

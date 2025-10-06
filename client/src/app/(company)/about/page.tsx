@@ -160,7 +160,6 @@ export default function AboutPage() {
       <Header />
       <main
         className="flex-1 transition-colors duration-300"
-        style={{ backgroundColor: "var(--color-background, #ffffff)" }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           {/* Hero Section */}

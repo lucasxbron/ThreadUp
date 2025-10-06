@@ -17,7 +17,6 @@ export default function ComingSoonPage() {
       <Header />
       <main
         className="flex-1 flex items-center justify-center transition-colors duration-300"
-        style={{ backgroundColor: "var(--color-background, #ffffff)" }}
       >
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Animated Icon */}
