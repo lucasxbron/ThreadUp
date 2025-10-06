@@ -9,7 +9,7 @@ class ApiClient {
 
   constructor() {
     // this.baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3005";
-    this.baseURL = process.env.NEXT_PUBLIC_API_URL || "https://your-backend-app.onrender.com";
+    this.baseURL = process.env.NEXT_PUBLIC_API_URL || "https://threadup-server.onrender.com";
   }
 
   private async makeRequest<T = any>(
