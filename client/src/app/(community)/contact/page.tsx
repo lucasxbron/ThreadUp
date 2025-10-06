@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Header } from '@/components/layout/Header';
 import { useSearchParams } from 'next/navigation';
 import { apiClient } from '@/utils/api';
 
-export default function ContactPage() {
+function ContactPageContent() {
   const searchParams = useSearchParams();
   const preSelectedSubject = searchParams?.get('subject');
 
@@ -165,7 +165,7 @@ export default function ContactPage() {
                 className="text-xl leading-relaxed max-w-3xl mx-auto"
                 style={{ color: 'var(--color-muted-foreground, #64748b)' }}
               >
-                Have a question, suggestion, or need help? We'd love to hear from you. 
+                Have a question, suggestion, or need help? We&apos;d love to hear from you. 
                 Our team typically responds within 24-48 hours.
               </p>
             </div>
@@ -496,5 +496,49 @@ export default function ContactPage() {
         </main>
       </div>
     </>
+  );
+}
+
+// Loading fallback component
+function ContactPageFallback() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <main className="flex-1 transition-colors duration-300">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <div className="text-center mb-12">
+            <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 7.89a2 2 0 002.83 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h1 
+              className="text-4xl font-bold mb-4"
+              style={{ color: 'var(--color-foreground, #0f172a)' }}
+            >
+              Contact Us
+            </h1>
+            <div className="animate-pulse space-y-4 max-w-3xl mx-auto">
+              <div 
+                className="h-4 rounded mx-auto"
+                style={{ backgroundColor: 'var(--color-muted, #f1f5f9)', width: '60%' }}
+              ></div>
+              <div 
+                className="h-4 rounded mx-auto"
+                style={{ backgroundColor: 'var(--color-muted, #f1f5f9)', width: '40%' }}
+              ></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense fallback={<ContactPageFallback />}>
+      <ContactPageContent />
+    </Suspense>
   );
 }
