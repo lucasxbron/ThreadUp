@@ -188,22 +188,16 @@ export const PostCard: React.FC<PostCardProps> = ({
   };
 
   const handleCopyLink = async () => {
-    const postUrl = `${window.location.origin}/post/${post._id}`;
-
+    // const postUrl = `${window.location.origin}/post/${post._id}`;
+    const postUrl = `${window.location.origin}/post?id=${post._id}`;
     try {
       await navigator.clipboard.writeText(postUrl);
       setShowActionsMenu(false);
       showToast("Post link copied to clipboard!", "success");
     } catch (err) {
-      // Fallback for older browsers
-      const textArea = document.createElement("textarea");
-      textArea.value = postUrl;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textArea);
       setShowActionsMenu(false);
-      showToast("Post link copied to clipboard!", "success");
+      showToast(`Copy failed. URL: ${postUrl}`, "info");
+      console.error("Copy to clipboard failed:", err);
     }
   };
 
