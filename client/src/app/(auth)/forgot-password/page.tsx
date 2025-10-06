@@ -84,7 +84,7 @@ export default function ForgotPasswordPage() {
               {message}
             </p>
 
-            {/* Email Icon - Now below the text */}
+            {/* Email Icon */}
             <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mb-4">
               <svg
                 className="h-6 w-6 text-blue-600"

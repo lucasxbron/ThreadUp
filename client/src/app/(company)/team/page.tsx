@@ -228,9 +228,7 @@ export default function TeamPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main
-        className="flex-1 transition-colors duration-300"
-      >
+      <main className="flex-1 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           {/* Header Section */}
           <div className="text-center mb-12">

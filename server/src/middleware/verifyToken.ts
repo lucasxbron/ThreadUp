@@ -14,7 +14,7 @@ export async function verifyToken(
 ) {
   try {
     let token = req.cookies?.token;
-    
+
     if (!token) {
       const authHeader = req.headers.authorization;
       if (authHeader && authHeader.startsWith("Bearer ")) {
@@ -53,11 +53,11 @@ export async function verifyToken(
     if (error instanceof jwt.JsonWebTokenError) {
       return next(createHttpError(401, "Token invalid"));
     }
-    
-    if (error instanceof Error && error.name === 'UnauthorizedError') {
+
+    if (error instanceof Error && error.name === "UnauthorizedError") {
       return next(error);
     }
-    
+
     return next(createHttpError(401, "Token invalid"));
   }
 }

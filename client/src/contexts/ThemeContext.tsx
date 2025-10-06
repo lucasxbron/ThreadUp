@@ -19,19 +19,22 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const initTheme = () => {
       try {
-        const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
+        const savedTheme = localStorage.getItem("theme") as
+          | "light"
+          | "dark"
+          | null;
         // Default to light mode, only use dark if explicitly saved
         const initialTheme = savedTheme || "light";
-        
+
         setTheme(initialTheme);
-        
+
         // Apply theme to document - ALWAYS start with clean slate
         document.documentElement.classList.remove("light", "dark");
         if (initialTheme === "dark") {
           document.documentElement.classList.add("dark");
         }
         // Don't add "light" class - let it be the default
-        
+
         console.log("Theme initialized:", initialTheme);
       } catch (error) {
         console.error("Theme initialization error:", error);
@@ -39,7 +42,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         setTheme("light");
         document.documentElement.classList.remove("light", "dark");
       }
-      
+
       setMounted(true);
     };
 
@@ -48,10 +51,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const toggleTheme = () => {
     if (!mounted) return;
-    
+
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    
+
     try {
       localStorage.setItem("theme", newTheme);
       document.documentElement.classList.remove("light", "dark");
@@ -59,7 +62,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         document.documentElement.classList.add("dark");
       }
       // Light mode = no class (default)
-      
+
       console.log("Theme toggled to:", newTheme);
     } catch (error) {
       console.error("Theme toggle error:", error);

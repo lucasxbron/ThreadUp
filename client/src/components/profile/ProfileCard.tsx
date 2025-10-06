@@ -36,7 +36,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ user }) => {
     try {
       setLoading(true);
 
-      // Get user's posts count (you'll need to create this endpoint)
+      // Get user's posts count
       const postsResponse = await apiClient.getUserPosts(user._id);
       const postsCount = postsResponse.data?.totalPosts || 0;
 

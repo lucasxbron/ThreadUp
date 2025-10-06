@@ -9,7 +9,8 @@ class ApiClient {
 
   constructor() {
     // this.baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3005";
-    this.baseURL = process.env.NEXT_PUBLIC_API_URL || "https://threadup-server.onrender.com";
+    this.baseURL =
+      process.env.NEXT_PUBLIC_API_URL || "https://threadup-server.onrender.com";
   }
 
   private async makeRequest<T = any>(
@@ -287,18 +288,18 @@ class ApiClient {
   }
 
   async forgotPassword(data: { email: string }) {
-  return this.makeRequest("/api/auth/forgot-password", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
-}
+    return this.makeRequest("/api/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
 
-async resetPassword(data: { token: string; newPassword: string }) {
-  return this.makeRequest("/api/auth/reset-password", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
-}
+  async resetPassword(data: { token: string; newPassword: string }) {
+    return this.makeRequest("/api/auth/reset-password", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
 
   // Upload endpoints
   async uploadFile(
@@ -375,8 +376,6 @@ async resetPassword(data: { token: string; newPassword: string }) {
   async getAdminStats() {
     return this.makeRequest("/api/admin/stats");
   }
-
-  
 }
 
 export const apiClient = new ApiClient();

@@ -538,9 +538,7 @@ export default function HomePage() {
     <ProtectedRoute>
       <div className="min-h-screen flex flex-col">
         <Header />
-        <main
-          className="flex-1 transition-colors duration-300"
-        >
+        <main className="flex-1 transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex gap-6 justify-center">
               {/* Profile Card and Suggestions - Left Side (Hidden on mobile/tablet) */}

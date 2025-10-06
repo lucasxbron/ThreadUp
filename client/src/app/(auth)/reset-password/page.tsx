@@ -463,9 +463,7 @@ function ResetPasswordFallback() {
       >
         <div className="flex justify-center mb-4">
           <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-            <span className="text-white font-bold text-xl md:text-2xl">
-              T
-            </span>
+            <span className="text-white font-bold text-xl md:text-2xl">T</span>
           </div>
         </div>
         <div className="animate-spin rounded-full h-8 w-8 mx-auto border-2 border-transparent border-t-blue-600"></div>

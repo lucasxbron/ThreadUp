@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
-import { uploadToCloudinary, uploadMultipleToCloudinary } from "../utils/cloudinary.js";
+import {
+  uploadToCloudinary,
+  uploadMultipleToCloudinary,
+} from "../utils/cloudinary.js";
 
 export const uploadSingleFile = async (
   req: Request,
@@ -13,18 +16,18 @@ export const uploadSingleFile = async (
     }
 
     // Determine folder based on upload type
-    const uploadType = req.body.type || 'general'; // 'profile', 'post', or 'general'
+    const uploadType = req.body.type || "general"; // 'profile', 'post', or 'general'
     let folder: string;
-    
+
     switch (uploadType) {
-      case 'profile':
-        folder = 'profile-images';
+      case "profile":
+        folder = "profile-images";
         break;
-      case 'post':
-        folder = 'post-images';
+      case "post":
+        folder = "post-images";
         break;
       default:
-        folder = 'general';
+        folder = "general";
     }
 
     const result = await uploadToCloudinary(req.file.path, folder);
@@ -37,8 +40,8 @@ export const uploadSingleFile = async (
         original_name: result.original_filename,
         size: result.bytes,
         format: result.format,
-        folder: folder
-      }
+        folder: folder,
+      },
     });
   } catch (error) {
     next(error);
@@ -57,33 +60,33 @@ export const uploadMultipleFiles = async (
     }
 
     // Determine folder based on upload type
-    const uploadType = req.body.type || 'general';
+    const uploadType = req.body.type || "general";
     let folder: string;
-    
+
     switch (uploadType) {
-      case 'profile':
-        folder = 'profile-images';
+      case "profile":
+        folder = "profile-images";
         break;
-      case 'post':
-        folder = 'post-images';
+      case "post":
+        folder = "post-images";
         break;
       default:
-        folder = 'general';
+        folder = "general";
     }
 
-    const filePaths = files.map(file => file.path);
+    const filePaths = files.map((file) => file.path);
     const results = await uploadMultipleToCloudinary(filePaths, folder);
 
     res.status(200).json({
       message: "Files uploaded successfully",
-      files: results.map(result => ({
+      files: results.map((result) => ({
         public_id: result.public_id,
         url: result.secure_url,
         original_name: result.original_filename,
         size: result.bytes,
         format: result.format,
-        folder: folder
-      }))
+        folder: folder,
+      })),
     });
   } catch (error) {
     next(error);
@@ -100,7 +103,7 @@ export const uploadProfileImage = async (
       throw createHttpError(400, "No profile image uploaded");
     }
 
-    const result = await uploadToCloudinary(req.file.path, 'profile-images');
+    const result = await uploadToCloudinary(req.file.path, "profile-images");
 
     res.status(200).json({
       message: "Profile image uploaded successfully",
@@ -109,8 +112,8 @@ export const uploadProfileImage = async (
         url: result.secure_url,
         original_name: result.original_filename,
         size: result.bytes,
-        format: result.format
-      }
+        format: result.format,
+      },
     });
   } catch (error) {
     next(error);
@@ -127,7 +130,7 @@ export const uploadPostImage = async (
       throw createHttpError(400, "No post image uploaded");
     }
 
-    const result = await uploadToCloudinary(req.file.path, 'post-images');
+    const result = await uploadToCloudinary(req.file.path, "post-images");
 
     res.status(200).json({
       message: "Post image uploaded successfully",
@@ -136,8 +139,8 @@ export const uploadPostImage = async (
         url: result.secure_url,
         original_name: result.original_filename,
         size: result.bytes,
-        format: result.format
-      }
+        format: result.format,
+      },
     });
   } catch (error) {
     next(error);
