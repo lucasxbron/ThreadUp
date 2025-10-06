@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -12,7 +12,7 @@ export const Input: React.FC<InputProps> = ({
   label,
   error,
   helperText,
-  className = '',
+  className = "",
   ...props
 }) => {
   return (
@@ -26,17 +26,16 @@ export const Input: React.FC<InputProps> = ({
         className={`
           w-full px-3 py-2 border rounded-lg shadow-sm placeholder-muted-foreground/60 
           focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary
-          ${error 
-            ? 'border-destructive text-destructive placeholder-destructive/50 focus:border-destructive focus:ring-destructive' 
-            : 'border-border bg-input text-foreground'
+          ${
+            error
+              ? "border-destructive text-destructive placeholder-destructive/50 focus:border-destructive focus:ring-destructive"
+              : "border-border bg-input text-foreground"
           }
           ${className}
         `}
         {...props}
       />
-      {error && (
-        <p className="text-sm text-destructive">{error}</p>
-      )}
+      {error && <p className="text-sm text-destructive">{error}</p>}
       {helperText && !error && (
         <p className="text-sm text-muted-foreground">{helperText}</p>
       )}

@@ -16,13 +16,20 @@ router.get("/verify-email-change", authController.verifyEmailChange);
 router.post("/forgot-password", authController.forgotPassword);
 router.post("/reset-password", authController.resetPassword);
 
-
 // Protected routes
 router.get("/profile", verifyToken, authController.getOwnProfile);
 router.put("/profile", verifyToken, authController.updateOwnProfile);
 router.put("/change-password", verifyToken, authController.changePassword);
 router.delete("/delete-account", verifyToken, authController.deleteAccount);
-router.post("/request-email-change", verifyToken, authController.requestEmailChange);
-router.post("/cancel-email-change", verifyToken, authController.cancelEmailChange);
+router.post(
+  "/request-email-change",
+  verifyToken,
+  authController.requestEmailChange
+);
+router.post(
+  "/cancel-email-change",
+  verifyToken,
+  authController.cancelEmailChange
+);
 
 export default router;

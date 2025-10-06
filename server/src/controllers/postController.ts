@@ -422,16 +422,16 @@ export const getFilteredPosts = async (
 
         // Check if there are posts in the last 7 days
         const recentPostsCount = await Post.countDocuments({
-          createdAt: { $gte: sevenDaysAgo }
+          createdAt: { $gte: sevenDaysAgo },
         });
 
         if (recentPostsCount < 5) {
           // If less than 5 posts in 7 days, expand to 30 days
           const thirtyDaysAgo = new Date();
           thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-          
+
           const monthPostsCount = await Post.countDocuments({
-            createdAt: { $gte: thirtyDaysAgo }
+            createdAt: { $gte: thirtyDaysAgo },
           });
 
           if (monthPostsCount >= 5) {

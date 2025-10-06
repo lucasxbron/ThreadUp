@@ -22,18 +22,24 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req: any, file: any, cb: any) => {
-  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+  const allowedTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+  ];
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Only image files are allowed'), false);
+    cb(new Error("Only image files are allowed"), false);
   }
 };
 
-export const upload = multer({ 
+export const upload = multer({
   storage,
   fileFilter,
   limits: {
     fileSize: 10 * 1024 * 1024, // 10MB limit (Cloudinary handles compression)
-  }
+  },
 });

@@ -14,17 +14,17 @@ interface ContactEmailData {
 
 export const sendContactEmail = async (data: ContactEmailData) => {
   const { name, email, subject, message } = data;
-    // const { name, email, subject, message, userAgent, ip } = data;
-  
+  // const { name, email, subject, message, userAgent, ip } = data;
+
   // Format timestamp
-  const timestamp = new Date().toLocaleString('en-US', {
-    timeZone: 'UTC',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
+  const timestamp = new Date().toLocaleString("en-US", {
+    timeZone: "UTC",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
   });
 
   try {

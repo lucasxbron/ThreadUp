@@ -2,7 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
 import AdminLog from "../models/adminLog.js";
 
-export const getAdminLogs = async (req: Request, res: Response, next: NextFunction) => {
+export const getAdminLogs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     // Only allow admins to view logs
     if (!req.user?.roles?.includes("ADMIN")) {
@@ -25,8 +29,8 @@ export const getAdminLogs = async (req: Request, res: Response, next: NextFuncti
     if (targetType) filter.targetType = targetType;
 
     const logs = await AdminLog.find(filter)
-      .populate('adminId', 'firstName lastName username email')
-      .populate('targetAuthorId', 'firstName lastName username email')
+      .populate("adminId", "firstName lastName username email")
+      .populate("targetAuthorId", "firstName lastName username email")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -46,15 +50,19 @@ export const getAdminLogs = async (req: Request, res: Response, next: NextFuncti
       filters: {
         action,
         adminId,
-        targetType
-      }
+        targetType,
+      },
     });
   } catch (error) {
     next(error);
   }
 };
 
-export const getAdminStats = async (req: Request, res: Response, next: NextFunction) => {
+export const getAdminStats = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     // Only allow admins to view stats
     if (!req.user?.roles?.includes("ADMIN")) {
@@ -62,46 +70,46 @@ export const getAdminStats = async (req: Request, res: Response, next: NextFunct
     }
 
     const totalLogs = await AdminLog.countDocuments();
-    
+
     const actionStats = await AdminLog.aggregate([
       {
         $group: {
-          _id: '$action',
-          count: { $sum: 1 }
-        }
-      }
+          _id: "$action",
+          count: { $sum: 1 },
+        },
+      },
     ]);
 
     const adminStats = await AdminLog.aggregate([
       {
         $group: {
-          _id: '$adminId',
-          count: { $sum: 1 }
-        }
+          _id: "$adminId",
+          count: { $sum: 1 },
+        },
       },
       {
         $lookup: {
-          from: 'users',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'admin'
-        }
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "admin",
+        },
       },
       {
-        $unwind: '$admin'
+        $unwind: "$admin",
       },
       {
         $project: {
           count: 1,
-          'admin.firstName': 1,
-          'admin.lastName': 1,
-          'admin.username': 1,
-          'admin.email': 1
-        }
+          "admin.firstName": 1,
+          "admin.lastName": 1,
+          "admin.username": 1,
+          "admin.email": 1,
+        },
       },
       {
-        $sort: { count: -1 }
-      }
+        $sort: { count: -1 },
+      },
     ]);
 
     // Recent activity (last 30 days)
@@ -111,27 +119,27 @@ export const getAdminStats = async (req: Request, res: Response, next: NextFunct
     const recentActivity = await AdminLog.aggregate([
       {
         $match: {
-          createdAt: { $gte: thirtyDaysAgo }
-        }
+          createdAt: { $gte: thirtyDaysAgo },
+        },
       },
       {
         $group: {
           _id: {
-            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" }
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
           },
-          count: { $sum: 1 }
-        }
+          count: { $sum: 1 },
+        },
       },
       {
-        $sort: { _id: 1 }
-      }
+        $sort: { _id: 1 },
+      },
     ]);
 
     res.status(200).json({
       totalLogs,
       actionStats,
       adminStats,
-      recentActivity
+      recentActivity,
     });
   } catch (error) {
     next(error);

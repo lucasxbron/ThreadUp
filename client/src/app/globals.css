@@ -2,47 +2,47 @@
 
 /* Define CSS custom properties for light mode */
 :root {
-  /* Base colors - Updated for off-white background */
-  --color-background: #f8fafc; /* Light gray background instead of pure white */
+  /* Base colors */
+  --color-background: #f8fafc; /* Light gray background */
   --color-foreground: #171717;
-  
+
   --color-card: #ffffff; /* Pure white for cards */
   --color-card-foreground: #111827;
-  
+
   --color-muted: #f1f5f9; /* Slightly darker gray for muted areas */
   --color-muted-foreground: #4b5563;
-  
+
   --color-border: #e2e8f0; /* Softer border color */
-  
+
   --color-input: #ffffff; /* Pure white for inputs */
-  
+
   --color-primary: #3b82f6; /* blue-500 */
   --color-primary-600: #2563eb; /* blue-600 */
   --color-primary-700: #1d4ed8; /* blue-700 */
   --color-primary-foreground: #ffffff;
-  
+
   --color-secondary: #f1f5f9; /* Light gray for secondary elements */
   --color-secondary-400: #e2e8f0; /* slate-200 */
   --color-secondary-500: #cbd5e1; /* slate-300 */
   --color-secondary-foreground: #1f2937;
-  
+
   --color-accent: #f1f5f9;
   --color-accent-foreground: #1f2937;
-  
+
   --color-destructive: #ef4444; /* red-500 */
   --color-destructive-600: #dc2626; /* red-600 */
   --color-destructive-700: #b91c1c; /* red-700 */
   --color-destructive-foreground: #ffffff;
-  
+
   --color-success: #22c55e;
   --color-success-foreground: #ffffff;
-  
+
   --color-warning: #f59e0b;
   --color-warning-foreground: #ffffff;
-  
+
   --color-info: #3b82f6;
   --color-info-foreground: #ffffff;
-  
+
   /* Gray scale for light mode */
   --color-gray-50: #f8fafc;
   --color-gray-100: #f1f5f9;
@@ -58,47 +58,47 @@
 
 /* Dark mode overrides */
 .dark {
-/* Deep blue theme */
---color-background: #101828; /* Very dark blue-gray */
+  /* Deep blue theme */
+  --color-background: #101828; /* Very dark blue-gray */
   --color-foreground: #f1f5f9;
-  
+
   --color-card: #1e2433; /* Slightly lighter blue-gray */
   --color-card-foreground: #f1f5f9;
-  
+
   --color-muted: #1e293b; /* Medium blue-gray */
   --color-muted-foreground: #94a3b8; /* Light blue-gray */
-  
+
   --color-border: #334155; /* Medium-light blue-gray border */
-  
+
   --color-input: #1e2433;
-  
-  --color-primary: #1877F2; /* Professional blue */
+
+  --color-primary: #1877f2; /* Professional blue */
   --color-primary-600: #0c63d4; /* Darker blue for hover */
   --color-primary-700: #0854b3; /* Even darker blue for active */
   --color-primary-foreground: #ffffff; /* White text for better contrast */
-  
+
   --color-secondary: #1e293b;
   --color-secondary-400: #334155; /* slate-700 */
   --color-secondary-500: #475569; /* slate-600 */
   --color-secondary-foreground: #f1f5f9;
-  
+
   --color-accent: #1c398e;
   --color-accent-foreground: #f1f5f9;
-  
+
   --color-destructive: #f43f5e; /* rose-500 - brighter than red for better visibility */
   --color-destructive-600: #e11d48; /* rose-600 */
   --color-destructive-700: #be123c; /* rose-700 */
   --color-destructive-foreground: #ffffff;
-  
+
   --color-success: #22c55e;
   --color-success-foreground: #ffffff;
-  
+
   --color-warning: #f59e0b;
   --color-warning-foreground: #ffffff;
-  
+
   --color-info: #3b82f6;
   --color-info-foreground: #ffffff;
-  
+
   /* Gray scale for dark mode */
   --color-gray-50: #030712; /* Darkest */
   --color-gray-100: #111827;
@@ -134,8 +134,16 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 15% 50%, rgba(28, 57, 142, 0.015) 0%, transparent 50%),
-              radial-gradient(circle at 85% 30%, rgba(60, 90, 190, 0.010) 0%, transparent 50%);
+  background: radial-gradient(
+      circle at 15% 50%,
+      rgba(28, 57, 142, 0.015) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 85% 30%,
+      rgba(60, 90, 190, 0.01) 0%,
+      transparent 50%
+    );
   pointer-events: none;
 }
 
@@ -187,23 +195,28 @@ body {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Smooth transitions */
 * {
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 @keyframes fadeIn {
-  0% { 
-    opacity: 0; 
-    transform: translateY(-10px) scale(0.95); 
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
   }
-  100% { 
-    opacity: 1; 
-    transform: translateY(0) scale(1); 
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -223,7 +236,7 @@ body {
   .backdrop-blur-lg {
     background-color: rgba(255, 255, 255, 0.9);
   }
-  
+
   .dark .backdrop-blur-lg {
     background-color: rgba(17, 24, 39, 0.9);
   }

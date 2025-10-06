@@ -3,7 +3,11 @@ import createHttpError from "http-errors";
 import { sendContactEmail } from "../utils/emails/contactEmail.js";
 import validator from "validator";
 
-export const submitContactForm = async (req: Request, res: Response, next: NextFunction) => {
+export const submitContactForm = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { name, email, subject, message, customSubject } = req.body;
 
@@ -30,15 +34,21 @@ export const submitContactForm = async (req: Request, res: Response, next: NextF
 
     // Determine final subject
     let finalSubject = subject;
-    if (subject === 'other' && customSubject) {
+    if (subject === "other" && customSubject) {
       if (customSubject.trim().length < 5) {
-        throw createHttpError(400, "Custom subject must be at least 5 characters long");
+        throw createHttpError(
+          400,
+          "Custom subject must be at least 5 characters long"
+        );
       }
       finalSubject = customSubject.trim();
     }
 
-    if (!finalSubject || finalSubject === 'other') {
-      throw createHttpError(400, "Please select a subject or provide a custom subject");
+    if (!finalSubject || finalSubject === "other") {
+      throw createHttpError(
+        400,
+        "Please select a subject or provide a custom subject"
+      );
     }
 
     // Send email
@@ -52,9 +62,9 @@ export const submitContactForm = async (req: Request, res: Response, next: NextF
     });
 
     res.status(200).json({
-      message: "Your message has been sent successfully! We'll get back to you within 24-48 hours."
+      message:
+        "Your message has been sent successfully! We'll get back to you within 24-48 hours.",
     });
-
   } catch (error) {
     next(error);
   }

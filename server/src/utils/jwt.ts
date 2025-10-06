@@ -10,7 +10,7 @@ export function createToken(payload: JwtPayload): string {
     if (!secret) {
       throw createHttpError(500, "JWT was not set");
     }
-    
+
     const token = jwt.sign(payload, secret, { expiresIn: "7d" });
     return token;
   } catch (error) {
@@ -23,7 +23,7 @@ export function verifyJWT(token: string): JwtPayload {
     if (!secret) {
       throw createHttpError(500, "JWT_SECRET not set");
     }
-    
+
     const payload = jwt.verify(token, secret) as JwtPayload;
     return payload;
   } catch (error) {

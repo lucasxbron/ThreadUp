@@ -23,7 +23,12 @@ router.get("/:id", optionalAuth, postController.getPostById);
 router.get("/user/:userId", optionalAuth, postController.getUserPosts);
 
 // Protected routes
-router.post("/", verifyToken, upload.single("image"), postController.createPost);
+router.post(
+  "/",
+  verifyToken,
+  upload.single("image"),
+  postController.createPost
+);
 router.delete("/:id", verifyToken, postController.deletePost);
 
 // Like tracking routes

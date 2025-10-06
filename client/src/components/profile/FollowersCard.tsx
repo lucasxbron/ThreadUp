@@ -55,53 +55,53 @@ export const FollowersCard: React.FC = () => {
   }, [isAuthenticated, user]);
 
   const loadFollowData = async () => {
-  if (!user) return;
+    if (!user) return;
 
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const [followersResponse, followingResponse] = await Promise.all([
-      apiClient.getFollowers(user._id, 1, 5),
-      apiClient.getFollowing(user._id, 1, 5),
-    ]);
+      const [followersResponse, followingResponse] = await Promise.all([
+        apiClient.getFollowers(user._id, 1, 5),
+        apiClient.getFollowing(user._id, 1, 5),
+      ]);
 
-    if (followersResponse.data) {
-      const followersData = followersResponse.data as FollowersResponse;
-      setFollowers(followersData.followers || []);
-      setFollowersCount(followersData.pagination?.totalFollowers || 0);
+      if (followersResponse.data) {
+        const followersData = followersResponse.data as FollowersResponse;
+        setFollowers(followersData.followers || []);
+        setFollowersCount(followersData.pagination?.totalFollowers || 0);
 
-      // Simple: Use server data with no force update (preserve existing states)
-      followersData.followers?.forEach((follower) => {
-        updateFollowState(
-          follower.user._id,
-          follower.user.isFollowing,
-          follower.user.followersCount || 0,
-          false // Don't force - preserve SuggestionsCard states
-        );
-      });
+        // Simple: Use server data with no force update (preserve existing states)
+        followersData.followers?.forEach((follower) => {
+          updateFollowState(
+            follower.user._id,
+            follower.user.isFollowing,
+            follower.user.followersCount || 0,
+            false // Don't force - preserve SuggestionsCard states
+          );
+        });
+      }
+
+      if (followingResponse.data) {
+        const followingData = followingResponse.data as FollowingResponse;
+        setFollowing(followingData.following || []);
+        setFollowingCount(followingData.pagination?.totalFollowing || 0);
+
+        // Force update for following
+        followingData.following?.forEach((followingUser) => {
+          updateFollowState(
+            followingUser.user._id,
+            true,
+            followingUser.user.followersCount || 0,
+            true
+          );
+        });
+      }
+    } catch (error) {
+      console.error("Error loading follow data:", error);
+    } finally {
+      setLoading(false);
     }
-
-    if (followingResponse.data) {
-      const followingData = followingResponse.data as FollowingResponse;
-      setFollowing(followingData.following || []);
-      setFollowingCount(followingData.pagination?.totalFollowing || 0);
-
-      // Force update for following (we know we follow them)
-      followingData.following?.forEach((followingUser) => {
-        updateFollowState(
-          followingUser.user._id,
-          true, // We follow them
-          followingUser.user.followersCount || 0,
-          true // Force update
-        );
-      });
-    }
-  } catch (error) {
-    console.error("Error loading follow data:", error);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const handleFollow = async (userId: string) => {
     if (!isAuthenticated || !user) {

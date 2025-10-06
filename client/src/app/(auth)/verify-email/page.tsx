@@ -280,8 +280,8 @@ function VerifyEmailContent() {
             className="mt-2 text-sm md:text-base"
             style={{ color: "var(--color-muted-foreground, #64748b)" }}
           >
-            We&apos;ve sent you a verification email. Please click the link in your
-            email to verify your account.
+            We&apos;ve sent you a verification email. Please click the link in
+            your email to verify your account.
           </p>
         </div>
 
@@ -295,8 +295,8 @@ function VerifyEmailContent() {
           }}
         >
           <p className="text-sm">
-            <strong>Important:</strong> Check your spam folder if you don&apos;t see
-            the email in your inbox.
+            <strong>Important:</strong> Check your spam folder if you don&apos;t
+            see the email in your inbox.
           </p>
         </div>
 
@@ -346,9 +346,7 @@ function VerifyEmailFallback() {
       >
         <div className="flex justify-center mb-4">
           <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-            <span className="text-white font-bold text-xl md:text-2xl">
-              T
-            </span>
+            <span className="text-white font-bold text-xl md:text-2xl">T</span>
           </div>
         </div>
         <div className="animate-spin rounded-full h-8 w-8 mx-auto border-2 border-transparent border-t-blue-600"></div>

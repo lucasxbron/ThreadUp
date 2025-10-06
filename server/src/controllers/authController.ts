@@ -160,8 +160,8 @@ export const login = async (
 
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "none",        // Changed from "strict" to "none"
-      secure: true,            // Changed from conditional to always true
+      sameSite: "none", // Changed from "strict" to "none"
+      secure: true, // Changed from conditional to always true
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days (same as JWT)
     });
 
@@ -727,12 +727,16 @@ export const forgotPassword = async (
     if (!user) {
       // Don't reveal if email exists or not for security
       return res.status(200).json({
-        message: "If an account with that email exists, we've sent a password reset link.",
+        message:
+          "If an account with that email exists, we've sent a password reset link.",
       });
     }
 
     if (!user.verified) {
-      throw createHttpError(400, "Please verify your email before resetting password");
+      throw createHttpError(
+        400,
+        "Please verify your email before resetting password"
+      );
     }
 
     // Generate reset token
@@ -750,7 +754,8 @@ export const forgotPassword = async (
     await sendPasswordResetEmail(user.email, resetToken, userName);
 
     res.status(200).json({
-      message: "If an account with that email exists, we've sent a password reset link.",
+      message:
+        "If an account with that email exists, we've sent a password reset link.",
     });
   } catch (error) {
     next(error);
@@ -801,7 +806,8 @@ export const resetPassword = async (
     await user.save();
 
     res.status(200).json({
-      message: "Password has been reset successfully. You can now log in with your new password.",
+      message:
+        "Password has been reset successfully. You can now log in with your new password.",
     });
   } catch (error) {
     next(error);

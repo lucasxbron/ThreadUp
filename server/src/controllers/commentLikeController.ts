@@ -3,7 +3,11 @@ import createHttpError from "http-errors";
 import CommentLike from "../models/commentLike.js";
 import Comment from "../models/comment.js";
 
-export const toggleCommentLike = async (req: Request, res: Response, next: NextFunction) => {
+export const toggleCommentLike = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { commentId } = req.params;
     const userId = req.user?._id;
@@ -23,27 +27,27 @@ export const toggleCommentLike = async (req: Request, res: Response, next: NextF
       // Unlike: Remove the like
       await CommentLike.findByIdAndDelete(existingLike._id);
       await Comment.findByIdAndUpdate(commentId, { $inc: { likeCount: -1 } });
-      
+
       const updatedComment = await Comment.findById(commentId);
-      
-      res.status(200).json({ 
-        message: "Comment like removed", 
+
+      res.status(200).json({
+        message: "Comment like removed",
         liked: false,
         likeCount: updatedComment?.likeCount || 0,
-        unlikedAt: new Date().toISOString()
+        unlikedAt: new Date().toISOString(),
       });
     } else {
       // Like: Add a new like
       const newLike = await CommentLike.create({ commentId, userId });
       await Comment.findByIdAndUpdate(commentId, { $inc: { likeCount: 1 } });
-      
+
       const updatedComment = await Comment.findById(commentId);
-      
-      res.status(200).json({ 
-        message: "Comment liked", 
+
+      res.status(200).json({
+        message: "Comment liked",
         liked: true,
         likeCount: updatedComment?.likeCount || 0,
-        likedAt: newLike.createdAt
+        likedAt: newLike.createdAt,
       });
     }
   } catch (error) {
@@ -51,7 +55,11 @@ export const toggleCommentLike = async (req: Request, res: Response, next: NextF
   }
 };
 
-export const getCommentLikeStatus = async (req: Request, res: Response, next: NextFunction) => {
+export const getCommentLikeStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { commentId } = req.params;
     const userId = req.user?._id;
@@ -59,23 +67,23 @@ export const getCommentLikeStatus = async (req: Request, res: Response, next: Ne
     // Only check like status if user is authenticated
     let liked = false;
     let likedAt = null;
-    
+
     if (userId) {
       const like = await CommentLike.findOne({ commentId, userId });
       liked = !!like;
       likedAt = like?.createdAt || null;
     }
 
-    const comment = await Comment.findById(commentId, 'likeCount');
+    const comment = await Comment.findById(commentId, "likeCount");
 
     if (!comment) {
       throw createHttpError(404, "Comment not found");
     }
 
-    res.status(200).json({ 
+    res.status(200).json({
       liked,
       likeCount: comment.likeCount || 0,
-      likedAt
+      likedAt,
     });
   } catch (error) {
     next(error);
@@ -83,7 +91,11 @@ export const getCommentLikeStatus = async (req: Request, res: Response, next: Ne
 };
 
 // Get users who liked a comment
-export const getCommentLikers = async (req: Request, res: Response, next: NextFunction) => {
+export const getCommentLikers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { commentId } = req.params;
 
@@ -93,16 +105,16 @@ export const getCommentLikers = async (req: Request, res: Response, next: NextFu
     }
 
     const likes = await CommentLike.find({ commentId })
-      .populate('userId', 'firstName lastName username')
+      .populate("userId", "firstName lastName username")
       .sort({ createdAt: -1 })
       .lean();
 
     res.status(200).json({
-      likers: likes.map(like => ({
+      likers: likes.map((like) => ({
         user: like.userId,
-        likedAt: like.createdAt
+        likedAt: like.createdAt,
       })),
-      totalLikes: likes.length
+      totalLikes: likes.length,
     });
   } catch (error) {
     next(error);

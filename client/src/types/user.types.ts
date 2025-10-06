@@ -20,7 +20,7 @@ export interface User {
 
 // Helper function to check admin status
 export const isAdmin = (user: User | null): boolean => {
-  return user?.roles?.includes('ADMIN') ?? false;
+  return user?.roles?.includes("ADMIN") ?? false;
 };
 
 export interface AuthState {

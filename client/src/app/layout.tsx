@@ -10,25 +10,34 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "ThreadUp - Connect & Share",
-  description: "A modern social platform for sharing thoughts and connecting with others",
+  description:
+    "A modern social platform for sharing thoughts and connecting with others",
   icons: {
     icon: [
-      { url: '/threadup_icon_gradient_16x16.ico', sizes: '16x16', type: 'image/x-icon' },
-      { url: '/threadup_icon_gradient_32x32.ico', sizes: '32x32', type: 'image/x-icon' },
-      { url: '/threadup_icon_gradient.svg', type: 'image/svg+xml' }
+      {
+        url: "/threadup_icon_gradient_16x16.ico",
+        sizes: "16x16",
+        type: "image/x-icon",
+      },
+      {
+        url: "/threadup_icon_gradient_32x32.ico",
+        sizes: "32x32",
+        type: "image/x-icon",
+      },
+      { url: "/threadup_icon_gradient.svg", type: "image/svg+xml" },
     ],
-    shortcut: '/threadup_icon_gradient_32x32.ico',
-    apple: '/threadup_icon_gradient.svg'
+    shortcut: "/threadup_icon_gradient_32x32.ico",
+    apple: "/threadup_icon_gradient.svg",
   },
-  manifest: '/manifest.json',
+  manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-}
+};
 
 export default function RootLayout({
   children,
@@ -37,7 +46,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.className}>
-      <body 
+      <body
         className="min-h-screen transition-colors duration-300"
         suppressHydrationWarning={true}
       >
@@ -45,9 +54,7 @@ export default function RootLayout({
           <AuthProvider>
             <FollowProvider>
               <ToastProvider>
-                <div className="min-h-screen flex flex-col">
-                  {children}
-                </div>
+                <div className="min-h-screen flex flex-col">{children}</div>
               </ToastProvider>
             </FollowProvider>
           </AuthProvider>
