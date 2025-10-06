@@ -8,7 +8,8 @@ class ApiClient {
   private baseURL: string;
 
   constructor() {
-    this.baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3005";
+    // this.baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3005";
+    this.baseURL = process.env.NEXT_PUBLIC_API_URL || "https://your-backend-app.onrender.com";
   }
 
   private async makeRequest<T = any>(
