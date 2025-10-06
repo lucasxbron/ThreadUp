@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { apiClient } from "@/utils/api";
 import { Button } from "@/components/ui/Button";
 import Image from "next/image";
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -280,7 +280,7 @@ export default function VerifyEmailPage() {
             className="mt-2 text-sm md:text-base"
             style={{ color: "var(--color-muted-foreground, #64748b)" }}
           >
-            We've sent you a verification email. Please click the link in your
+            We&apos;ve sent you a verification email. Please click the link in your
             email to verify your account.
           </p>
         </div>
@@ -295,7 +295,7 @@ export default function VerifyEmailPage() {
           }}
         >
           <p className="text-sm">
-            <strong>Important:</strong> Check your spam folder if you don't see
+            <strong>Important:</strong> Check your spam folder if you don&apos;t see
             the email in your inbox.
           </p>
         </div>
@@ -307,7 +307,7 @@ export default function VerifyEmailPage() {
               className="text-sm"
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
-              Didn't receive the email?
+              Didn&apos;t receive the email?
             </p>
 
             <Link href="/register" className="block">
@@ -330,5 +330,45 @@ export default function VerifyEmailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Loading fallback component
+function VerifyEmailFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div
+        className="w-full max-w-sm sm:max-w-md space-y-6 md:space-y-8 p-6 md:p-8 rounded-xl shadow-lg border text-center"
+        style={{
+          backgroundColor: "var(--color-card, #ffffff)",
+          borderColor: "var(--color-border, #e2e8f0)",
+        }}
+      >
+        <div className="flex justify-center mb-4">
+          <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+            <span className="text-white font-bold text-xl md:text-2xl">
+              T
+            </span>
+          </div>
+        </div>
+        <div className="animate-spin rounded-full h-8 w-8 mx-auto border-2 border-transparent border-t-blue-600"></div>
+        <div>
+          <h2
+            className="text-xl md:text-2xl font-bold"
+            style={{ color: "var(--color-foreground, #0f172a)" }}
+          >
+            Loading...
+          </h2>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<VerifyEmailFallback />}>
+      <VerifyEmailContent />
+    </Suspense>
   );
 }
