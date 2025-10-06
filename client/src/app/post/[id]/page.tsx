@@ -54,7 +54,6 @@ export default function PostPage() {
         <Header />
         <main
           className="flex-1 transition-colors duration-300"
-          style={{ backgroundColor: "var(--color-background, #ffffff)" }}
         >
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="animate-pulse">
@@ -109,7 +108,6 @@ export default function PostPage() {
         <Header />
         <main
           className="flex-1 flex items-center justify-center transition-colors duration-300"
-          style={{ backgroundColor: "var(--color-background, #ffffff)" }}
         >
           <div className="text-center space-y-4">
             <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center" 
@@ -153,7 +151,6 @@ export default function PostPage() {
       <Header />
       <main
         className="flex-1 transition-colors duration-300"
-        style={{ backgroundColor: "var(--color-background, #ffffff)" }}
       >
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <PostCard

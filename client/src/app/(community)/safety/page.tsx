@@ -103,7 +103,6 @@ export default function SafetyPage() {
       <Header />
       <main
         className="flex-1 transition-colors duration-300"
-        style={{ backgroundColor: "var(--color-background, #ffffff)" }}
       >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           {/* Header Section */}
@@ -239,8 +238,8 @@ export default function SafetyPage() {
           <div 
             className="rounded-2xl border p-8 text-center"
             style={{
-              backgroundColor: 'rgba(239, 68, 68, 0.05)',
-              borderColor: 'rgba(239, 68, 68, 0.2)'
+              backgroundColor: "rgba(59, 130, 246, 0.05)",
+              borderColor: "rgba(59, 130, 246, 0.2)",
             }}
           >
             <svg 
