@@ -1,0 +1,27 @@
+{
+  "name": "ThreadUp",
+  "short_name": "ThreadUp",
+  "description": "A modern social platform for sharing thoughts and connecting with others",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/threadup_icon_gradient_16x16.ico",
+      "sizes": "16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/threadup_icon_gradient_32x32.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/threadup_icon_gradient.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
