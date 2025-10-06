@@ -11,14 +11,19 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "ThreadUp - Connect & Share",
   description: "A modern social platform for sharing thoughts and connecting with others",
+  icons: {
+    icon: [
+      { url: '/threadup_icon_gradient_16x16.ico', sizes: '16x16', type: 'image/x-icon' },
+      { url: '/threadup_icon_gradient_32x32.ico', sizes: '32x32', type: 'image/x-icon' },
+      { url: '/threadup_icon_gradient.svg', type: 'image/svg+xml' }
+    ],
+    shortcut: '/threadup_icon_gradient_32x32.ico',
+    apple: '/threadup_icon_gradient.svg'
+  },
+  manifest: '/manifest.json',
+  themeColor: '#3b82f6',
+  viewport: 'width=device-width, initial-scale=1',
 };
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-}
 
 export default function RootLayout({
   children,
