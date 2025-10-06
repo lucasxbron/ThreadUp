@@ -1,103 +1,113 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/Button';
+import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/Button";
+import Image from "next/image";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const { register } = useAuth();
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate all fields are filled
-    if (!formData.firstName.trim() || !formData.lastName.trim() || !formData.username.trim() || !formData.email.trim() || !formData.password.trim() || !formData.confirmPassword.trim()) {
-      setError('Please fill in all fields');
+    if (
+      !formData.firstName.trim() ||
+      !formData.lastName.trim() ||
+      !formData.username.trim() ||
+      !formData.email.trim() ||
+      !formData.password.trim() ||
+      !formData.confirmPassword.trim()
+    ) {
+      setError("Please fill in all fields");
       return;
     }
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
     // Validate password length (keep original 6 characters)
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError("Password must be at least 6 characters");
       return;
     }
 
     // Add username validation for first/last name registration
     if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
-      setError('Username can only contain letters, numbers, and underscores');
+      setError("Username can only contain letters, numbers, and underscores");
       return;
     }
 
     if (formData.username.length < 3) {
-      setError('Username must be at least 3 characters');
+      setError("Username must be at least 3 characters");
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       const result = await register(
         formData.firstName.trim(),
         formData.lastName.trim(),
-        formData.username.trim(), 
-        formData.email.trim(), 
+        formData.username.trim(),
+        formData.email.trim(),
         formData.password
       );
-      
+
       // Handle the correct response format: {success: boolean, error?: string}
-      if (result && typeof result === 'object' && result.success === true) {
+      if (result && typeof result === "object" && result.success === true) {
         // Registration successful - redirect to verification or home
-        router.push('/verify-email');
+        router.push("/verify-email");
       } else {
         // Registration failed - extract error message
-        let errorMessage = 'Registration failed. Please try again.';
-        
-        if (result && typeof result === 'object' && result.error) {
+        let errorMessage = "Registration failed. Please try again.";
+
+        if (result && typeof result === "object" && result.error) {
           errorMessage = result.error;
         }
-        
+
         setError(errorMessage);
       }
     } catch (err) {
       // Handle different error formats
-      let errorMessage = 'Registration failed. Please try again.';
-      
+      let errorMessage = "Registration failed. Please try again.";
+
       if (err instanceof Error) {
         errorMessage = err.message;
-      } else if (typeof err === 'string') {
+      } else if (typeof err === "string") {
         errorMessage = err;
-      } else if (err && typeof err === 'object' && 'message' in err) {
+      } else if (err && typeof err === "object" && "message" in err) {
         errorMessage = String((err as any).message);
       }
-      
+
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -113,24 +123,24 @@ export default function RegisterPage() {
           color: var(--color-foreground, #0f172a) !important;
           border: 1px solid var(--color-border, #e2e8f0) !important;
         }
-        
+
         .register-input:focus {
           border-color: var(--color-primary, #3b82f6) !important;
           outline: none !important;
           box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
         }
-        
+
         .register-input::placeholder {
           color: var(--color-muted-foreground, #64748b) !important;
           opacity: 0.7 !important;
         }
-        
+
         .dark .register-input {
           background-color: var(--color-card, #1e2433) !important;
           color: var(--color-foreground, #f8fafc) !important;
           border-color: var(--color-border, #334155) !important;
         }
-        
+
         .dark .register-input::placeholder {
           color: var(--color-muted-foreground, #94a3b8) !important;
           opacity: 0.8 !important;
@@ -138,29 +148,36 @@ export default function RegisterPage() {
       `}</style>
 
       <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
-        <div 
+        <div
           className="w-full max-w-sm sm:max-w-md space-y-6 md:space-y-8 p-6 md:p-8 rounded-xl shadow-lg border"
           style={{
-            backgroundColor: 'var(--color-card, #ffffff)',
-            borderColor: 'var(--color-border, #e2e8f0)'
+            backgroundColor: "var(--color-card, #ffffff)",
+            borderColor: "var(--color-border, #e2e8f0)",
           }}
         >
           {/* Logo and Title */}
           <div className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-xl md:text-2xl">T</span>
+            <div className="flex justify-center mb-3">
+              <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
+                <Image
+                  src="/threadup_icon_gradient.svg"
+                  alt="ThreadUp"
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-contain drop-shadow-lg"
+                  priority
+                />
               </div>
             </div>
-            <h2 
+            <h2
               className="text-2xl md:text-3xl font-bold"
-              style={{ color: 'var(--color-foreground, #0f172a)' }}
+              style={{ color: "var(--color-foreground, #0f172a)" }}
             >
               Join ThreadUp
             </h2>
-            <p 
+            <p
               className="mt-2 text-sm md:text-base"
-              style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+              style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               Create your account to get started
             </p>
@@ -169,12 +186,12 @@ export default function RegisterPage() {
           {/* Register Form */}
           <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div 
+              <div
                 className="border rounded-lg p-3 text-center"
                 style={{
-                  backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                  borderColor: 'rgba(239, 68, 68, 0.3)',
-                  color: 'var(--color-destructive, #ef4444)'
+                  backgroundColor: "rgba(239, 68, 68, 0.1)",
+                  borderColor: "rgba(239, 68, 68, 0.3)",
+                  color: "var(--color-destructive, #ef4444)",
                 }}
               >
                 <p className="text-sm">{error}</p>
@@ -196,7 +213,7 @@ export default function RegisterPage() {
                   className="register-input w-full px-3 py-3 md:py-2 rounded-lg transition-colors duration-200"
                   disabled={loading}
                   style={{
-                    fontSize: '16px' // Prevent iOS zoom
+                    fontSize: "16px", // Prevent iOS zoom
                   }}
                 />
               </div>
@@ -213,7 +230,7 @@ export default function RegisterPage() {
                   className="register-input w-full px-3 py-3 md:py-2 rounded-lg transition-colors duration-200"
                   disabled={loading}
                   style={{
-                    fontSize: '16px'
+                    fontSize: "16px",
                   }}
                 />
               </div>
@@ -232,7 +249,7 @@ export default function RegisterPage() {
                 className="register-input w-full px-3 py-3 md:py-2 rounded-lg transition-colors duration-200"
                 disabled={loading}
                 style={{
-                  fontSize: '16px'
+                  fontSize: "16px",
                 }}
               />
             </div>
@@ -250,68 +267,160 @@ export default function RegisterPage() {
                 className="register-input w-full px-3 py-3 md:py-2 rounded-lg transition-colors duration-200"
                 disabled={loading}
                 style={{
-                  fontSize: '16px'
+                  fontSize: "16px",
                 }}
               />
             </div>
 
-            <div>
+            <div className="relative">
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 autoComplete="new-password"
                 required
                 placeholder="Password (min. 6 characters)"
                 value={formData.password}
                 onChange={handleChange}
-                className="register-input w-full px-3 py-3 md:py-2 rounded-lg transition-colors duration-200"
+                className="register-input w-full px-3 py-3 md:py-2 pr-10 rounded-lg transition-colors duration-200"
                 disabled={loading}
                 style={{
-                  fontSize: '16px'
+                  fontSize: "16px",
                 }}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                disabled={loading}
+              >
+                {showPassword ? (
+                  <svg
+                    className="h-5 w-5 text-gray-400 hover:text-gray-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="h-5 w-5 text-gray-400 hover:text-gray-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                )}
+              </button>
             </div>
 
-            <div>
+            <div className="relative">
               <input
                 id="confirmPassword"
                 name="confirmPassword"
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 autoComplete="new-password"
                 required
                 placeholder="Confirm password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="register-input w-full px-3 py-3 md:py-2 rounded-lg transition-colors duration-200"
+                className="register-input w-full px-3 py-3 md:py-2 pr-10 rounded-lg transition-colors duration-200"
                 disabled={loading}
                 style={{
-                  fontSize: '16px'
+                  fontSize: "16px",
                 }}
               />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                disabled={loading}
+              >
+                {showConfirmPassword ? (
+                  <svg
+                    className="h-5 w-5 text-gray-400 hover:text-gray-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="h-5 w-5 text-gray-400 hover:text-gray-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                )}
+              </button>
             </div>
 
             <Button
               type="submit"
-              disabled={loading || !formData.firstName.trim() || !formData.lastName.trim() || !formData.username.trim() || !formData.email.trim() || !formData.password.trim() || !formData.confirmPassword.trim()}
+              disabled={
+                loading ||
+                !formData.firstName.trim() ||
+                !formData.lastName.trim() ||
+                !formData.username.trim() ||
+                !formData.email.trim() ||
+                !formData.password.trim() ||
+                !formData.confirmPassword.trim()
+              }
               loading={loading}
               className="w-full py-3 text-base md:text-sm font-medium"
             >
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {loading ? "Creating Account..." : "Create Account"}
             </Button>
           </form>
 
           {/* Links */}
           <div className="text-center">
-            <p 
+            <p
               className="text-sm"
-              style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+              style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
-              Already have an account?{' '}
-              <Link 
-                href="/login" 
+              Already have an account?{" "}
+              <Link
+                href="/login"
                 className="font-medium underline hover:opacity-80 transition-opacity"
-                style={{ color: 'var(--color-primary, #3b82f6)' }}
+                style={{ color: "var(--color-primary, #3b82f6)" }}
               >
                 Sign in
               </Link>
@@ -320,23 +429,23 @@ export default function RegisterPage() {
 
           {/* Terms */}
           <div className="text-center">
-            <p 
+            <p
               className="text-xs leading-relaxed"
-              style={{ color: 'var(--color-muted-foreground, #64748b)' }}
+              style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
-              By creating an account, you agree to our{' '}
-              <Link 
-                href="/terms" 
+              By creating an account, you agree to our{" "}
+              <Link
+                href="/terms"
                 className="underline hover:opacity-80 transition-opacity"
-                style={{ color: 'var(--color-primary, #3b82f6)' }}
+                style={{ color: "var(--color-primary, #3b82f6)" }}
               >
                 Terms of Service
-              </Link>{' '}
-              and{' '}
-              <Link 
-                href="/privacy" 
+              </Link>{" "}
+              and{" "}
+              <Link
+                href="/privacy"
                 className="underline hover:opacity-80 transition-opacity"
-                style={{ color: 'var(--color-primary, #3b82f6)' }}
+                style={{ color: "var(--color-primary, #3b82f6)" }}
               >
                 Privacy Policy
               </Link>
