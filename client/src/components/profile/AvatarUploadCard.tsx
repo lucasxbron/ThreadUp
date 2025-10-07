@@ -49,13 +49,13 @@ export const AvatarUploadCard: React.FC = () => {
       // Step 1: Upload image using existing upload endpoint
       const formData = new FormData();
       formData.append("file", croppedFile);
-      formData.append("type", "profile");
+      // formData.append("type", "profile");
 
       const uploadResponse = await apiClient.uploadAvatar(formData);
 
-      if (uploadResponse.data?.file) {
+      if (uploadResponse.data?.profileImage) {
         // Step 2: Update user profile with new avatar
-        const { url, public_id } = uploadResponse.data.file;
+        const { url, public_id } = uploadResponse.data.profileImage;
 
         const profileResponse = await apiClient.updateUserAvatar(
           url,
@@ -91,7 +91,7 @@ export const AvatarUploadCard: React.FC = () => {
     setSuccess("");
 
     try {
-      const response = await apiClient.deleteAvatar();
+      const response = await apiClient.updateUserAvatar(null, null);
 
       if (response.data || response.message) {
         setSuccess("Profile picture removed successfully!");

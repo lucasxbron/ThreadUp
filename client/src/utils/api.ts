@@ -314,14 +314,17 @@ class ApiClient {
   }
 
   async uploadAvatar(formData: FormData) {
-    formData.append("type", "profile");
-    return this.makeRequest("/api/upload", {
+    // formData.append("type", "profile");
+    return this.makeRequest("/api/upload/profile", {
       method: "POST",
       body: formData,
     });
   }
 
-  async updateUserAvatar(avatarUrl: string, avatarPublicId: string) {
+  async updateUserAvatar(
+    avatarUrl: string | null,
+    avatarPublicId: string | null
+  ) {
     return this.makeRequest("/api/auth/profile", {
       method: "PUT",
       body: JSON.stringify({
@@ -331,14 +334,19 @@ class ApiClient {
     });
   }
 
+  // async deleteAvatar() {
+  //   return this.makeRequest("/api/auth/profile", {
+  //     method: "PUT",
+  //     body: JSON.stringify({
+  //       avatarUrl: null,
+  //       avatarPublicId: null,
+  //     }),
+  //   });
+  // }
+
   async deleteAvatar() {
-    return this.makeRequest("/api/auth/profile", {
-      method: "PUT",
-      body: JSON.stringify({
-        avatarUrl: null,
-        avatarPublicId: null,
-      }),
-    });
+    // Use the updateUserAvatar method with null values
+    return this.updateUserAvatar(null, null);
   }
 
   async submitContactForm(data: {

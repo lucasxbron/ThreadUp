@@ -12,6 +12,7 @@ import { sendEmailChangeVerification } from "../utils/emails/emailChange.js";
 import crypto from "crypto";
 import mongoose from "mongoose";
 import { sendPasswordResetEmail } from "../utils/emails/passwordReset.js";
+import { deleteFromCloudinary } from "../utils/cloudinary.js";
 
 const secret = config.JWT_SECRET;
 
@@ -283,12 +284,45 @@ export const updateOwnProfile = async (
       updateData.username = username.trim().toLowerCase();
     }
 
-    // Handle avatar updates
-    if (avatarUrl !== undefined) {
-      updateData.avatarUrl = avatarUrl;
+    // Handle avatar deletion from Cloudinary
+    const currentUser = await User.findById(req.user?._id);
+    if (!currentUser) {
+      throw createHttpError(404, "User not found");
     }
-    if (avatarPublicId !== undefined) {
-      updateData.avatarPublicId = avatarPublicId;
+
+    // If avatarUrl is being set to null/undefined (deletion)
+    if (avatarUrl === null || avatarUrl === undefined) {
+      // Delete the current avatar from Cloudinary if it exists
+      if (currentUser.avatarPublicId) {
+        try {
+          await deleteFromCloudinary(currentUser.avatarPublicId);
+        } catch (error) {
+          console.warn("Failed to delete avatar from Cloudinary:", error);
+          // Continue with profile update even if Cloudinary deletion fails
+        }
+      }
+      updateData.avatarUrl = null;
+      updateData.avatarPublicId = null;
+    } else {
+      // Handle avatar updates (new avatar uploaded)
+      if (avatarUrl !== undefined) {
+        // If updating to a new avatar, delete the old one from Cloudinary
+        if (
+          currentUser.avatarPublicId &&
+          avatarPublicId !== currentUser.avatarPublicId
+        ) {
+          try {
+            await deleteFromCloudinary(currentUser.avatarPublicId);
+          } catch (error) {
+            console.warn("Failed to delete old avatar from Cloudinary:", error);
+            // Continue with profile update even if old image deletion fails
+          }
+        }
+        updateData.avatarUrl = avatarUrl;
+      }
+      if (avatarPublicId !== undefined) {
+        updateData.avatarPublicId = avatarPublicId;
+      }
     }
 
     if (Object.keys(updateData).length === 0) {
