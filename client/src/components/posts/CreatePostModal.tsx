@@ -229,6 +229,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               style={{
                 color: "var(--color-muted-foreground, #64748b)",
                 backgroundColor: "transparent",
+                zIndex: 10,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor =
@@ -257,14 +258,6 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               </svg>
             </button>
           </div>
-
-          {/* Emoji Picker */}
-          <EmojiPicker
-            isOpen={showEmojiPicker}
-            onClose={() => setShowEmojiPicker(false)}
-            onEmojiSelect={handleEmojiSelect}
-            triggerRef={emojiButtonRef}
-          />
 
           {/* Image Preview with variable height */}
           {imagePreview && (
@@ -427,6 +420,18 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
           </div>
         </form>
       </Modal>
+
+      {/* EmojiPicker rendered outside Modal to prevent overflow */}
+      {showEmojiPicker && (
+        <div style={{ position: "fixed", zIndex: 9999 }}>
+          <EmojiPicker
+            isOpen={showEmojiPicker}
+            onClose={() => setShowEmojiPicker(false)}
+            onEmojiSelect={handleEmojiSelect}
+            triggerRef={emojiButtonRef}
+          />
+        </div>
+      )}
     </>
   );
 };
