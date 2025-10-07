@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Modal } from "./Modal";
 
 interface ImageCropperProps {
@@ -10,6 +10,13 @@ interface ImageCropperProps {
   onCropComplete: (croppedFile: File) => void;
 }
 
+interface CropArea {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export const ImageCropper: React.FC<ImageCropperProps> = ({
   isOpen,
   onClose,
@@ -17,14 +24,29 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
   onCropComplete,
 }) => {
   const [imageSrc, setImageSrc] = useState<string>("");
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
   const [loading, setLoading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+
+  // Crop area in pixels, always maintains square aspect ratio
+  const [cropArea, setCropArea] = useState<CropArea>({
+    x: 0,
+    y: 0,
+    width: 200,
+    height: 200,
+  });
+
+  const [isDragging, setIsDragging] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [resizeHandle, setResizeHandle] = useState<string>("");
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (imageFile) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -36,11 +58,241 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
   }, [imageFile]);
 
   const handleImageLoad = () => {
+    const image = imageRef.current;
+    const container = containerRef.current;
+
+    if (!image || !container) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const containerAspect = containerRect.width / containerRect.height;
+    const imageAspect = image.naturalWidth / image.naturalHeight;
+
+    let displayWidth, displayHeight;
+
+    if (imageAspect > containerAspect) {
+      displayWidth = containerRect.width;
+      displayHeight = displayWidth / imageAspect;
+    } else {
+      displayHeight = containerRect.height;
+      displayWidth = displayHeight * imageAspect;
+    }
+
+    setImageSize({ width: displayWidth, height: displayHeight });
+    setContainerSize({
+      width: containerRect.width,
+      height: containerRect.height,
+    });
     setImageLoaded(true);
-    // Reset crop and zoom when new image loads
-    setCrop({ x: 0, y: 0 });
-    setZoom(1);
+
+    // Calculate image offset within container
+    const imageOffsetX = (containerRect.width - displayWidth) / 2;
+    const imageOffsetY = (containerRect.height - displayHeight) / 2;
+
+    // Initialize crop area as square in the center
+    const minDimension = Math.min(displayWidth, displayHeight);
+    const cropSize = Math.min(200, minDimension * 0.6); // 60% of smaller dimension, max 200px
+
+    setCropArea({
+      x: imageOffsetX + (displayWidth - cropSize) / 2,
+      y: imageOffsetY + (displayHeight - cropSize) / 2,
+      width: cropSize,
+      height: cropSize,
+    });
   };
+
+  // Handle mouse down on crop area
+  const handleMouseDown = (e: React.MouseEvent, handle?: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setDragStart({ x, y });
+
+    if (handle) {
+      setIsResizing(true);
+      setResizeHandle(handle);
+      setIsDragging(false);
+    } else {
+      setIsDragging(true);
+      setIsResizing(false);
+      setResizeHandle("");
+    }
+  };
+
+  // Handle resize handle mouse down
+  const handleResizeMouseDown = (e: React.MouseEvent, handle: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setDragStart({ x, y });
+    setIsResizing(true);
+    setResizeHandle(handle);
+    setIsDragging(false);
+  };
+
+  // Handle mouse move
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const deltaX = x - dragStart.x;
+      const deltaY = y - dragStart.y;
+
+      // Get image position within container
+      const imageOffsetX = (containerSize.width - imageSize.width) / 2;
+      const imageOffsetY = (containerSize.height - imageSize.height) / 2;
+
+      if (isDragging && !isResizing) {
+        // Move crop area - keep it within image bounds
+        setCropArea((prev) => {
+          const newX = Math.max(
+            imageOffsetX,
+            Math.min(
+              imageOffsetX + imageSize.width - prev.width,
+              prev.x + deltaX
+            )
+          );
+          const newY = Math.max(
+            imageOffsetY,
+            Math.min(
+              imageOffsetY + imageSize.height - prev.height,
+              prev.y + deltaY
+            )
+          );
+          return { ...prev, x: newX, y: newY };
+        });
+
+        setDragStart({ x, y });
+      } else if (isResizing && !isDragging && resizeHandle) {
+        // Resize crop area maintaining square aspect ratio
+        setCropArea((prev) => {
+          let newCrop = { ...prev };
+          const minSize = 50; // Minimum crop size
+          const maxSize = Math.min(imageSize.width, imageSize.height);
+
+          switch (resizeHandle) {
+            case "se": // Southeast corner
+              const newSize = Math.max(
+                minSize,
+                Math.min(
+                  maxSize,
+                  prev.width + deltaX,
+                  prev.height + deltaY,
+                  imageOffsetX + imageSize.width - prev.x, // Max width within image
+                  imageOffsetY + imageSize.height - prev.y // Max height within image
+                )
+              );
+              newCrop.width = newSize;
+              newCrop.height = newSize;
+              break;
+
+            case "sw": // Southwest corner
+              const swSize = Math.max(
+                minSize,
+                Math.min(
+                  maxSize,
+                  prev.width - deltaX,
+                  prev.height + deltaY,
+                  prev.x - imageOffsetX, // Can't go beyond left edge
+                  imageOffsetY + imageSize.height - prev.y // Max height within image
+                )
+              );
+              if (
+                swSize >= minSize &&
+                prev.x - (swSize - prev.width) >= imageOffsetX
+              ) {
+                newCrop.x = prev.x - (swSize - prev.width);
+                newCrop.width = swSize;
+                newCrop.height = swSize;
+              }
+              break;
+
+            case "ne": // Northeast corner
+              const neSize = Math.max(
+                minSize,
+                Math.min(
+                  maxSize,
+                  prev.width + deltaX,
+                  prev.height - deltaY,
+                  imageOffsetX + imageSize.width - prev.x, // Max width within image
+                  prev.y - imageOffsetY // Can't go beyond top edge
+                )
+              );
+              if (
+                neSize >= minSize &&
+                prev.y - (neSize - prev.height) >= imageOffsetY
+              ) {
+                newCrop.y = prev.y - (neSize - prev.height);
+                newCrop.width = neSize;
+                newCrop.height = neSize;
+              }
+              break;
+
+            case "nw": // Northwest corner
+              const nwSize = Math.max(
+                minSize,
+                Math.min(
+                  maxSize,
+                  prev.width - deltaX,
+                  prev.height - deltaY,
+                  prev.x - imageOffsetX, // Can't go beyond left edge
+                  prev.y - imageOffsetY // Can't go beyond top edge
+                )
+              );
+              if (
+                nwSize >= minSize &&
+                prev.x - (nwSize - prev.width) >= imageOffsetX &&
+                prev.y - (nwSize - prev.height) >= imageOffsetY
+              ) {
+                newCrop.x = prev.x - (nwSize - prev.width);
+                newCrop.y = prev.y - (nwSize - prev.height);
+                newCrop.width = nwSize;
+                newCrop.height = nwSize;
+              }
+              break;
+          }
+
+          return newCrop;
+        });
+
+        setDragStart({ x, y });
+      }
+    },
+    [isDragging, isResizing, dragStart, imageSize, containerSize, resizeHandle]
+  );
+
+  // Handle mouse up
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+    setIsResizing(false);
+    setResizeHandle("");
+  }, []);
+
+  // Add event listeners
+  useEffect(() => {
+    if (isDragging || isResizing) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+      };
+    }
+  }, [isDragging, isResizing, handleMouseMove, handleMouseUp]);
 
   const createCroppedImage = useCallback(async () => {
     const canvas = canvasRef.current;
@@ -52,35 +304,39 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
     if (!ctx) return null;
 
     // Set canvas size to square (400x400 for avatars)
-    const size = 400;
-    canvas.width = size;
-    canvas.height = size;
+    const outputSize = 400;
+    canvas.width = outputSize;
+    canvas.height = outputSize;
 
-    // Calculate the crop area in the original image coordinates
-    const cropSize = Math.min(image.naturalWidth, image.naturalHeight) / zoom;
-    const cropX = (image.naturalWidth - cropSize) / 2 + (crop.x * cropSize) / 100;
-    const cropY = (image.naturalHeight - cropSize) / 2 + (crop.y * cropSize) / 100;
+    // Calculate crop area in original image coordinates
+    const scaleX = image.naturalWidth / imageSize.width;
+    const scaleY = image.naturalHeight / imageSize.height;
 
-    // Ensure crop area stays within image bounds
-    const clampedCropX = Math.max(0, Math.min(cropX, image.naturalWidth - cropSize));
-    const clampedCropY = Math.max(0, Math.min(cropY, image.naturalHeight - cropSize));
-    const clampedCropSize = Math.min(cropSize, image.naturalWidth - clampedCropX, image.naturalHeight - clampedCropY);
+    // Get image offset within container
+    const imageOffsetX = (containerSize.width - imageSize.width) / 2;
+    const imageOffsetY = (containerSize.height - imageSize.height) / 2;
+
+    // Calculate crop coordinates relative to the image (not container)
+    const cropX = (cropArea.x - imageOffsetX) * scaleX;
+    const cropY = (cropArea.y - imageOffsetY) * scaleY;
+    const cropWidth = cropArea.width * scaleX;
+    const cropHeight = cropArea.height * scaleY;
 
     // Clear canvas with white background
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, size, size);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, outputSize, outputSize);
 
-    // Draw cropped and scaled image
+    // Draw cropped image
     ctx.drawImage(
       image,
-      clampedCropX,
-      clampedCropY,
-      clampedCropSize,
-      clampedCropSize,
+      cropX,
+      cropY,
+      cropWidth,
+      cropHeight,
       0,
       0,
-      size,
-      size
+      outputSize,
+      outputSize
     );
 
     return new Promise<File>((resolve, reject) => {
@@ -99,7 +355,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
         0.9
       );
     });
-  }, [crop, zoom, imageLoaded]);
+  }, [cropArea, imageLoaded, imageSize, containerSize]);
 
   const handleSave = async () => {
     setLoading(true);
@@ -116,32 +372,6 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
     }
   };
 
-  const getImageDisplaySize = () => {
-    const image = imageRef.current;
-    if (!image) return { width: 0, height: 0 };
-
-    const containerWidth = 300; // Max display width
-    const containerHeight = 300; // Max display height
-    
-    const aspectRatio = image.naturalWidth / image.naturalHeight;
-    
-    let displayWidth, displayHeight;
-    
-    if (aspectRatio > 1) {
-      // Wide image
-      displayWidth = Math.min(containerWidth, image.naturalWidth);
-      displayHeight = displayWidth / aspectRatio;
-    } else {
-      // Tall or square image
-      displayHeight = Math.min(containerHeight, image.naturalHeight);
-      displayWidth = displayHeight * aspectRatio;
-    }
-    
-    return { width: displayWidth, height: displayHeight };
-  };
-
-  const displaySize = getImageDisplaySize();
-
   return (
     <Modal
       isOpen={isOpen}
@@ -150,13 +380,14 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
       size="lg"
     >
       <div className="space-y-4">
-        {/* Image Preview */}
-        <div 
-          className="relative mx-auto bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center"
-          style={{ 
-            width: '320px', 
-            height: '320px',
-            backgroundColor: 'var(--color-muted, #f1f5f9)'
+        {/* Image Preview with Crop Overlay */}
+        <div
+          ref={containerRef}
+          className="relative mx-auto bg-gray-100 rounded-lg overflow-hidden select-none"
+          style={{
+            width: "400px",
+            height: "400px",
+            backgroundColor: "var(--color-muted, #f1f5f9)",
           }}
         >
           {imageSrc && (
@@ -166,140 +397,110 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
                 src={imageSrc}
                 alt="Crop preview"
                 onLoad={handleImageLoad}
-                className="absolute"
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
                 style={{
-                  width: `${displaySize.width * zoom}px`,
-                  height: `${displaySize.height * zoom}px`,
-                  transform: `translate(${crop.x}px, ${crop.y}px)`,
-                  objectFit: 'contain',
-                  left: '50%',
-                  top: '50%',
-                  marginLeft: `${-(displaySize.width * zoom) / 2}px`,
-                  marginTop: `${-(displaySize.height * zoom) / 2}px`,
+                  width: `${imageSize.width}px`,
+                  height: `${imageSize.height}px`,
+                  objectFit: "contain",
+                  pointerEvents: "none",
                 }}
+                draggable={false}
               />
 
-              {/* Crop overlay - circular guide */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div
-                  className="absolute border-4 border-white rounded-full shadow-lg"
-                  style={{
-                    width: "200px",
-                    height: "200px",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    boxShadow: "0 0 0 200px rgba(0, 0, 0, 0.5)",
-                  }}
-                />
-                {/* Center crosshair */}
-                <div
-                  className="absolute"
-                  style={{
-                    top: "50%",
-                    left: "50%",
-                    width: "20px",
-                    height: "1px",
-                    backgroundColor: "white",
-                    transform: "translate(-50%, -50%)",
-                  }}
-                />
-                <div
-                  className="absolute"
-                  style={{
-                    top: "50%",
-                    left: "50%",
-                    width: "1px",
-                    height: "20px",
-                    backgroundColor: "white",
-                    transform: "translate(-50%, -50%)",
-                  }}
-                />
-              </div>
+              {/* Crop Overlay */}
+              {imageLoaded && (
+                <div className="absolute inset-0">
+                  {/* Dark overlay using proper positioning */}
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: "rgba(0,0,0,0.5)",
+                    }}
+                  />
+
+                  {/* Clear crop area */}
+                  <div
+                    className="absolute"
+                    style={{
+                      left: `${cropArea.x}px`,
+                      top: `${cropArea.y}px`,
+                      width: `${cropArea.width}px`,
+                      height: `${cropArea.height}px`,
+                      background: "transparent",
+                      boxShadow: `
+                        0 0 0 9999px rgba(0,0,0,0.5),
+                        inset 0 0 0 2px white,
+                        inset 0 0 0 3px rgba(0,0,0,0.3)
+                      `,
+                    }}
+                  />
+
+                  {/* Crop area with handles */}
+                  <div
+                    className="absolute border-2 border-white cursor-move"
+                    style={{
+                      left: `${cropArea.x}px`,
+                      top: `${cropArea.y}px`,
+                      width: `${cropArea.width}px`,
+                      height: `${cropArea.height}px`,
+                      boxShadow: "0 0 0 1px rgba(0,0,0,0.3)",
+                    }}
+                    onMouseDown={(e) => handleMouseDown(e)}
+                  >
+                    {/* Corner resize handles */}
+                    <div
+                      className="absolute w-4 h-4 bg-white border border-gray-400 cursor-nw-resize -top-2 -left-2 rounded-sm"
+                      onMouseDown={(e) => handleResizeMouseDown(e, "nw")}
+                    />
+                    <div
+                      className="absolute w-4 h-4 bg-white border border-gray-400 cursor-ne-resize -top-2 -right-2 rounded-sm"
+                      onMouseDown={(e) => handleResizeMouseDown(e, "ne")}
+                    />
+                    <div
+                      className="absolute w-4 h-4 bg-white border border-gray-400 cursor-sw-resize -bottom-2 -left-2 rounded-sm"
+                      onMouseDown={(e) => handleResizeMouseDown(e, "sw")}
+                    />
+                    <div
+                      className="absolute w-4 h-4 bg-white border border-gray-400 cursor-se-resize -bottom-2 -right-2 rounded-sm"
+                      onMouseDown={(e) => handleResizeMouseDown(e, "se")}
+                    />
+
+                    {/* Grid lines */}
+                    <div className="absolute inset-0 pointer-events-none">
+                      <div
+                        className="absolute border-l border-white opacity-30"
+                        style={{ left: "33.33%", top: 0, height: "100%" }}
+                      />
+                      <div
+                        className="absolute border-l border-white opacity-30"
+                        style={{ left: "66.66%", top: 0, height: "100%" }}
+                      />
+                      <div
+                        className="absolute border-t border-white opacity-30"
+                        style={{ top: "33.33%", left: 0, width: "100%" }}
+                      />
+                      <div
+                        className="absolute border-t border-white opacity-30"
+                        style={{ top: "66.66%", left: 0, width: "100%" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </>
           )}
         </div>
 
-        {/* Controls */}
+        {/* Instructions */}
         {imageLoaded && (
-          <div className="space-y-4">
-            <div>
-              <label
-                className="block text-sm font-medium mb-2"
-                style={{ color: "var(--color-foreground, #0f172a)" }}
-              >
-                Zoom: {zoom.toFixed(1)}x
-              </label>
-              <input
-                type="range"
-                min={0.5}
-                max={3}
-                step={0.1}
-                value={zoom}
-                onChange={(e) => setZoom(Number(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                style={{
-                  background: `linear-gradient(to right, var(--color-primary, #3b82f6) 0%, var(--color-primary, #3b82f6) ${((zoom - 0.5) / 2.5) * 100}%, var(--color-muted, #e2e8f0) ${((zoom - 0.5) / 2.5) * 100}%, var(--color-muted, #e2e8f0) 100%)`
-                }}
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label
-                  className="block text-sm font-medium mb-1"
-                  style={{ color: "var(--color-foreground, #0f172a)" }}
-                >
-                  Horizontal Position
-                </label>
-                <input
-                  type="range"
-                  min={-100}
-                  max={100}
-                  step={1}
-                  value={crop.x}
-                  onChange={(e) =>
-                    setCrop((prev) => ({ ...prev, x: Number(e.target.value) }))
-                  }
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
-              </div>
-              <div>
-                <label
-                  className="block text-sm font-medium mb-1"
-                  style={{ color: "var(--color-foreground, #0f172a)" }}
-                >
-                  Vertical Position
-                </label>
-                <input
-                  type="range"
-                  min={-100}
-                  max={100}
-                  step={1}
-                  value={crop.y}
-                  onChange={(e) =>
-                    setCrop((prev) => ({ ...prev, y: Number(e.target.value) }))
-                  }
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
-              </div>
-            </div>
-
-            {/* Reset button */}
-            <button
-              onClick={() => {
-                setCrop({ x: 0, y: 0 });
-                setZoom(1);
-              }}
-              className="text-sm px-3 py-1 rounded transition-colors"
-              style={{
-                color: "var(--color-primary, #3b82f6)",
-                backgroundColor: "transparent",
-                border: `1px solid var(--color-border, #e2e8f0)`,
-              }}
-            >
-              Reset Position & Zoom
-            </button>
+          <div
+            className="text-center text-sm p-3 rounded-lg"
+            style={{
+              backgroundColor: "var(--color-muted, #f1f5f9)",
+              color: "var(--color-muted-foreground, #64748b)",
+            }}
+          >
+            Drag the crop area to reposition. Drag corners to resize.
           </div>
         )}
 
@@ -307,7 +508,10 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
         <canvas ref={canvasRef} className="hidden" />
 
         {/* Action Buttons */}
-        <div className="flex space-x-3 justify-end pt-4 border-t" style={{ borderColor: "var(--color-border, #e2e8f0)" }}>
+        <div
+          className="flex space-x-3 justify-end pt-4 border-t"
+          style={{ borderColor: "var(--color-border, #e2e8f0)" }}
+        >
           <button
             onClick={onClose}
             disabled={loading}
