@@ -25,7 +25,7 @@ router.post(
 router.post(
   "/profile",
   verifyToken,
-  upload.single("profileImage"),
+  upload.single("file"),
   uploadController.uploadProfileImage
 );
 router.post(
