@@ -515,9 +515,6 @@ export const PostCard: React.FC<PostCardProps> = ({
             className="text-sm leading-relaxed"
             style={{ color: "var(--color-card-foreground, #0f172a)" }}
           >
-            <span className="font-semibold mr-2">
-              {getFullName(post.authorId.firstName, post.authorId.lastName)}
-            </span>
             <span
               className="whitespace-pre-wrap break-words"
               style={{
