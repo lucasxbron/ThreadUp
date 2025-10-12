@@ -132,7 +132,13 @@ export const login = async (
       throw createHttpError(400, "Email and password are required");
     }
 
-    const user = await User.findOne({ email });
+    // Normalize the email for lookup (same as during registration)
+    const normalizedEmail =
+      validator.normalizeEmail(email.trim(), {
+        gmail_remove_dots: false,
+      }) || email.trim(); // Use original if normalization fails
+
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       throw createHttpError(401, "Invalid credentials");
     }
@@ -203,7 +209,13 @@ export const resendVerification = async (
       throw createHttpError(400, "Email is required");
     }
 
-    const user = await User.findOne({ email });
+    // Normalize the email for lookup (same as during registration)
+    const normalizedEmail =
+      validator.normalizeEmail(email.trim(), {
+        gmail_remove_dots: false,
+      }) || email.trim(); // Use original if normalization fails
+
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       throw createHttpError(404, "User not found");
     }
@@ -218,7 +230,7 @@ export const resendVerification = async (
     await user.save();
 
     // Send new verification email
-    await sendVerificationEmail(email, verificationToken);
+    await sendVerificationEmail(normalizedEmail, verificationToken);
 
     res.status(200).json({
       message: "Verification email sent successfully! Please check your inbox.",
@@ -757,7 +769,13 @@ export const forgotPassword = async (
       throw createHttpError(400, "Invalid email format");
     }
 
-    const user = await User.findOne({ email: email.trim() });
+    // Normalize the email for lookup (same as during registration)
+    const normalizedEmail =
+      validator.normalizeEmail(email.trim(), {
+        gmail_remove_dots: false,
+      }) || email.trim(); // Use original if normalization fails
+
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       // Don't reveal if email exists or not for security
       return res.status(200).json({
