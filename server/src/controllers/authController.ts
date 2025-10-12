@@ -590,7 +590,7 @@ export const requestEmailChange = async (
     const normalizedNewEmail =
       validator.normalizeEmail(newEmail, {
         gmail_remove_dots: false,
-      }) || newEmail;
+      }) || newEmail; // Use original if normalization fails
 
     if (normalizedNewEmail === user.email) {
       throw createHttpError(
