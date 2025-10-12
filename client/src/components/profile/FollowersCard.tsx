@@ -104,7 +104,18 @@ export const FollowersCard: React.FC = () => {
   };
 
   const handleFollow = async (userId: string) => {
-    if (!isAuthenticated || !user) {
+    if (!isAuthenticated || !user || !userId || userId === "undefined") {
+      console.warn("Invalid follow attempt:", {
+        isAuthenticated,
+        user: !!user,
+        userId,
+      });
+      return;
+    }
+
+    // Additional validation
+    if (userId === user._id) {
+      console.warn("User attempted to follow themselves");
       return;
     }
 
@@ -299,104 +310,120 @@ export const FollowersCard: React.FC = () => {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    {followers.slice(0, 3).map((follower) => {
-                      // Use ONLY global state, not server state
-                      const globalState = getFollowState(follower.user._id);
-                      const isFollowingThem = globalState?.isFollowing ?? false; // Default to false if no state
-                      const isLoading = globalState?.isLoading ?? false;
+                    {followers
+                      .slice(0, 3)
+                      .map((follower) => {
+                        // Validate follower data
+                        if (
+                          !follower?.user?._id ||
+                          follower.user._id === "undefined"
+                        ) {
+                          console.warn("Invalid follower data:", follower);
+                          return null; // Skip rendering this item
+                        }
 
-                      return (
-                        <div
-                          key={follower.user._id}
-                          className="flex items-center space-x-2"
-                        >
-                          <div className="flex-shrink-0">
-                            <Avatar
-                              user={{
-                                firstName: follower.user.firstName,
-                                lastName: follower.user.lastName,
-                                avatarUrl: follower.user.avatarUrl,
-                              }}
-                              size="sm"
-                            />
-                          </div>
+                        // Use ONLY global state, not server state
+                        const globalState = getFollowState(follower.user._id);
+                        const isFollowingThem =
+                          globalState?.isFollowing ?? false;
+                        const isLoading = globalState?.isLoading ?? false;
 
-                          <div className="flex-1 min-w-0">
-                            <p
-                              className="text-xs font-medium truncate"
-                              style={{
-                                color: "var(--color-card-foreground, #0f172a)",
-                              }}
-                            >
-                              {getFullName(
-                                follower.user.firstName,
-                                follower.user.lastName
-                              )}
-                            </p>
-                            <p
-                              className="text-xs truncate"
-                              style={{
-                                color: "var(--color-muted-foreground, #64748b)",
-                              }}
-                            >
-                              @{follower.user.username}
-                            </p>
-                          </div>
-
-                          <button
-                            onClick={() => handleFollow(follower.user._id)}
-                            disabled={isLoading}
-                            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
-                              isFollowingThem
-                                ? "cursor-default"
-                                : "hover:scale-105"
-                            }`}
-                            style={{
-                              minWidth: "64px",
-                              backgroundColor: isFollowingThem
-                                ? "var(--color-secondary, #f1f5f9)"
-                                : "var(--color-primary, #3b82f6)",
-                              color: isFollowingThem
-                                ? "var(--color-secondary-foreground, #1f2937)"
-                                : "white",
-                            }}
-                            onMouseEnter={(e) => {
-                              if (!isFollowingThem) {
-                                e.currentTarget.style.backgroundColor =
-                                  "var(--color-primary-600, #2563eb)";
-                              } else {
-                                e.currentTarget.style.backgroundColor =
-                                  "var(--color-secondary-400, #e2e8f0)";
-                              }
-                            }}
-                            onMouseLeave={(e) => {
-                              if (!isFollowingThem) {
-                                e.currentTarget.style.backgroundColor =
-                                  "var(--color-primary, #3b82f6)";
-                              } else {
-                                e.currentTarget.style.backgroundColor =
-                                  "var(--color-secondary, #f1f5f9)";
-                              }
-                            }}
+                        return (
+                          <div
+                            key={follower.user._id}
+                            className="flex items-center space-x-2"
                           >
-                            {isLoading ? (
-                              <div
-                                className="animate-spin rounded-full h-3 w-3 border border-t-transparent mx-auto"
-                                style={{
-                                  borderColor: isFollowingThem
-                                    ? "var(--color-secondary-foreground, #1f2937)"
-                                    : "white",
+                            <div className="flex-shrink-0">
+                              <Avatar
+                                user={{
+                                  firstName: follower.user.firstName,
+                                  lastName: follower.user.lastName,
+                                  avatarUrl: follower.user.avatarUrl,
                                 }}
-                              ></div>
-                            ) : isFollowingThem ? (
-                              "Following"
-                            ) : (
-                              "Follow"
-                            )}
-                          </button>
-                        </div>
-                      );
-                    })}
+                                size="sm"
+                              />
+                            </div>
+
+                            <div className="flex-1 min-w-0">
+                              <p
+                                className="text-xs font-medium truncate"
+                                style={{
+                                  color:
+                                    "var(--color-card-foreground, #0f172a)",
+                                }}
+                              >
+                                {getFullName(
+                                  follower.user.firstName,
+                                  follower.user.lastName
+                                )}
+                              </p>
+                              <p
+                                className="text-xs truncate"
+                                style={{
+                                  color:
+                                    "var(--color-muted-foreground, #64748b)",
+                                }}
+                              >
+                                @{follower.user.username}
+                              </p>
+                            </div>
+
+                            <button
+                              onClick={() => handleFollow(follower.user._id)}
+                              disabled={isLoading}
+                              className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
+                                isFollowingThem
+                                  ? "cursor-default"
+                                  : "hover:scale-105"
+                              }`}
+                              style={{
+                                minWidth: "64px",
+                                backgroundColor: isFollowingThem
+                                  ? "var(--color-secondary, #f1f5f9)"
+                                  : "var(--color-primary, #3b82f6)",
+                                color: isFollowingThem
+                                  ? "var(--color-secondary-foreground, #1f2937)"
+                                  : "white",
+                              }}
+                              onMouseEnter={(e) => {
+                                if (!isFollowingThem) {
+                                  e.currentTarget.style.backgroundColor =
+                                    "var(--color-primary-600, #2563eb)";
+                                } else {
+                                  e.currentTarget.style.backgroundColor =
+                                    "var(--color-secondary-400, #e2e8f0)";
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                if (!isFollowingThem) {
+                                  e.currentTarget.style.backgroundColor =
+                                    "var(--color-primary, #3b82f6)";
+                                } else {
+                                  e.currentTarget.style.backgroundColor =
+                                    "var(--color-secondary, #f1f5f9)";
+                                }
+                              }}
+                            >
+                              {isLoading ? (
+                                <div
+                                  className="animate-spin rounded-full h-3 w-3 border border-t-transparent mx-auto"
+                                  style={{
+                                    borderColor: isFollowingThem
+                                      ? "var(--color-secondary-foreground, #1f2937)"
+                                      : "white",
+                                  }}
+                                ></div>
+                              ) : isFollowingThem ? (
+                                "Following"
+                              ) : (
+                                "Follow"
+                              )}
+                            </button>
+                          </div>
+                        );
+                      })
+                      .filter(Boolean)}{" "}
+                    {/* Filter out null items */}
                   </div>
                 )}
               </div>

@@ -16,12 +16,26 @@ export const toggleFollow = async (
     const { userId } = req.params;
     const followerId = req.user?._id;
 
+    // Enhanced validation
     if (!followerId) {
       throw createHttpError(401, "User not authenticated");
     }
 
+    if (!userId || userId === "undefined" || typeof userId !== "string") {
+      throw createHttpError(400, "Invalid user ID provided");
+    }
+
     if (followerId === userId) {
       throw createHttpError(400, "Users cannot follow themselves");
+    }
+
+    // Validate ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      throw createHttpError(400, "Invalid user ID format");
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(followerId)) {
+      throw createHttpError(400, "Invalid follower ID format");
     }
 
     const userToFollow = await User.findById(userId);
