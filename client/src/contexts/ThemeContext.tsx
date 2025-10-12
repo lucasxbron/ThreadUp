@@ -13,7 +13,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -23,8 +23,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
           | "light"
           | "dark"
           | null;
-        // Default to light mode, only use dark if explicitly saved
-        const initialTheme = savedTheme || "light";
+        // Default to dark mode, only use light if explicitly saved
+        const initialTheme = savedTheme || "dark";
 
         setTheme(initialTheme);
 
@@ -33,13 +33,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         if (initialTheme === "dark") {
           document.documentElement.classList.add("dark");
         }
-        // Don't add "light" class - let it be the default
+        // Don't add "dark" class - let it be the default
 
-        console.log("Theme initialized:", initialTheme);
+        // console.log("Theme initialized:", initialTheme);
       } catch (error) {
         console.error("Theme initialization error:", error);
-        // Fallback to light mode
-        setTheme("light");
+        // Fallback to dark mode
+        setTheme("dark");
         document.documentElement.classList.remove("light", "dark");
       }
 
@@ -61,9 +61,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       if (newTheme === "dark") {
         document.documentElement.classList.add("dark");
       }
-      // Light mode = no class (default)
+      // Dark mode = no class (default)
 
-      console.log("Theme toggled to:", newTheme);
+      // console.log("Theme toggled to:", newTheme);
     } catch (error) {
       console.error("Theme toggle error:", error);
     }
