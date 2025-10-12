@@ -126,18 +126,18 @@ userSchema.methods.toJSON = function () {
 
 userSchema.pre("save", async function (next) {
   this.email = validator.trim(this.email);
-  this.email =
-    validator.normalizeEmail(this.email, {
-      gmail_remove_dots: false,
-    }) || this.email;
+  const normalizedEmail = validator.normalizeEmail(this.email, {
+    gmail_remove_dots: false,
+  });
+  this.email = normalizedEmail || this.email; // Use original if normalization fails
 
   // Normalize pending email if it exists
   if (this.isModified("pendingEmail") && this.pendingEmail) {
     this.pendingEmail = validator.trim(this.pendingEmail);
-    this.pendingEmail =
-      validator.normalizeEmail(this.pendingEmail, {
-        gmail_remove_dots: false,
-      }) || this.pendingEmail;
+    const normalizedPendingEmail = validator.normalizeEmail(this.pendingEmail, {
+      gmail_remove_dots: false,
+    });
+    this.pendingEmail = normalizedPendingEmail || this.pendingEmail; // Use original if normalization fails
   }
 
   if (this.isModified("firstName")) {
