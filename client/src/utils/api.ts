@@ -208,6 +208,15 @@ class ApiClient {
 
   // Follow endpoints
   async toggleFollow(userId: string) {
+    // Validate userId before making request
+    if (!userId || userId === "undefined" || typeof userId !== "string") {
+      return { error: "Invalid user ID provided" };
+    }
+
+    if (userId.length !== 24) {
+      return { error: "Invalid user ID format" };
+    }
+
     return this.makeRequest(`/api/follows/user/${userId}`, {
       method: "POST",
     });

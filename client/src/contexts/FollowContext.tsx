@@ -23,9 +23,7 @@ interface FollowContextType {
     followersCount: number,
     forceUpdate?: boolean
   ) => void; // ADD forceUpdate parameter
-  getFollowState: (
-    userId: string
-  ) => {
+  getFollowState: (userId: string) => {
     isFollowing: boolean;
     followersCount: number;
     isLoading: boolean;
@@ -84,6 +82,17 @@ export const FollowProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const toggleFollow = useCallback(
     async (userId: string, currentFollowersCount: number): Promise<boolean> => {
+      // Enhanced validation
+      if (!userId || userId === "undefined" || typeof userId !== "string") {
+        console.error("Invalid userId provided to toggleFollow:", userId);
+        return false;
+      }
+
+      if (userId.length !== 24) {
+        console.error("Invalid ObjectId format:", userId);
+        return false;
+      }
+
       // Set loading state
       setFollowStates((prev) => ({
         ...prev,
