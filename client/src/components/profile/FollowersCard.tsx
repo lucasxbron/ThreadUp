@@ -469,65 +469,91 @@ export const FollowersCard: React.FC = () => {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    {following.slice(0, 3).map((followingUser) => (
-                      <div
-                        key={followingUser.user._id}
-                        className="flex items-center space-x-2"
-                      >
-                        <div className="flex-shrink-0">
-                          <Avatar
-                            user={{
-                              firstName: followingUser.user.firstName,
-                              lastName: followingUser.user.lastName,
-                              avatarUrl: followingUser.user.avatarUrl,
-                            }}
-                            size="sm"
-                          />
-                        </div>
+                    {following
+                      .slice(0, 3)
+                      .map((followingUser) => {
+                        // Validate following user data - ADD THIS VALIDATION
+                        if (
+                          !followingUser?.user?._id ||
+                          followingUser.user._id === "undefined"
+                        ) {
+                          console.warn(
+                            "Invalid following user data:",
+                            followingUser
+                          );
+                          return null; // Skip rendering this item
+                        }
 
-                        <div className="flex-1 min-w-0">
-                          <p
-                            className="text-xs font-medium truncate"
-                            style={{
-                              color: "var(--color-card-foreground, #0f172a)",
-                            }}
+                        return (
+                          <div
+                            key={followingUser.user._id}
+                            className="flex items-center space-x-2"
                           >
-                            {getFullName(
-                              followingUser.user.firstName,
-                              followingUser.user.lastName
-                            )}
-                          </p>
-                          <p
-                            className="text-xs truncate"
-                            style={{
-                              color: "var(--color-muted-foreground, #64748b)",
-                            }}
-                          >
-                            @{followingUser.user.username}
-                          </p>
-                        </div>
+                            <div className="flex-shrink-0">
+                              <Avatar
+                                user={{
+                                  firstName:
+                                    followingUser.user.firstName || "Unknown",
+                                  lastName: followingUser.user.lastName || "",
+                                  avatarUrl: followingUser.user.avatarUrl,
+                                }}
+                                size="sm"
+                              />
+                            </div>
 
-                        <button
-                          onClick={() => handleFollow(followingUser.user._id)}
-                          className="px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 cursor-default hover:scale-105"
-                          style={{
-                            minWidth: "64px",
-                            backgroundColor: "var(--color-secondary, #f1f5f9)",
-                            color: "var(--color-secondary-foreground, #1f2937)",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor =
-                              "var(--color-secondary-400, #e2e8f0)";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor =
-                              "var(--color-secondary, #f1f5f9)";
-                          }}
-                        >
-                          Following
-                        </button>
-                      </div>
-                    ))}
+                            <div className="flex-1 min-w-0">
+                              <p
+                                className="text-xs font-medium truncate"
+                                style={{
+                                  color:
+                                    "var(--color-card-foreground, #0f172a)",
+                                }}
+                              >
+                                {getFullName(
+                                  followingUser.user.firstName || "Unknown",
+                                  followingUser.user.lastName || ""
+                                )}
+                              </p>
+                              <p
+                                className="text-xs truncate"
+                                style={{
+                                  color:
+                                    "var(--color-muted-foreground, #64748b)",
+                                }}
+                              >
+                                @{followingUser.user.username || "unknown"}
+                              </p>
+                            </div>
+
+                            <button
+                              onClick={() =>
+                                handleFollow(followingUser.user._id)
+                              }
+                              disabled={!followingUser.user._id}
+                              className="px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 cursor-default hover:scale-105"
+                              style={{
+                                minWidth: "64px",
+                                backgroundColor:
+                                  "var(--color-secondary, #f1f5f9)",
+                                color:
+                                  "var(--color-secondary-foreground, #1f2937)",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor =
+                                  "var(--color-secondary-400, #e2e8f0)";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor =
+                                  "var(--color-secondary, #f1f5f9)";
+                              }}
+                            >
+                              Following
+                            </button>
+                          </div>
+                        );
+                      })
+                      .filter(Boolean)}{" "}
+                    {/* Add .filter(Boolean) to remove null items */}
                   </div>
                 )}
               </div>
