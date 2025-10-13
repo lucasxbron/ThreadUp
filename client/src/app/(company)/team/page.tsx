@@ -2,60 +2,79 @@
 
 import React from "react";
 import { Header } from "@/components/layout/Header";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function TeamPage() {
   const teamMembers = [
     {
       name: "Lucas Bron",
-      role: "Lead Developer",
-      bio: "Passionate about creating meaningful social connections through technology. Full-stack developer with a focus on user experience and privacy-first design.",
-      avatar: "LB",
+      role: "Project Lead & Full Stack Developer",
+      description:
+        "Passionate about creating meaningful social connections through technology. Leads platform architecture, privacy framework, and overall product vision.",
+      avatar: "/avatars/developers/lucas_bron_avatar.png",
       gradient: "from-blue-500 to-purple-600",
-      github: "lucasxbron",
-      links: {
-        github: "https://github.com/lucasxbron",
-        // twitter: "https://twitter.com/lucasxbron",
-        // linkedin: "https://linkedin.com/in/lucasxbron"
-      },
+      expertise: [
+        "Full-Stack Development",
+        "System Architecture",
+        "Privacy Engineering",
+        "Product Strategy",
+      ],
       contributions: [
         "Platform architecture and design",
-        "Full-stack development",
+        "Privacy-first framework development",
         "UI/UX design and implementation",
-        "Privacy and security framework",
+        "Security and authentication systems",
+        "Project leadership and vision",
       ],
+      github: "lucasxbron",
+      // technologies: ["Next.js", "Node.js", "TypeScript", "MongoDB"],
     },
     {
       name: "Sophie Kock",
       role: "Full Stack Developer",
-      bio: "Creative full-stack developer passionate about building intuitive user interfaces and robust backend systems. Dedicated to crafting seamless digital experiences.",
-      avatar: "SK",
+      description:
+        "Creative full-stack developer passionate about building intuitive user interfaces and robust backend systems. Specializes in user experience and frontend optimization.",
+      avatar: "/avatars/developers/sophie_kock_avatar.png",
       gradient: "from-pink-500 to-rose-600",
-      github: "Sophie-Kock",
-      links: {
-        github: "https://github.com/Sophie-Kock",
-      },
+      expertise: [
+        "Frontend Development",
+        "UI/UX Design",
+        "Component Architecture",
+        "User Experience",
+      ],
       contributions: [
         "Frontend development and optimization",
         "Component architecture and design",
         "User interface enhancements",
+        "Responsive design implementation",
+        "User experience research",
       ],
+      github: "Sophie-Kock",
+      // technologies: ["React", "Next.js", "Tailwind CSS", "TypeScript"],
     },
     {
       name: "Marcus Stöppler",
       role: "Full Stack Developer",
-      bio: "Versatile full-stack developer with expertise in modern web technologies. Focused on performance optimization and scalable application development.",
-      avatar: "MS",
+      description:
+        "Versatile full-stack developer with expertise in modern web technologies. Focused on performance optimization and scalable application development.",
+      avatar: "/avatars/developers/marcus_stoeppler_avatar.png",
       gradient: "from-green-500 to-teal-600",
-      github: "DCI-Mendo",
-      links: {
-        github: "https://github.com/DCI-Mendo",
-      },
+      expertise: [
+        "Backend Development",
+        "Database Design",
+        "Performance Optimization",
+        "API Development",
+      ],
       contributions: [
         "Backend API development",
-        "Database optimization",
+        "Database optimization and design",
         "Performance monitoring and tuning",
+        "Server-side logic implementation",
+        "Infrastructure and deployment",
       ],
+      github: "DCI-Mendo",
+      // technologies: ["Node.js", "Express.js", "MongoDB", "REST APIs"],
     },
   ];
 
@@ -264,134 +283,168 @@ export default function TeamPage() {
           </div>
 
           {/* Team Members */}
-          <div className="mb-16">
-            <h2
-              className="text-3xl font-bold mb-8 text-center"
-              style={{ color: "var(--color-foreground, #0f172a)" }}
-            >
-              Our Team
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {teamMembers.map((member, index) => (
-                <div
-                  key={index}
-                  className="rounded-2xl border p-6 hover:shadow-lg transition-all duration-300 text-center"
-                  style={{
-                    backgroundColor: "var(--color-card, #ffffff)",
-                    borderColor: "var(--color-border, #e2e8f0)",
-                  }}
-                >
-                  {/* Avatar */}
-                  <div className="mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+            {teamMembers.map((member, index) => (
+              <div
+                key={member.name}
+                className={`rounded-2xl border p-6 hover:scale-105 transition-all duration-300 ${
+                  index === 0
+                    ? "animate-slide-in-left"
+                    : index === 1
+                    ? "animate-slide-in-up"
+                    : "animate-slide-in-right"
+                }`}
+                style={{
+                  backgroundColor: "var(--color-card)",
+                  borderColor: "var(--color-border)",
+                }}
+              >
+                {/* Avatar and Basic Info */}
+                <div className="text-center mb-6">
+                  <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden border-2 border-white shadow-lg">
+                    <Image
+                      src={member.avatar}
+                      alt={`${member.name} avatar`}
+                      width={96}
+                      height={96}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to gradient background with initials if image fails
+                        const target = e.currentTarget;
+                        const fallback =
+                          target.nextElementSibling as HTMLElement;
+                        target.style.display = "none";
+                        if (fallback) fallback.style.display = "flex";
+                      }}
+                    />
                     <div
-                      className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-4 bg-gradient-to-r ${member.gradient}`}
+                      className={`w-24 h-24 rounded-full bg-gradient-to-r ${member.gradient} flex items-center justify-center hidden`}
                     >
-                      <span className="text-white font-bold text-2xl">
-                        {member.avatar}
+                      <span className="text-2xl font-bold text-white">
+                        {member.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
                       </span>
                     </div>
-                    <h3
-                      className="text-xl font-bold mb-1"
-                      style={{ color: "var(--color-foreground, #0f172a)" }}
-                    >
-                      {member.name}
-                    </h3>
-                    <p
-                      className="text-sm font-medium mb-3"
-                      style={{ color: "var(--color-primary, #3b82f6)" }}
-                    >
-                      {member.role}
-                    </p>
-                    <p
-                      className="text-sm leading-relaxed mb-4"
-                      style={{
-                        color: "var(--color-muted-foreground, #64748b)",
-                      }}
-                    >
-                      {member.bio}
-                    </p>
                   </div>
+                  <h3
+                    className="text-xl font-bold mb-1"
+                    style={{ color: "var(--color-foreground)" }}
+                  >
+                    {member.name}
+                  </h3>
+                  <p className="text-sm font-medium mb-3 text-blue-300">
+                    {member.role}
+                  </p>
+                  <p
+                    className="text-sm leading-relaxed mb-4"
+                    style={{ color: "var(--color-muted-foreground)" }}
+                  >
+                    {member.description}
+                  </p>
+                </div>
 
-                  {/* Contributions */}
-                  <div className="mb-6">
-                    <h4
-                      className="font-semibold mb-3 text-left"
-                      style={{ color: "var(--color-foreground, #0f172a)" }}
-                    >
-                      Key Contributions:
-                    </h4>
-                    <ul className="text-left space-y-1">
-                      {member.contributions.map(
-                        (contribution, contribIndex) => (
-                          <li
-                            key={contribIndex}
-                            className="flex items-start space-x-2"
-                          >
-                            <svg
-                              className="w-4 h-4 mt-0.5 flex-shrink-0"
-                              style={{ color: "var(--color-success, #22c55e)" }}
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                            <span
-                              className="text-sm"
-                              style={{
-                                color: "var(--color-foreground, #0f172a)",
-                              }}
-                            >
-                              {contribution}
-                            </span>
-                          </li>
-                        )
-                      )}
-                    </ul>
-                  </div>
-
-                  {/* Social Links */}
-                  <div className="flex justify-center space-x-3">
-                    {member.links.github && (
-                      <a
-                        href={member.links.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                {/* Expertise */}
+                <div className="mb-4">
+                  <h4
+                    className="font-semibold mb-2 text-left"
+                    style={{ color: "var(--color-foreground)" }}
+                  >
+                    Expertise:
+                  </h4>
+                  <div className="flex flex-wrap gap-1">
+                    {member.expertise.map((skill, skillIndex) => (
+                      <span
+                        key={skillIndex}
+                        className="text-xs px-2 py-1 rounded-full"
                         style={{
-                          backgroundColor: "var(--color-secondary, #f1f5f9)",
-                          color: "var(--color-muted-foreground, #64748b)",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor =
-                            "var(--color-primary, #3b82f6)";
-                          e.currentTarget.style.color = "white";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor =
-                            "var(--color-secondary, #f1f5f9)";
-                          e.currentTarget.style.color =
-                            "var(--color-muted-foreground, #64748b)";
+                          backgroundColor: "var(--color-secondary)",
+                          color: "var(--color-foreground)",
                         }}
                       >
-                        <svg
-                          className="w-4 h-4"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                        </svg>
-                      </a>
-                    )}
+                        {skill}
+                      </span>
+                    ))}
                   </div>
                 </div>
-              ))}
-            </div>
+
+                {/* Technologies */}
+                {/* <div className="mb-4">
+                  <h4
+                    className="font-semibold mb-2 text-left"
+                    style={{ color: "var(--color-foreground)" }}
+                  >
+                    Technologies:
+                  </h4>
+                  <div className="flex flex-wrap gap-1">
+                    {member.technologies.map((tech, techIndex) => (
+                      <span
+                        key={techIndex}
+                        className="text-xs px-2 py-1 rounded-full"
+                        style={{
+                          backgroundColor: "rgba(59, 130, 246, 0.1)",
+                          color: "var(--color-primary)",
+                        }}
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div> */}
+
+                {/* Key Contributions */}
+                <div className="mb-4">
+                  <h4
+                    className="font-semibold mb-2 text-left"
+                    style={{ color: "var(--color-foreground)" }}
+                  >
+                    Key Contributions:
+                  </h4>
+                  <ul className="text-left space-y-1">
+                    {member.contributions
+                      .slice(0, 3)
+                      .map((contribution, contribIndex) => (
+                        <li
+                          key={contribIndex}
+                          className="flex items-start space-x-2"
+                        >
+                          <div className="w-1.5 h-1.5 bg-green-400 rounded-full mt-1.5 flex-shrink-0"></div>
+                          <span
+                            className="text-sm"
+                            style={{ color: "var(--color-muted-foreground)" }}
+                          >
+                            {contribution}
+                          </span>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+
+                {/* GitHub Link */}
+                <div className="text-center">
+                  <a
+                    href={`https://github.com/${member.github}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors"
+                    style={{
+                      backgroundColor: "var(--color-secondary)",
+                      color: "var(--color-foreground)",
+                    }}
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                    </svg>
+                    <span className="text-sm">@{member.github}</span>
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Our Values */}
