@@ -241,7 +241,7 @@ export default function LoginPage() {
               className="text-sm"
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link
                 href="/register"
                 className="font-medium underline hover:opacity-80 transition-opacity"

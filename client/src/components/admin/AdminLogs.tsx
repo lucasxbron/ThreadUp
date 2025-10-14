@@ -490,7 +490,8 @@ export const AdminLogs: React.FC = () => {
                           color: "var(--color-muted-foreground, #64748b)",
                         }}
                       >
-                        "{log.details.postText || log.details.commentText}"
+                        &quot;{log.details.postText || log.details.commentText}
+                        &quot;
                       </p>
                     </div>
                   )}

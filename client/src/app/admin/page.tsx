@@ -84,7 +84,7 @@ export default function AdminPage() {
               className="text-sm"
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
-              You don't have permission to access the admin panel.
+              You don&apos;t have permission to access the admin panel.
             </p>
           </div>
         </main>

@@ -369,7 +369,9 @@ export const EmailChangeCard: React.FC = () => {
                   className="text-sm space-y-1"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  <li>• We'll send a verification email to your new address</li>
+                  <li>
+                    • We&apos;ll send a verification email to your new address
+                  </li>
                   <li>
                     • Your current email remains active until verification
                   </li>

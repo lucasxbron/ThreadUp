@@ -141,8 +141,8 @@ export default function TermsOfServicePage() {
                 >
                   By creating an account or using ThreadUp, you agree to be
                   bound by these Terms of Service and our Community Guidelines.
-                  If you don't agree to these terms, please don't use our
-                  service.
+                  If you don&apos;t agree to these terms, please don&apos;t use
+                  our service.
                 </p>
               </div>
             </div>
@@ -345,7 +345,7 @@ export default function TermsOfServicePage() {
                         color: "var(--color-muted-foreground, #64748b)",
                       }}
                     >
-                      We'll notify users of significant changes
+                      We&apos;ll notify users of significant changes
                     </span>
                   </li>
                   <li className="flex items-start space-x-2">

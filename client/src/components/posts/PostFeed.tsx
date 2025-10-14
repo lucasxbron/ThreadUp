@@ -461,7 +461,7 @@ export const PostFeed: React.FC = () => {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                You've seen all {totalPosts} posts
+                You&apos;ve seen all {totalPosts} posts
               </div>
             </div>
           )}

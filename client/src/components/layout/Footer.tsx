@@ -31,7 +31,7 @@ export const Footer: React.FC = () => {
                   href="/updates"
                   className="hover:text-foreground transition-colors cursor-pointer"
                 >
-                  What's New
+                  What&apos;s New
                 </Link>
               </li>
               <li>

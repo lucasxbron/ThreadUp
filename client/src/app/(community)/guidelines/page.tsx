@@ -563,8 +563,9 @@ export default function CommunityGuidelinesPage() {
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               These guidelines are living documents that may be updated as our
-              community grows. By following these guidelines, you're helping
-              create a positive space where meaningful connections can flourish.
+              community grows. By following these guidelines, you&apos;re
+              helping create a positive space where meaningful connections can
+              flourish.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/" className="block">

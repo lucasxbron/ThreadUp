@@ -215,8 +215,8 @@ export const SuggestionsCard: React.FC = () => {
                 className="text-xs"
                 style={{ color: "var(--color-muted-foreground, #64748b)" }}
               >
-                Start interacting with other users' posts to get personalized
-                suggestions!
+                Start interacting with other users&apos; posts to get
+                personalized suggestions!
               </p>
             </div>
           ) : (

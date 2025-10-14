@@ -60,8 +60,8 @@ export default function ComingSoonPage() {
             className="text-xl md:text-2xl mb-8 leading-relaxed"
             style={{ color: "var(--color-muted-foreground, #64748b)" }}
           >
-            This feature is currently under development. We're working hard to
-            bring it to you soon!
+            This feature is currently under development. We&apos;re working hard
+            to bring it to you soon!
           </p>
 
           {/* Feature Status */}
