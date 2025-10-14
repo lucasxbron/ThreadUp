@@ -424,11 +424,13 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
     const isEditing = editStates[comment._id];
     const showReplyEmojiPicker = replyEmojiPickers[comment._id];
     const isDeleting = deletingComments.has(comment._id);
+    const isCurrentUserAdmin = isAdmin(user);
+    const isAuthorAdmin = (comment.authorId.roles || []).includes("admin");
 
     // Admin delete logic
-    const canDelete = user?._id === comment.authorId._id || isAdmin(user);
+    const canDelete = user?._id === comment.authorId._id || isCurrentUserAdmin;
     const isOwnComment = user?._id === comment.authorId._id;
-    const isAdminDelete = isAdmin(user) && !isOwnComment;
+    const isAdminDelete = isCurrentUserAdmin && !isOwnComment;
 
     return (
       <div key={comment._id} className="space-y-3">
@@ -468,9 +470,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
               </span>
 
               {/* Admin Badge */}
-              {isAdmin({ roles: comment.authorId.roles || [] } as any) && (
-                <AdminBadge className="flex-shrink-0" />
-              )}
+              {isAuthorAdmin && <AdminBadge className="flex-shrink-0" />}
 
               <span
                 className="text-xs flex-shrink-0"
