@@ -83,7 +83,7 @@ export const CreatePost: React.FC<CreatePostProps> = ({ onPostCreated }) => {
         removeImage();
         onPostCreated();
       }
-    } catch (err) {
+    } catch {
       setError("Failed to create post");
     } finally {
       setLoading(false);

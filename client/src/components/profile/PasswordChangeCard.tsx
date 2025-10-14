@@ -71,7 +71,7 @@ export const PasswordChangeCard: React.FC = () => {
       } else {
         setError(response.error || "Failed to change password");
       }
-    } catch (err) {
+    } catch {
       setError("Failed to change password. Please try again.");
     } finally {
       setLoading(false);

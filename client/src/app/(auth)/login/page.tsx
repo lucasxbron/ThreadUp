@@ -54,7 +54,7 @@ export default function LoginPage() {
       } else if (typeof err === "string") {
         errorMessage = err;
       } else if (err && typeof err === "object" && "message" in err) {
-        errorMessage = String((err as any).message);
+        errorMessage = String((err as { message: unknown }).message);
       }
 
       setError(errorMessage);

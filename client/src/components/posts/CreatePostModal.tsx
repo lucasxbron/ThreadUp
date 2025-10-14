@@ -111,7 +111,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
         onPostCreated();
         onClose();
       }
-    } catch (err) {
+    } catch {
       setError("Failed to create post");
     } finally {
       setLoading(false);

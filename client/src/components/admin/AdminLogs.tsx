@@ -99,7 +99,7 @@ export const AdminLogs: React.FC = () => {
       } else {
         setError(response.error || "Failed to load admin logs");
       }
-    } catch (err) {
+    } catch {
       setError("Failed to load admin logs");
     } finally {
       setLoading(false);

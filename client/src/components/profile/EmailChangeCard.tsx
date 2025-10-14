@@ -68,7 +68,7 @@ export const EmailChangeCard: React.FC = () => {
       } else {
         setError(response.error || "Failed to request email change");
       }
-    } catch (err) {
+    } catch {
       setError("Failed to request email change. Please try again.");
     } finally {
       setLoading(false);
@@ -89,7 +89,7 @@ export const EmailChangeCard: React.FC = () => {
       } else {
         setError(response.error || "Failed to cancel email change");
       }
-    } catch (err) {
+    } catch {
       setError("Failed to cancel email change. Please try again.");
     } finally {
       setLoading(false);

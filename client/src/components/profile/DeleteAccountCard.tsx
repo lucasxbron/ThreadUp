@@ -51,7 +51,7 @@ export const DeleteAccountCard: React.FC = () => {
       } else {
         setError(response.error || "Failed to delete account");
       }
-    } catch (err) {
+    } catch {
       setError("Failed to delete account. Please try again.");
     } finally {
       setLoading(false);
