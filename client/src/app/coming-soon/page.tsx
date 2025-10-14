@@ -204,18 +204,18 @@ export default function ComingSoonPage() {
 
             <Link href="/updates" className="block">
               <button
-                className="px-6 py-3 rounded-lg font-medium transition-colors"
+                className="px-6 py-3 rounded-lg font-medium transition-colors border"
                 style={{
                   backgroundColor: "transparent",
-                  color: "var(--color-muted-foreground, #64748b)",
+                  color: "var(--color-foreground, #0f172a)",
+                  borderColor: "var(--color-border, #e2e8f0)",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color =
-                    "var(--color-foreground, #0f172a)";
+                  e.currentTarget.style.backgroundColor =
+                    "var(--color-secondary, #f1f5f9)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color =
-                    "var(--color-muted-foreground, #64748b)";
+                  e.currentTarget.style.backgroundColor = "transparent";
                 }}
               >
                 📋 View Roadmap
