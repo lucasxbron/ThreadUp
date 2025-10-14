@@ -131,7 +131,7 @@ export default function TeamPage() {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M8 9l3 3-3 3m13 0h-6m-2-5h6m2 5V9a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h14a2 2 0 002-2z"
+            d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
           />
         </svg>
       ),
@@ -177,7 +177,7 @@ export default function TeamPage() {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9"
+            d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
       ),
@@ -613,18 +613,18 @@ export default function TeamPage() {
               </Link>
               <Link href="/" className="block">
                 <button
-                  className="px-6 py-3 rounded-lg font-medium transition-colors"
+                  className="px-6 py-3 rounded-lg font-medium transition-colors border"
                   style={{
                     backgroundColor: "transparent",
-                    color: "var(--color-muted-foreground, #64748b)",
+                    color: "var(--color-foreground, #0f172a)",
+                    borderColor: "var(--color-border, #e2e8f0)",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color =
-                      "var(--color-foreground, #0f172a)";
+                    e.currentTarget.style.backgroundColor =
+                      "var(--color-secondary, #f1f5f9)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color =
-                      "var(--color-muted-foreground, #64748b)";
+                    e.currentTarget.style.backgroundColor = "transparent";
                   }}
                 >
                   Back to ThreadUp

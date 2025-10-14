@@ -381,10 +381,24 @@ export default function UpdatesPage() {
                   {/* New Features */}
                   <div className="mb-8">
                     <h4
-                      className="text-xl font-bold mb-4"
+                      className="text-xl font-bold mb-4 flex items-center space-x-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
-                      ✨ New Features
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        style={{ color: "var(--color-primary, #3b82f6)" }}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                        />
+                      </svg>
+                      <span>New Features</span>
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {update.features.map((feature, featureIndex) => (
@@ -430,10 +444,24 @@ export default function UpdatesPage() {
                   {/* Improvements */}
                   <div>
                     <h4
-                      className="text-xl font-bold mb-4"
+                      className="text-xl font-bold mb-4 flex items-center space-x-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
-                      🚀 Key Highlights
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        style={{ color: "var(--color-primary, #3b82f6)" }}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                      </svg>
+                      <span>Key Highlights</span>
                     </h4>
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {update.improvements.map(
@@ -721,8 +749,8 @@ export default function UpdatesPage() {
           <div
             className="rounded-2xl border p-8 text-center mt-12"
             style={{
-              backgroundColor: "var(--color-card, #ffffff)",
-              borderColor: "var(--color-border, #e2e8f0)",
+              backgroundColor: "rgba(59, 130, 246, 0.05)",
+              borderColor: "rgba(59, 130, 246, 0.2)",
             }}
           >
             <h3
@@ -772,18 +800,18 @@ export default function UpdatesPage() {
               </a>
               <Link href="/" className="block">
                 <button
-                  className="px-6 py-3 rounded-lg font-medium transition-colors"
+                  className="px-6 py-3 rounded-lg font-medium transition-colors border"
                   style={{
                     backgroundColor: "transparent",
-                    color: "var(--color-muted-foreground, #64748b)",
+                    color: "var(--color-foreground, #0f172a)",
+                    borderColor: "var(--color-border, #e2e8f0)",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color =
-                      "var(--color-foreground, #0f172a)";
+                    e.currentTarget.style.backgroundColor =
+                      "var(--color-secondary, #f1f5f9)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color =
-                      "var(--color-muted-foreground, #64748b)";
+                    e.currentTarget.style.backgroundColor = "transparent";
                   }}
                 >
                   Back to ThreadUp
