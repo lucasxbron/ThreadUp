@@ -579,8 +579,8 @@ export default function DMCAPage() {
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               If you have questions about our DMCA policy or need assistance
-              with the takedown or counter-notice process, please don't hesitate
-              to contact us.
+              with the takedown or counter-notice process, please don&apos;t
+              hesitate to contact us.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/" className="block">

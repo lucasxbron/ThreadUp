@@ -270,15 +270,15 @@ export default function UpdatesPage() {
               className="text-4xl font-bold mb-4"
               style={{ color: "var(--color-foreground, #0f172a)" }}
             >
-              What's New
+              What&apos;s New
             </h1>
             <p
               className="text-xl leading-relaxed max-w-3xl mx-auto"
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               Stay up to date with the latest ThreadUp features, improvements,
-              and upcoming changes. We're constantly working to make ThreadUp
-              better for our community.
+              and upcoming changes. We&apos;re constantly working to make
+              ThreadUp better for our community.
             </p>
           </div>
 
@@ -516,9 +516,9 @@ export default function UpdatesPage() {
                   className="text-lg"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  Here's what we're working on to make ThreadUp even better.
-                  Timelines are estimates and may change based on development
-                  priorities.
+                  Here&apos;s what we&apos;re working on to make ThreadUp even
+                  better. Timelines are estimates and may change based on
+                  development priorities.
                 </p>
               </div>
 
@@ -623,8 +623,9 @@ export default function UpdatesPage() {
                     className="text-lg mb-6 max-w-md mx-auto"
                     style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
-                    We're currently focused on perfecting the existing features.
-                    New updates will be announced as they're planned!
+                    We&apos;re currently focused on perfecting the existing
+                    features. New updates will be announced as they&apos;re
+                    planned!
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                     <a

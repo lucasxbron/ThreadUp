@@ -308,7 +308,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
                 className="text-sm"
                 style={{ color: "var(--color-muted-foreground, #64748b)" }}
               >
-                No emojis found for "{searchTerm}"
+                No emojis found for &quot;{searchTerm}&quot;
               </p>
               <p
                 className="text-xs mt-1"

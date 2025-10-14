@@ -112,8 +112,9 @@ export default function ForgotPasswordPage() {
             }}
           >
             <p className="text-sm">
-              <strong>Important:</strong> Check your spam folder if you don't
-              see the email in your inbox. The reset link expires in 1 hour.
+              <strong>Important:</strong> Check your spam folder if you
+              don&apos;t see the email in your inbox. The reset link expires in
+              1 hour.
             </p>
           </div>
 
@@ -210,8 +211,8 @@ export default function ForgotPasswordPage() {
               className="mt-2 text-sm md:text-base"
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
-              Enter your email address and we'll send you a link to reset your
-              password
+              Enter your email address and we&apos;ll send you a link to reset
+              your password
             </p>
           </div>
 
@@ -279,7 +280,7 @@ export default function ForgotPasswordPage() {
               className="block text-sm font-medium underline hover:opacity-80 transition-opacity"
               style={{ color: "var(--color-primary, #3b82f6)" }}
             >
-              Don't have an account? Sign up
+              Don&apos;t have an account? Sign up
             </Link>
           </div>
         </div>

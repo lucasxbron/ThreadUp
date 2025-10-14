@@ -173,7 +173,7 @@ export default function SafetyPage() {
               className="text-xl leading-relaxed max-w-3xl mx-auto"
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
-              Your safety is our top priority. We've built comprehensive
+              Your safety is our top priority. We&apos;ve built comprehensive
               features and policies to help protect you and create a secure
               environment for meaningful connections.
             </p>
@@ -335,7 +335,7 @@ export default function SafetyPage() {
               className="mb-6"
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
-              If you're experiencing harassment, threats, or any safety
+              If you&apos;re experiencing harassment, threats, or any safety
               concerns, please report it immediately. For emergencies, contact
               your local authorities.
             </p>

@@ -255,8 +255,8 @@ export const AllSuggestionsModal: React.FC<AllSuggestionsModalProps> = ({
               className="text-sm"
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
-              We couldn't find any suggestions for you right now. Try posting
-              more content or following some users!
+              We couldn&apos;t find any suggestions for you right now. Try
+              posting more content or following some users!
             </p>
           </div>
         ) : (

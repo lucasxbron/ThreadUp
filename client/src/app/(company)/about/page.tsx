@@ -622,7 +622,7 @@ export default function AboutPage() {
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               Experience social networking that respects your privacy and puts
-              community first. Join thousands of users who've made ThreadUp
+              community first. Join thousands of users who&apos;ve made ThreadUp
               their digital home.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

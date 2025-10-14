@@ -155,7 +155,7 @@ export default function CookiePolicyPage() {
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               We use minimal cookies to ensure ThreadUp works properly and
-              securely. Here's everything you need to know about our cookie
+              securely. Here&apos;s everything you need to know about our cookie
               usage.
             </p>
           </div>
@@ -317,7 +317,7 @@ export default function CookiePolicyPage() {
               className="text-2xl font-bold mb-6 text-center"
               style={{ color: "var(--color-foreground, #0f172a)" }}
             >
-              What We DON'T Use
+              What We DON&apos;T Use
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex items-start space-x-3">
@@ -346,7 +346,7 @@ export default function CookiePolicyPage() {
                     className="text-sm"
                     style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
-                    We don't track your behavior across other websites
+                    We don&apos;t track your behavior across other websites
                   </p>
                 </div>
               </div>
@@ -376,7 +376,7 @@ export default function CookiePolicyPage() {
                     className="text-sm"
                     style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
-                    We don't use Google Analytics or similar services
+                    We don&apos;t use Google Analytics or similar services
                   </p>
                 </div>
               </div>
@@ -406,7 +406,7 @@ export default function CookiePolicyPage() {
                     className="text-sm"
                     style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
-                    We don't serve targeted ads or use ad networks
+                    We don&apos;t serve targeted ads or use ad networks
                   </p>
                 </div>
               </div>
@@ -436,7 +436,8 @@ export default function CookiePolicyPage() {
                     className="text-sm"
                     style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
-                    We don't allow other companies to set cookies on ThreadUp
+                    We don&apos;t allow other companies to set cookies on
+                    ThreadUp
                   </p>
                 </div>
               </div>
@@ -506,8 +507,8 @@ export default function CookiePolicyPage() {
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               If you have any questions about our cookie usage or need help
-              managing your preferences, we're here to help. Our commitment is
-              to be transparent about all data practices.
+              managing your preferences, we&apos;re here to help. Our commitment
+              is to be transparent about all data practices.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/" className="block">

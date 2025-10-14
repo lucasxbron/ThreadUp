@@ -277,8 +277,9 @@ export default function TeamPage() {
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               ThreadUp is built by a passionate team dedicated to creating
-              authentic social connections while respecting user privacy. We're
-              a small, focused team that believes in quality over quantity.
+              authentic social connections while respecting user privacy.
+              We&apos;re a small, focused team that believes in quality over
+              quantity.
             </p>
           </div>
 
@@ -563,9 +564,10 @@ export default function TeamPage() {
               className="mb-6 max-w-2xl mx-auto"
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
-              We're always looking for passionate people who share our values.
-              Whether you're interested in contributing to our open source
-              project or joining the team, we'd love to hear from you.
+              We&apos;re always looking for passionate people who share our
+              values. Whether you&apos;re interested in contributing to our open
+              source project or joining the team, we&apos;d love to hear from
+              you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a

@@ -221,7 +221,7 @@ export default function PrivacyPolicyPage() {
                   className="text-sm"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  We're clear about what data we collect and why we need it
+                  We&apos;re clear about what data we collect and why we need it
                 </p>
               </div>
               <div className="text-center">
@@ -254,7 +254,8 @@ export default function PrivacyPolicyPage() {
                   className="text-sm"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  We only collect data that's necessary to provide our service
+                  We only collect data that&apos;s necessary to provide our
+                  service
                 </p>
               </div>
               <div className="text-center">
@@ -680,7 +681,7 @@ export default function PrivacyPolicyPage() {
               className="text-2xl font-bold mb-6 text-center"
               style={{ color: "var(--color-foreground, #0f172a)" }}
             >
-              What We Don't Do
+              What We Don&apos;t Do
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex items-start space-x-3">
@@ -703,7 +704,7 @@ export default function PrivacyPolicyPage() {
                     className="font-semibold mb-1"
                     style={{ color: "var(--color-foreground, #0f172a)" }}
                   >
-                    We Don't Sell Your Data
+                    We Don&apos;t Sell Your Data
                   </h3>
                   <p
                     className="text-sm"
@@ -739,7 +740,8 @@ export default function PrivacyPolicyPage() {
                     className="text-sm"
                     style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
-                    We only collect what's necessary for our service to work
+                    We only collect what&apos;s necessary for our service to
+                    work
                   </p>
                 </div>
               </div>
@@ -769,7 +771,7 @@ export default function PrivacyPolicyPage() {
                     className="text-sm"
                     style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
-                    We don't track you across other websites or apps
+                    We don&apos;t track you across other websites or apps
                   </p>
                 </div>
               </div>
@@ -799,7 +801,8 @@ export default function PrivacyPolicyPage() {
                     className="text-sm"
                     style={{ color: "var(--color-muted-foreground, #64748b)" }}
                   >
-                    We won't access or use your data without clear permission
+                    We won&apos;t access or use your data without clear
+                    permission
                   </p>
                 </div>
               </div>
@@ -825,7 +828,7 @@ export default function PrivacyPolicyPage() {
               style={{ color: "var(--color-muted-foreground, #64748b)" }}
             >
               If you have any questions about this privacy policy or how we
-              handle your data, please don't hesitate to contact us.
+              handle your data, please don&apos;t hesitate to contact us.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a href="/contact?subject=privacy" className="block">
