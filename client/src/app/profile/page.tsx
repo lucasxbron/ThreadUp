@@ -98,7 +98,7 @@ export default function ProfilePage() {
       } else {
         setError(result?.error || "Failed to update profile");
       }
-    } catch (err) {
+    } catch {
       setError("Failed to update profile. Please try again.");
     } finally {
       setLoading(false);
@@ -117,7 +117,7 @@ export default function ProfilePage() {
         month: "long",
         day: "numeric",
       });
-    } catch (error) {
+    } catch {
       return "Unknown";
     }
   };

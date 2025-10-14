@@ -112,7 +112,7 @@ function ContactPageContent() {
       } else {
         setError(response.error || "Failed to send message");
       }
-    } catch (err) {
+    } catch {
       setError("Failed to send message. Please try again.");
     } finally {
       setLoading(false);

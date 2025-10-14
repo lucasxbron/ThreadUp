@@ -47,7 +47,7 @@ function PostPageContent() {
       } else {
         setError(response.error || "Post not found");
       }
-    } catch (err) {
+    } catch {
       setError("Failed to load post");
     } finally {
       setLoading(false);

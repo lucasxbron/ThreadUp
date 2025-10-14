@@ -72,7 +72,7 @@ export const AvatarUploadCard: React.FC = () => {
       } else {
         setError(uploadResponse.error || "Failed to upload image");
       }
-    } catch (err) {
+    } catch {
       setError("Failed to upload profile picture. Please try again.");
     } finally {
       setUploading(false);
@@ -100,7 +100,7 @@ export const AvatarUploadCard: React.FC = () => {
       } else {
         setError(response.error || "Failed to remove profile picture");
       }
-    } catch (err) {
+    } catch {
       setError("Failed to remove profile picture. Please try again.");
     } finally {
       setDeleting(false);
