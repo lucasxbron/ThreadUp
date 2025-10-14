@@ -200,7 +200,7 @@ function ContactPageContent() {
               {/* Contact Form */}
               <div className="lg:col-span-2">
                 <div
-                  className="rounded-xl border p-6 sm:p-8"
+                  className="rounded-xl border p-6 sm:p-8 h-full"
                   style={{
                     backgroundColor: "var(--color-card, #ffffff)",
                     borderColor: "var(--color-border, #e2e8f0)",
