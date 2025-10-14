@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Header } from "@/components/layout/Header";
-import Link from "next/link";
 
 export default function DevelopersPage() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -182,45 +181,45 @@ export default function DevelopersPage() {
     },
   ];
 
-  const contributionAreas = [
-    {
-      title: "Frontend Development",
-      description: "Help improve the user interface and user experience",
-      skills: ["React", "TypeScript", "CSS", "UI/UX Design"],
-      difficulty: "Beginner to Advanced",
-    },
-    {
-      title: "Backend Development",
-      description:
-        "Work on API endpoints, database optimization, and server logic",
-      skills: ["Node.js", "Express", "MongoDB", "API Design"],
-      difficulty: "Intermediate to Advanced",
-    },
-    {
-      title: "Mobile Development",
-      description: "Help build native mobile applications for iOS and Android",
-      skills: ["React Native", "Swift", "Kotlin", "Mobile UI"],
-      difficulty: "Advanced",
-    },
-    {
-      title: "Documentation",
-      description: "Improve documentation, write tutorials, and create guides",
-      skills: ["Technical Writing", "Markdown", "API Documentation"],
-      difficulty: "Beginner to Intermediate",
-    },
-    {
-      title: "Testing & QA",
-      description: "Write tests, find bugs, and improve code quality",
-      skills: ["Jest", "Testing", "Bug Reporting", "Quality Assurance"],
-      difficulty: "Beginner to Intermediate",
-    },
-    {
-      title: "Design & Branding",
-      description: "Create designs, icons, and improve the visual identity",
-      skills: ["Figma", "Adobe Creative Suite", "Branding", "Icon Design"],
-      difficulty: "Beginner to Advanced",
-    },
-  ];
+  // const contributionAreas = [
+  //   {
+  //     title: "Frontend Development",
+  //     description: "Help improve the user interface and user experience",
+  //     skills: ["React", "TypeScript", "CSS", "UI/UX Design"],
+  //     difficulty: "Beginner to Advanced",
+  //   },
+  //   {
+  //     title: "Backend Development",
+  //     description:
+  //       "Work on API endpoints, database optimization, and server logic",
+  //     skills: ["Node.js", "Express", "MongoDB", "API Design"],
+  //     difficulty: "Intermediate to Advanced",
+  //   },
+  //   {
+  //     title: "Mobile Development",
+  //     description: "Help build native mobile applications for iOS and Android",
+  //     skills: ["React Native", "Swift", "Kotlin", "Mobile UI"],
+  //     difficulty: "Advanced",
+  //   },
+  //   {
+  //     title: "Documentation",
+  //     description: "Improve documentation, write tutorials, and create guides",
+  //     skills: ["Technical Writing", "Markdown", "API Documentation"],
+  //     difficulty: "Beginner to Intermediate",
+  //   },
+  //   {
+  //     title: "Testing & QA",
+  //     description: "Write tests, find bugs, and improve code quality",
+  //     skills: ["Jest", "Testing", "Bug Reporting", "Quality Assurance"],
+  //     difficulty: "Beginner to Intermediate",
+  //   },
+  //   {
+  //     title: "Design & Branding",
+  //     description: "Create designs, icons, and improve the visual identity",
+  //     skills: ["Figma", "Adobe Creative Suite", "Branding", "Icon Design"],
+  //     difficulty: "Beginner to Advanced",
+  //   },
+  // ];
 
   return (
     <div className="min-h-screen flex flex-col">
