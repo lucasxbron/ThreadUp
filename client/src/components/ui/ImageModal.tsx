@@ -96,14 +96,9 @@ export const ImageModal: React.FC<ImageModalProps> = ({
           <Image
             src={imageUrl}
             alt={alt}
-            width={0}
-            height={0}
+            fill
             sizes="95vw"
-            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl cursor-zoom-out"
-            style={{
-              maxWidth: "95vw",
-              maxHeight: "95vh",
-            }}
+            className="object-contain rounded-lg shadow-2xl cursor-zoom-out"
             onClick={(e) => {
               e.stopPropagation();
               onClose();
