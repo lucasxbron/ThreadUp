@@ -168,31 +168,31 @@ export default function CommunityGuidelinesPage() {
     },
   ];
 
-  const reportingSteps = [
-    {
-      step: "1",
-      title: "Identify the Issue",
-      description: "Recognize content or behavior that violates our guidelines",
-    },
-    {
-      step: "2",
-      title: "Use Report Button",
-      description:
-        "Click the report option on posts, comments, or user profiles",
-    },
-    {
-      step: "3",
-      title: "Provide Details",
-      description:
-        "Give specific information about the violation to help our review",
-    },
-    {
-      step: "4",
-      title: "We Review",
-      description:
-        "Our team investigates and takes appropriate action within 24-48 hours",
-    },
-  ];
+  // const reportingSteps = [
+  //   {
+  //     step: "1",
+  //     title: "Identify the Issue",
+  //     description: "Recognize content or behavior that violates our guidelines",
+  //   },
+  //   {
+  //     step: "2",
+  //     title: "Use Report Button",
+  //     description:
+  //       "Click the report option on posts, comments, or user profiles",
+  //   },
+  //   {
+  //     step: "3",
+  //     title: "Provide Details",
+  //     description:
+  //       "Give specific information about the violation to help our review",
+  //   },
+  //   {
+  //     step: "4",
+  //     title: "We Review",
+  //     description:
+  //       "Our team investigates and takes appropriate action within 24-48 hours",
+  //   },
+  // ];
 
   const consequences = [
     {
