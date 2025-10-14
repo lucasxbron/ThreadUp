@@ -109,7 +109,14 @@ export const ImageModal: React.FC<ImageModalProps> = ({
               onClose();
             }}
             priority={true}
-            quality={85} // Slightly lower quality for faster loading
+            quality={85}
+            unoptimized={true}
+            onError={(e) => {
+              console.error("Image failed to load:", imageUrl);
+            }}
+            onLoad={() => {
+              console.log("Image loaded successfully:", imageUrl);
+            }}
           />
         </div>
       </div>
