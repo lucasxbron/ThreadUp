@@ -3,15 +3,8 @@
 import React from "react";
 import { Header } from "@/components/layout/Header";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export default function ComingSoonPage() {
-  const router = useRouter();
-
-  const goBack = () => {
-    router.back();
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
