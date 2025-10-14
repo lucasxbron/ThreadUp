@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect } from "react";
-import Image from "next/image";
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -93,24 +92,17 @@ export const ImageModal: React.FC<ImageModalProps> = ({
         onClick={onClose}
       >
         <div className="relative max-w-[95vw] max-h-[95vh] flex items-center justify-center">
-          <Image
+          <img
             src={imageUrl}
             alt={alt}
-            fill
-            sizes="95vw"
-            className="object-contain rounded-lg shadow-2xl cursor-zoom-out"
+            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
             onClick={(e) => {
               e.stopPropagation();
               onClose();
             }}
-            priority={true}
-            quality={85}
-            unoptimized={true}
-            onError={(e) => {
-              console.error("Image failed to load:", imageUrl);
-            }}
-            onLoad={() => {
-              console.log("Image loaded successfully:", imageUrl);
+            style={{
+              maxWidth: "95vw",
+              maxHeight: "95vh",
             }}
           />
         </div>
