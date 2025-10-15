@@ -426,6 +426,12 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
     const isDeleting = deletingComments.has(comment._id);
     const isCurrentUserAdmin = isAdmin(user);
     const isAuthorAdmin = (comment.authorId.roles || []).includes("admin");
+    console.log(
+      "Comment author roles:",
+      comment.authorId.roles,
+      "isAuthorAdmin:",
+      isAuthorAdmin
+    );
 
     // Admin delete logic
     const canDelete = user?._id === comment.authorId._id || isCurrentUserAdmin;
