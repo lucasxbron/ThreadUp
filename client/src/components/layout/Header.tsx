@@ -155,27 +155,59 @@ export const Header: React.FC = () => {
           <div className="flex justify-between items-center h-14 sm:h-16">
             {/* Logo */}
             <div className="flex-shrink-0">
-              <Link
-                href="/"
-                className="flex items-center space-x-1.5 sm:space-x-2 cursor-pointer hover:opacity-90 transition-opacity duration-200"
-              >
-                <div className="w-9 h-9 flex items-center justify-center">
-                  <Image
-                    src="/threadup_icon_gradient.svg"
-                    alt="ThreadUp"
-                    width={32}
-                    height={32}
-                    className="w-full h-full object-contain"
-                    priority
-                  />
-                </div>
-                <span
-                  className="text-lg sm:text-xl font-bold hidden sm:block"
-                  style={{ color: "var(--color-foreground, #0f172a)" }}
+              {isAuthenticated ? (
+                <button
+                  onClick={() => {
+                    if (pathname === "/") {
+                      // If already on home page, trigger a refresh
+                      window.dispatchEvent(new CustomEvent("refreshPosts"));
+                    } else {
+                      // Navigate to home page
+                      window.location.href = "/";
+                    }
+                  }}
+                  className="flex items-center space-x-1.5 sm:space-x-2 cursor-pointer hover:opacity-90 transition-opacity duration-200"
                 >
-                  ThreadUp
-                </span>
-              </Link>
+                  <div className="w-9 h-9 flex items-center justify-center">
+                    <Image
+                      src="/threadup_icon_gradient.svg"
+                      alt="ThreadUp"
+                      width={32}
+                      height={32}
+                      className="w-full h-full object-contain"
+                      priority
+                    />
+                  </div>
+                  <span
+                    className="text-lg sm:text-xl font-bold hidden sm:block"
+                    style={{ color: "var(--color-foreground, #0f172a)" }}
+                  >
+                    ThreadUp
+                  </span>
+                </button>
+              ) : (
+                <Link
+                  href="/"
+                  className="flex items-center space-x-1.5 sm:space-x-2 cursor-pointer hover:opacity-90 transition-opacity duration-200"
+                >
+                  <div className="w-9 h-9 flex items-center justify-center">
+                    <Image
+                      src="/threadup_icon_gradient.svg"
+                      alt="ThreadUp"
+                      width={32}
+                      height={32}
+                      className="w-full h-full object-contain"
+                      priority
+                    />
+                  </div>
+                  <span
+                    className="text-lg sm:text-xl font-bold hidden sm:block"
+                    style={{ color: "var(--color-foreground, #0f172a)" }}
+                  >
+                    ThreadUp
+                  </span>
+                </Link>
+              )}
             </div>
 
             {/* Navigation */}
