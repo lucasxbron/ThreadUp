@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link";
 import { Post } from "@/types/post.types";
 import { isAdmin } from "@/types/user.types";
 import { useAuth } from "@/contexts/AuthContext";
@@ -58,6 +57,9 @@ export const PostCard: React.FC<PostCardProps> = ({
   const followerCount =
     globalFollowState?.followersCount ?? post.authorId.followersCount ?? 0;
   const followLoading = globalFollowState?.isLoading ?? false;
+  const authorRoles = post.authorId.roles ?? [];
+  const isAuthorAdmin = authorRoles.includes("admin");
+  const isCurrentUserAdmin = isAdmin(user);
 
   // Initialize global follow state if not present
   useEffect(() => {
@@ -97,8 +99,12 @@ export const PostCard: React.FC<PostCardProps> = ({
 
     if (showActionsMenu) {
       document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
     }
 
+    // Add explicit cleanup for when showActionsMenu becomes false
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -201,9 +207,9 @@ export const PostCard: React.FC<PostCardProps> = ({
     }
   };
 
-  const canDelete = user?._id === post.authorId._id || isAdmin(user);
+  const canDelete = user?._id === post.authorId._id || isCurrentUserAdmin;
   const isOwnPost = user?._id === post.authorId._id;
-  const isAdminDelete = isAdmin(user) && !isOwnPost;
+  const isAdminDelete = isCurrentUserAdmin && !isOwnPost;
 
   // Get full name
   const getFullName = (firstName: string, lastName: string) => {
@@ -214,8 +220,8 @@ export const PostCard: React.FC<PostCardProps> = ({
     try {
       const response = await apiClient.getComments(post._id);
       if (response.data) {
-        const commentsData = response.data as any;
-        setCommentCount(commentsData.comments?.length || 0);
+        const commentsData = response.data as { comments?: Array<unknown> };
+        setCommentCount(commentsData.comments?.length ?? 0);
       }
     } catch (error) {
       console.error("Error loading comment count:", error);
@@ -262,9 +268,7 @@ export const PostCard: React.FC<PostCardProps> = ({
                 </p>
 
                 {/* Admin Badge */}
-                {isAdmin({ roles: post.authorId.roles || [] } as any) && (
-                  <AdminBadge className="flex-shrink-0" />
-                )}
+                {isAuthorAdmin && <AdminBadge className="flex-shrink-0" />}
 
                 {/* Follow Button - Only show for other users */}
                 {isAuthenticated && !isOwnPost && (
