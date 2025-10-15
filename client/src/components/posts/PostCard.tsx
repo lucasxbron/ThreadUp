@@ -59,6 +59,13 @@ export const PostCard: React.FC<PostCardProps> = ({
   const followLoading = globalFollowState?.isLoading ?? false;
   const authorRoles = post.authorId.roles ?? [];
   const isAuthorAdmin = authorRoles.includes("admin");
+  console.log(
+    "Post author roles:",
+    post.authorId.roles,
+    "isAuthorAdmin:",
+    isAuthorAdmin
+  );
+
   const isCurrentUserAdmin = isAdmin(user);
 
   // Initialize global follow state if not present
