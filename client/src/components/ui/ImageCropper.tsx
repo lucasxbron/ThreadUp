@@ -180,7 +180,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
       } else if (isResizing && !isDragging && resizeHandle) {
         // Resize crop area maintaining square aspect ratio
         setCropArea((prev) => {
-          let newCrop = { ...prev };
+          const newCrop = { ...prev };
           const minSize = 50; // Minimum crop size
           const maxSize = Math.min(imageSize.width, imageSize.height);
 
