@@ -456,54 +456,63 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
 
           {/* Comment content */}
           <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-x-1 sm:gap-x-2 gap-y-1 mb-1">
-              <span
-                className="font-medium text-xs sm:text-sm truncate"
-                style={{ color: "var(--color-card-foreground, #0f172a)" }}
-              >
-                {getFullName(
-                  comment.authorId.firstName,
-                  comment.authorId.lastName
+            {/* Metadata - Name and badge on first line, username/date together */}
+            <div className="flex flex-col gap-1 mb-1">
+              {/* First line: Name and Admin Badge */}
+              <div className="flex items-center gap-x-2">
+                <span
+                  className="font-medium text-xs sm:text-sm"
+                  style={{ color: "var(--color-card-foreground, #0f172a)" }}
+                >
+                  {getFullName(
+                    comment.authorId.firstName,
+                    comment.authorId.lastName
+                  )}
+                </span>
+                {isAuthorAdmin && <AdminBadge className="flex-shrink-0" />}
+              </div>
+
+              {/* Second line: Username, date, and edited flag - wraps together */}
+              <div className="flex flex-wrap items-center gap-x-1">
+                <span
+                  className="text-xs"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  @{comment.authorId.username}
+                </span>
+                <span
+                  className="text-xs"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  •
+                </span>
+                <span
+                  className="text-xs"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  {formatDate(comment.createdAt)}
+                </span>
+                {comment.edited && (
+                  <>
+                    <span
+                      className="text-xs"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      •
+                    </span>
+                    <span
+                      className="text-xs italic"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      (edited)
+                    </span>
+                  </>
                 )}
-              </span>
-
-              {/* Admin Badge */}
-              {isAuthorAdmin && <AdminBadge className="flex-shrink-0" />}
-
-              <span
-                className="text-xs flex-shrink-0"
-                style={{ color: "var(--color-muted-foreground, #64748b)" }}
-              >
-                @{comment.authorId.username}
-              </span>
-              <span
-                className="text-xs flex-shrink-0"
-                style={{ color: "var(--color-muted-foreground, #64748b)" }}
-              >
-                •
-              </span>
-              <span
-                className="text-xs flex-shrink-0"
-                style={{ color: "var(--color-muted-foreground, #64748b)" }}
-              >
-                {formatDate(comment.createdAt)}
-              </span>
-              {comment.edited && (
-                <>
-                  <span
-                    className="text-xs flex-shrink-0"
-                    style={{ color: "var(--color-muted-foreground, #64748b)" }}
-                  >
-                    •
-                  </span>
-                  <span
-                    className="text-xs flex-shrink-0 italic"
-                    style={{ color: "var(--color-muted-foreground, #64748b)" }}
-                  >
-                    (edited)
-                  </span>
-                </>
-              )}
+              </div>
             </div>
 
             {/* Comment text or edit input */}
