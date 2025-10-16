@@ -456,63 +456,24 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
 
           {/* Comment content */}
           <div className="flex-1 min-w-0">
-            {/* Metadata - Name and badge on first line, username/date together */}
-            <div className="flex flex-col gap-1 mb-1">
-              {/* First line: Name and Admin Badge */}
-              <div className="flex items-center gap-x-2">
-                <span
-                  className="font-medium text-xs sm:text-sm"
-                  style={{ color: "var(--color-card-foreground, #0f172a)" }}
-                >
-                  {getFullName(
-                    comment.authorId.firstName,
-                    comment.authorId.lastName
-                  )}
-                </span>
-                {isAuthorAdmin && <AdminBadge className="flex-shrink-0" />}
-              </div>
-
-              {/* Second line: Username, date, and edited flag - wraps together */}
-              <div className="flex flex-wrap items-center gap-x-1">
-                <span
-                  className="text-xs"
-                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
-                >
-                  @{comment.authorId.username}
-                </span>
-                <span
-                  className="text-xs"
-                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
-                >
-                  •
-                </span>
-                <span
-                  className="text-xs"
-                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
-                >
-                  {formatDate(comment.createdAt)}
-                </span>
-                {comment.edited && (
-                  <>
-                    <span
-                      className="text-xs"
-                      style={{
-                        color: "var(--color-muted-foreground, #64748b)",
-                      }}
-                    >
-                      •
-                    </span>
-                    <span
-                      className="text-xs italic"
-                      style={{
-                        color: "var(--color-muted-foreground, #64748b)",
-                      }}
-                    >
-                      (edited)
-                    </span>
-                  </>
+            {/* Metadata - Name, Admin Badge, and Username on one line */}
+            <div className="flex items-center gap-x-1 flex-wrap mb-1">
+              <span
+                className="font-medium text-xs sm:text-sm"
+                style={{ color: "var(--color-card-foreground, #0f172a)" }}
+              >
+                {getFullName(
+                  comment.authorId.firstName,
+                  comment.authorId.lastName
                 )}
-              </div>
+              </span>
+              {isAuthorAdmin && <AdminBadge className="flex-shrink-0" />}
+              <span
+                className="text-xs"
+                style={{ color: "var(--color-muted-foreground, #64748b)" }}
+              >
+                @{comment.authorId.username}
+              </span>
             </div>
 
             {/* Comment text or edit input */}
@@ -569,142 +530,167 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                 </div>
               </div>
             ) : (
-              <p
-                className="text-xs sm:text-sm break-words whitespace-pre-wrap mb-2"
-                style={{
-                  color: "var(--color-card-foreground, #0f172a)",
-                  wordBreak: "break-word",
-                  overflowWrap: "break-word",
-                  hyphens: "auto",
-                }}
-              >
-                {comment.text}
-              </p>
-            )}
-
-            {/* Comment actions */}
-            {!isEditing && (
-              <div className="flex items-center space-x-3 sm:space-x-4">
-                {/* Like button */}
-                <button
-                  onClick={() => handleCommentLike(comment._id)}
-                  disabled={!isAuthenticated || likingComments.has(comment._id)}
-                  className="flex items-center space-x-1 transition-all duration-200 hover:scale-105"
+              <div className="space-y-2">
+                {/* Comment text */}
+                <p
+                  className="text-xs sm:text-sm break-words whitespace-pre-wrap"
                   style={{
-                    color: comment.liked
-                      ? "var(--color-destructive, #ef4444)"
-                      : "var(--color-muted-foreground, #64748b)",
-                    backgroundColor: "transparent",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!comment.liked) {
-                      e.currentTarget.style.color =
-                        "var(--color-destructive, #ef4444)";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!comment.liked) {
-                      e.currentTarget.style.color =
-                        "var(--color-muted-foreground, #64748b)";
-                    }
+                    color: "var(--color-card-foreground, #0f172a)",
+                    wordBreak: "break-word",
+                    overflowWrap: "break-word",
+                    hyphens: "auto",
                   }}
                 >
-                  <svg
-                    className={`w-3 h-3 sm:w-4 sm:h-4 transition-all duration-200 ${
-                      comment.liked ? "fill-current" : ""
-                    }`}
-                    fill={comment.liked ? "currentColor" : "none"}
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
-                  <span className="text-xs font-medium">
-                    {comment.likeCount || 0}
-                  </span>
-                </button>
+                  {comment.text}
+                </p>
 
-                {/* Reply button */}
-                {isAuthenticated && (
+                {/* Comment actions with date and edited status */}
+                <div className="flex items-center space-x-3 sm:space-x-4">
+                  {/* Like button */}
                   <button
-                    onClick={() =>
-                      handleReply(comment._id, comment.authorId.username)
+                    onClick={() => handleCommentLike(comment._id)}
+                    disabled={
+                      !isAuthenticated || likingComments.has(comment._id)
                     }
-                    className="text-xs transition-all duration-200 hover:scale-105"
+                    className="flex items-center space-x-1 transition-all duration-200 hover:scale-105"
                     style={{
-                      color: "var(--color-muted-foreground, #64748b)",
+                      color: comment.liked
+                        ? "var(--color-destructive, #ef4444)"
+                        : "var(--color-muted-foreground, #64748b)",
                       backgroundColor: "transparent",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color =
-                        "var(--color-primary, #3b82f6)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color =
-                        "var(--color-muted-foreground, #64748b)";
-                    }}
-                  >
-                    Reply
-                  </button>
-                )}
-
-                {/* Edit button - only for comment author */}
-                {isOwnComment && (
-                  <button
-                    onClick={() => handleEdit(comment._id, comment.text)}
-                    className="text-xs transition-all duration-200 hover:scale-105"
-                    style={{
-                      color: "var(--color-muted-foreground, #64748b)",
-                      backgroundColor: "transparent",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color =
-                        "var(--color-primary, #3b82f6)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color =
-                        "var(--color-muted-foreground, #64748b)";
-                    }}
-                  >
-                    Edit
-                  </button>
-                )}
-
-                {/* Delete button - for comment author OR admin */}
-                {canDelete && (
-                  <button
-                    onClick={() => handleDeleteClick(comment._id, isReply)}
-                    disabled={isDeleting}
-                    className="text-xs transition-all duration-200 hover:scale-105 disabled:opacity-50"
-                    style={{
-                      color: "var(--color-destructive, #ef4444)",
-                      backgroundColor: "transparent",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isDeleting) {
-                        e.currentTarget.style.color =
-                          "var(--color-destructive-600, #dc2626)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isDeleting) {
+                      if (!comment.liked) {
                         e.currentTarget.style.color =
                           "var(--color-destructive, #ef4444)";
                       }
                     }}
+                    onMouseLeave={(e) => {
+                      if (!comment.liked) {
+                        e.currentTarget.style.color =
+                          "var(--color-muted-foreground, #64748b)";
+                      }
+                    }}
                   >
-                    {isDeleting
-                      ? "Deleting..."
-                      : isAdminDelete
-                      ? "Delete (Admin)"
-                      : "Delete"}
+                    <svg
+                      className={`w-3 h-3 sm:w-4 sm:h-4 transition-all duration-200 ${
+                        comment.liked ? "fill-current" : ""
+                      }`}
+                      fill={comment.liked ? "currentColor" : "none"}
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
+                    <span className="text-xs font-medium">
+                      {comment.likeCount || 0}
+                    </span>
                   </button>
-                )}
+
+                  {/* Date */}
+                  <span
+                    className="text-xs"
+                    style={{
+                      color: "var(--color-muted-foreground, #64748b)",
+                    }}
+                  >
+                    {formatDate(comment.createdAt)}
+                  </span>
+
+                  {/* Edited status */}
+                  {comment.edited && (
+                    <span
+                      className="text-xs italic"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      (edited)
+                    </span>
+                  )}
+
+                  {/* Reply button */}
+                  {isAuthenticated && (
+                    <button
+                      onClick={() =>
+                        handleReply(comment._id, comment.authorId.username)
+                      }
+                      className="text-xs transition-all duration-200 hover:scale-105"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                        backgroundColor: "transparent",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color =
+                          "var(--color-primary, #3b82f6)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color =
+                          "var(--color-muted-foreground, #64748b)";
+                      }}
+                    >
+                      Reply
+                    </button>
+                  )}
+
+                  {/* Edit button - only for comment author */}
+                  {isOwnComment && (
+                    <button
+                      onClick={() => handleEdit(comment._id, comment.text)}
+                      className="text-xs transition-all duration-200 hover:scale-105"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                        backgroundColor: "transparent",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color =
+                          "var(--color-primary, #3b82f6)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color =
+                          "var(--color-muted-foreground, #64748b)";
+                      }}
+                    >
+                      Edit
+                    </button>
+                  )}
+
+                  {/* Delete button - for comment author OR admin */}
+                  {canDelete && (
+                    <button
+                      onClick={() => handleDeleteClick(comment._id, isReply)}
+                      disabled={isDeleting}
+                      className="text-xs transition-all duration-200 hover:scale-105 disabled:opacity-50"
+                      style={{
+                        color: "var(--color-destructive, #ef4444)",
+                        backgroundColor: "transparent",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isDeleting) {
+                          e.currentTarget.style.color =
+                            "var(--color-destructive-600, #dc2626)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isDeleting) {
+                          e.currentTarget.style.color =
+                            "var(--color-destructive, #ef4444)";
+                        }
+                      }}
+                    >
+                      {isDeleting
+                        ? "Deleting..."
+                        : isAdminDelete
+                        ? "Delete (Admin)"
+                        : "Delete"}
+                    </button>
+                  )}
+                </div>
               </div>
             )}
 
