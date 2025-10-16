@@ -456,7 +456,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
 
           {/* Comment content */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center space-x-1 sm:space-x-2 mb-1">
+            <div className="flex flex-wrap items-center gap-x-1 sm:gap-x-2 gap-y-1 mb-1">
               <span
                 className="font-medium text-xs sm:text-sm truncate"
                 style={{ color: "var(--color-card-foreground, #0f172a)" }}
