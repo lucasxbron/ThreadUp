@@ -60,6 +60,27 @@ export const Header: React.FC = () => {
   // Check if create post button should be shown (only on home page)
   const shouldShowCreatePost = isAuthenticated && pathname === "/";
 
+  const LogoInner = () => (
+    <>
+      <div className="w-9 h-9 flex items-center justify-center">
+        <Image
+          src="/threadup_icon_gradient.svg"
+          alt="ThreadUp"
+          width={32}
+          height={32}
+          className="w-full h-full object-contain"
+          priority
+        />
+      </div>
+      <span
+        className="text-lg sm:text-xl font-bold hidden sm:block"
+        style={{ color: "var(--color-foreground, #0f172a)" }}
+      >
+        ThreadUp
+      </span>
+    </>
+  );
+
   const ThemeToggle = () => {
     const { theme, toggleTheme } = useTheme();
 
@@ -155,57 +176,23 @@ export const Header: React.FC = () => {
           <div className="flex justify-between items-center h-14 sm:h-16">
             {/* Logo */}
             <div className="flex-shrink-0">
-              {isAuthenticated ? (
+              {isAuthenticated && pathname === "/" ? (
                 <button
-                  onClick={() => {
-                    if (pathname === "/") {
-                      // If already on home page, trigger a refresh
-                      window.dispatchEvent(new CustomEvent("refreshPosts"));
-                    } else {
-                      // Navigate to home page
-                      window.location.href = "/";
-                    }
-                  }}
+                  onClick={() =>
+                    window.dispatchEvent(new CustomEvent("refreshPosts"))
+                  }
                   className="flex items-center space-x-1.5 sm:space-x-2 cursor-pointer hover:opacity-90 transition-opacity duration-200"
+                  aria-label="Refresh posts"
                 >
-                  <div className="w-9 h-9 flex items-center justify-center">
-                    <Image
-                      src="/threadup_icon_gradient.svg"
-                      alt="ThreadUp"
-                      width={32}
-                      height={32}
-                      className="w-full h-full object-contain"
-                      priority
-                    />
-                  </div>
-                  <span
-                    className="text-lg sm:text-xl font-bold hidden sm:block"
-                    style={{ color: "var(--color-foreground, #0f172a)" }}
-                  >
-                    ThreadUp
-                  </span>
+                  <LogoInner />
                 </button>
               ) : (
                 <Link
                   href="/"
                   className="flex items-center space-x-1.5 sm:space-x-2 cursor-pointer hover:opacity-90 transition-opacity duration-200"
+                  aria-label="Go to home"
                 >
-                  <div className="w-9 h-9 flex items-center justify-center">
-                    <Image
-                      src="/threadup_icon_gradient.svg"
-                      alt="ThreadUp"
-                      width={32}
-                      height={32}
-                      className="w-full h-full object-contain"
-                      priority
-                    />
-                  </div>
-                  <span
-                    className="text-lg sm:text-xl font-bold hidden sm:block"
-                    style={{ color: "var(--color-foreground, #0f172a)" }}
-                  >
-                    ThreadUp
-                  </span>
+                  <LogoInner />
                 </Link>
               )}
             </div>
