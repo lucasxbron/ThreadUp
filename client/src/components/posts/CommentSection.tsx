@@ -436,14 +436,12 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
       <div key={comment._id} className="space-y-3">
         <div
           className={`flex items-start space-x-2 sm:space-x-3 group ${
-            isReply ? "ml-4 sm:ml-10 pl-2 sm:pl-4" : ""
+            isReply ? "ml-3 sm:ml-10 pl-3 sm:pl-4 border-l" : ""
           }`}
           style={
             isReply
-              ? {
-                  borderLeft: "2px solid var(--color-border, #e2e8f0)",
-                }
-              : {}
+              ? { borderColor: "var(--color-border, #e2e8f0)" }
+              : undefined
           }
         >
           {/* Avatar */}
