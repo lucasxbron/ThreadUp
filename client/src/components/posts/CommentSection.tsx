@@ -435,12 +435,12 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
     return (
       <div key={comment._id} className="space-y-3">
         <div
-          className="flex items-start space-x-2 sm:space-x-3 group"
+          className={`flex items-start space-x-2 sm:space-x-3 group ${
+            isReply ? "ml-4 sm:ml-10 pl-2 sm:pl-4" : ""
+          }`}
           style={
             isReply
               ? {
-                  marginLeft: "2.5rem",
-                  paddingLeft: "1rem",
                   borderLeft: "2px solid var(--color-border, #e2e8f0)",
                 }
               : {}
