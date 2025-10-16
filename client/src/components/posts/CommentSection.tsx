@@ -531,20 +531,33 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
               </div>
             ) : (
               <div className="space-y-2">
-                {/* Comment text */}
-                <p
-                  className="text-xs sm:text-sm break-words whitespace-pre-wrap"
-                  style={{
-                    color: "var(--color-card-foreground, #0f172a)",
-                    wordBreak: "break-word",
-                    overflowWrap: "break-word",
-                    hyphens: "auto",
-                  }}
-                >
-                  {comment.text}
-                </p>
+                {/* Comment text with edited status */}
+                <div className="flex items-baseline gap-1 flex-wrap">
+                  <p
+                    className="text-xs sm:text-sm break-words whitespace-pre-wrap"
+                    style={{
+                      color: "var(--color-card-foreground, #0f172a)",
+                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
+                      hyphens: "auto",
+                    }}
+                  >
+                    {comment.text}
+                  </p>
+                  {/* Edited status */}
+                  {comment.edited && (
+                    <span
+                      className="text-xs italic flex-shrink-0"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      (edited)
+                    </span>
+                  )}
+                </div>
 
-                {/* Comment actions with date and edited status */}
+                {/* Comment actions with date */}
                 <div className="flex items-center space-x-3 sm:space-x-4">
                   {/* Like button */}
                   <button
@@ -601,18 +614,6 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                   >
                     {formatDate(comment.createdAt)}
                   </span>
-
-                  {/* Edited status */}
-                  {comment.edited && (
-                    <span
-                      className="text-xs italic"
-                      style={{
-                        color: "var(--color-muted-foreground, #64748b)",
-                      }}
-                    >
-                      (edited)
-                    </span>
-                  )}
 
                   {/* Reply button */}
                   {isAuthenticated && (
