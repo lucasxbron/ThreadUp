@@ -24,9 +24,29 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
     left: 0,
   });
 
+  // Don't render emoji picker on mobile devices - they should use native keyboard
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // Tailwind's md breakpoint
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Close picker on mobile (shouldn't be visible anyway)
+  useEffect(() => {
+    if (isMobile && isOpen) {
+      onClose();
+    }
+  }, [isMobile, isOpen, onClose]);
+
   // Calculate position relative to trigger element and account for scroll
   useEffect(() => {
-    if (isOpen && triggerRef?.current) {
+    if (isOpen && triggerRef?.current && !isMobile) {
       const updatePosition = () => {
         if (!triggerRef?.current) return;
 
@@ -66,7 +86,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
       // Calculate initial position
       updatePosition();
     }
-  }, [isOpen, triggerRef]);
+  }, [isOpen, triggerRef, isMobile]);
 
   // Close on outside click
   useEffect(() => {
@@ -82,7 +102,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
       }
     };
 
-    if (isOpen) {
+    if (isOpen && !isMobile) {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("touchstart", handleClickOutside);
     }
@@ -91,7 +111,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
     };
-  }, [isOpen, onClose, triggerRef]);
+  }, [isOpen, onClose, triggerRef, isMobile]);
 
   // Close on escape key
   useEffect(() => {
@@ -101,16 +121,17 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
       }
     };
 
-    if (isOpen) {
+    if (isOpen && !isMobile) {
       document.addEventListener("keydown", handleEscape);
     }
 
     return () => {
       document.removeEventListener("keydown", handleEscape);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, isMobile]);
 
-  if (!isOpen) return null;
+  // Don't render on mobile or when closed
+  if (!isOpen || isMobile) return null;
 
   // Filter emojis based on search
   const filteredEmojis = searchTerm
@@ -194,7 +215,6 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
           borderColor: "var(--color-border, #e2e8f0)",
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
         }}
-        // Prevent all clicks inside the picker from bubbling
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -258,9 +278,9 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
                   ? "💻"
                   : category === "Symbols & Hearts"
                   ? "❤️"
-                  : category === "Flags"
-                  ? "🏁"
-                  : category.split(" ")[0]}
+                  : // : category === "Flags"
+                    // ? "🏁"
+                    category.split(" ")[0]}
               </button>
             ))}
           </div>
@@ -283,7 +303,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
                   e.stopPropagation();
                   handleEmojiClick(emojiData.emoji);
                 }}
-                title={emojiData.name} // Tooltip with emoji name
+                title={emojiData.name}
                 className="w-8 h-8 flex items-center justify-center rounded transition-colors text-lg"
                 style={{
                   backgroundColor: "transparent",
