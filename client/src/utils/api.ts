@@ -1,7 +1,47 @@
-interface ApiResponse<T = any> {
+import type { Post } from "@/types/post.types";
+
+interface ApiResponse<T = unknown> {
   data?: T;
   error?: string;
   message?: string;
+}
+
+interface UploadResponse {
+  profileImage?: {
+    url: string;
+    public_id: string;
+  };
+  postImage?: {
+    url: string;
+    public_id: string;
+  };
+}
+
+interface UserPostsResponse {
+  posts: Post[];
+  totalPosts: number;
+  currentPage: number;
+  totalPages: number;
+}
+
+interface FollowStatusResponse {
+  isFollowing: boolean;
+  followersCount: number;
+  followingCount: number;
+}
+
+interface ToggleFollowResponse {
+  following: boolean;
+  followersCount: number;
+}
+
+interface VerifyEmailChangeResponse {
+  message: string;
+  user: {
+    email: string;
+    _id: string;
+    username: string;
+  };
 }
 
 class ApiClient {
@@ -13,7 +53,7 @@ class ApiClient {
       process.env.NEXT_PUBLIC_API_URL || "https://threadup-server.onrender.com";
   }
 
-  private async makeRequest<T = any>(
+  private async makeRequest<T = unknown>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
@@ -123,7 +163,7 @@ class ApiClient {
   }
 
   async getPostById(id: string) {
-    return this.makeRequest(`/api/posts/${id}`);
+    return this.makeRequest<Post>(`/api/posts/${id}`);
   }
 
   async createPost(formData: FormData) {
@@ -150,7 +190,7 @@ class ApiClient {
   }
 
   async createComment(postId: string, text: string, parentCommentId?: string) {
-    const body: any = { text };
+    const body: Record<string, string> = { text };
     if (parentCommentId) {
       body.parentCommentId = parentCommentId;
     }
@@ -217,13 +257,18 @@ class ApiClient {
       return { error: "Invalid user ID format" };
     }
 
-    return this.makeRequest(`/api/follows/user/${userId}`, {
-      method: "POST",
-    });
+    return this.makeRequest<ToggleFollowResponse>(
+      `/api/follows/user/${userId}`,
+      {
+        method: "POST",
+      }
+    );
   }
 
   async getFollowStatus(userId: string) {
-    return this.makeRequest(`/api/follows/user/${userId}/status`);
+    return this.makeRequest<FollowStatusResponse>(
+      `/api/follows/user/${userId}/status`
+    );
   }
 
   async getFollowers(userId: string, page: number = 1, limit: number = 20) {
@@ -239,7 +284,7 @@ class ApiClient {
   }
 
   async getUserPosts(userId: string, page: number = 1, limit: number = 20) {
-    return this.makeRequest(
+    return this.makeRequest<UserPostsResponse>(
       `/api/posts/user/${userId}?page=${page}&limit=${limit}`
     );
   }
@@ -287,7 +332,9 @@ class ApiClient {
   }
 
   async verifyEmailChange(token: string) {
-    return this.makeRequest(`/api/auth/verify-email-change?token=${token}`);
+    return this.makeRequest<VerifyEmailChangeResponse>(
+      `/api/auth/verify-email-change?token=${token}`
+    );
   }
 
   async cancelEmailChange() {
@@ -323,8 +370,7 @@ class ApiClient {
   }
 
   async uploadAvatar(formData: FormData) {
-    // formData.append("type", "profile");
-    return this.makeRequest("/api/upload/profile", {
+    return this.makeRequest<UploadResponse>("/api/upload/profile", {
       method: "POST",
       body: formData,
     });
