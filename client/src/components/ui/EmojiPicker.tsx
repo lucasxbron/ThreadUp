@@ -24,6 +24,8 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
     left: 0,
   });
 
+  const [isPositioned, setIsPositioned] = useState(false);
+
   // Don't render emoji picker on mobile devices - they should use native keyboard
   const [isMobile, setIsMobile] = useState(false);
 
@@ -81,8 +83,10 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
         }
 
         setPosition({ top, left });
+        setIsPositioned(true);
       };
-
+      // Reset positioning state when opening
+      setIsPositioned(false);
       // Calculate initial position
       updatePosition();
     }
@@ -131,7 +135,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
   }, [isOpen, onClose, isMobile]);
 
   // Don't render on mobile or when closed
-  if (!isOpen || isMobile) return null;
+  if (!isOpen || isMobile || !isPositioned) return null;
 
   // Filter emojis based on search
   const filteredEmojis = searchTerm
