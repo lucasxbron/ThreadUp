@@ -108,8 +108,8 @@ export const ImageModal: React.FC<ImageModalProps> = ({
         </div>
       </div>
 
-      {/* Instructions text */}
-      <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-[310]">
+      {/* Instructions text - Desktop only */}
+      <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-[310] hidden lg:block">
         <div
           className="px-4 py-2 rounded-full text-white text-sm"
           style={{
