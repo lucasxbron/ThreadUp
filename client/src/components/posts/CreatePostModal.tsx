@@ -225,7 +225,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
               ref={emojiButtonRef}
               type="button"
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-              className="absolute bottom-2 right-2 p-1.5 rounded-lg transition-all duration-200 hover:scale-110 hidden md:block"
+              className="absolute bottom-2 right-2 p-1.5 rounded-lg transition-all duration-200 hover:scale-110 hidden lg:block"
               style={{
                 color: "var(--color-muted-foreground, #64748b)",
                 backgroundColor: "transparent",

@@ -31,7 +31,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // Tailwind's md breakpoint
+      setIsMobile(window.innerWidth < 1024); // Tailwind's lg breakpoint
     };
 
     checkMobile();
@@ -39,7 +39,7 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Close picker on mobile (shouldn't be visible anyway)
+  // Close picker on mobile
   useEffect(() => {
     if (isMobile && isOpen) {
       onClose();
