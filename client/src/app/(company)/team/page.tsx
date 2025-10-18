@@ -12,7 +12,7 @@ export default function TeamPage() {
       role: "Project Lead & Full Stack Developer",
       description:
         "Passionate about creating meaningful social connections through technology. Leads platform architecture, privacy framework, and overall product vision.",
-      avatar: "/avatars/developers/lucas_bron_avatar.png",
+      avatar: "/avatars/developers/lucas_bron_avatar_512x512.webp",
       gradient: "from-blue-500 to-purple-600",
       expertise: [
         "Full-Stack Development",
@@ -35,7 +35,7 @@ export default function TeamPage() {
       role: "Full Stack Developer",
       description:
         "Creative full-stack developer passionate about building intuitive user interfaces and robust backend systems. Specializes in user experience and frontend optimization.",
-      avatar: "/avatars/developers/sophie_kock_avatar.png",
+      avatar: "/avatars/developers/sophie_kock_avatar_512x512.webp",
       gradient: "from-pink-500 to-rose-600",
       expertise: [
         "Frontend Development",
@@ -58,7 +58,7 @@ export default function TeamPage() {
       role: "Full Stack Developer",
       description:
         "Versatile full-stack developer with expertise in modern web technologies. Focused on performance optimization and scalable application development.",
-      avatar: "/avatars/developers/marcus_stoeppler_avatar.png",
+      avatar: "/avatars/developers/marcus_stoeppler_avatar_512x512.webp",
       gradient: "from-green-500 to-teal-600",
       expertise: [
         "Backend Development",
