@@ -286,7 +286,7 @@ export default function ProfilePage() {
             <div className="space-y-6">
               {/* Back Button and Page Header */}
               <div
-                className="rounded-xl shadow-lg border p-6 transition-all duration-300"
+                className="rounded-xl shadow-lg border p-4 sm:p-6 transition-all duration-300"
                 style={{
                   backgroundColor: "var(--color-card, #ffffff)",
                   borderColor: "var(--color-border, #e2e8f0)",
@@ -294,17 +294,27 @@ export default function ProfilePage() {
                     "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
                 }}
               >
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
-                  <div className="flex items-center space-x-4">
-                    {/* Back Button */}
+                <div className="flex flex-col space-y-4">
+                  {/* Back Button - Full width on mobile */}
+                  <div>
                     <Link href="/">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="flex items-center space-x-2 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                      <button
+                        type="button"
+                        className="group flex items-center space-x-2 px-3 py-2 -ml-2 rounded-lg transition-colors duration-200"
+                        style={{
+                          color: "var(--color-primary, #3b82f6",
+                          backgroundColor: "transparent",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor =
+                            "var(--color-secondary, #f1f5f9)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "transparent";
+                        }}
                       >
                         <svg
-                          className="w-4 h-4"
+                          className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -313,14 +323,16 @@ export default function ProfilePage() {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             strokeWidth={2}
-                            d="M15 19l-7-7 7-7"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"
                           />
                         </svg>
-                        <span>Back to Feed</span>
-                      </Button>
+                        <span className="text-sm font-medium">Back</span>
+                      </button>
                     </Link>
+                  </div>
 
-                    {/* Title */}
+                  {/* Header Content */}
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
                     <div>
                       <h1
                         className="text-2xl sm:text-3xl font-bold"
@@ -329,7 +341,7 @@ export default function ProfilePage() {
                         Profile Settings
                       </h1>
                       <p
-                        className="mt-1 text-base"
+                        className="mt-1 text-sm sm:text-base"
                         style={{
                           color: "var(--color-muted-foreground, #64748b)",
                         }}
@@ -337,30 +349,30 @@ export default function ProfilePage() {
                         Manage your account information and preferences
                       </p>
                     </div>
-                  </div>
 
-                  {/* Edit Button */}
-                  <Button
-                    onClick={() => setIsEditing(true)}
-                    variant="primary"
-                    size="sm"
-                    className="px-6 py-2.5 w-full sm:w-auto"
-                  >
-                    <svg
-                      className="w-4 h-4 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                    {/* Edit Button */}
+                    <Button
+                      onClick={() => setIsEditing(true)}
+                      variant="primary"
+                      size="sm"
+                      className="px-6 py-2.5 w-full sm:w-auto flex items-center justify-center space-x-2"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                      />
-                    </svg>
-                    Edit Profile
-                  </Button>
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                        />
+                      </svg>
+                      <span>Edit Profile</span>
+                    </Button>
+                  </div>
                 </div>
               </div>
 
