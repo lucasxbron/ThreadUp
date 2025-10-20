@@ -28,6 +28,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const [imageOffset, setImageOffset] = useState({ x: 0, y: 0 });
 
   // Crop area in pixels, always maintains square aspect ratio
   const [cropArea, setCropArea] = useState<CropArea>({
@@ -59,49 +60,49 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
 
   const handleImageLoad = () => {
     const image = imageRef.current;
-    const container = containerRef.current;
 
-    if (!image || !container) return;
+    if (!image) return;
 
-    const containerRect = container.getBoundingClientRect();
-    const containerAspect = containerRect.width / containerRect.height;
+    // Use a fixed max dimension
+    const maxDimension = 400;
     const imageAspect = image.naturalWidth / image.naturalHeight;
 
     let displayWidth, displayHeight;
 
-    if (imageAspect > containerAspect) {
-      displayWidth = containerRect.width;
+    // Fit image inside max dimension while maintaining aspect ratio
+    if (imageAspect > 1) {
+      // Image is wider - fit to width
+      displayWidth = maxDimension;
       displayHeight = displayWidth / imageAspect;
     } else {
-      displayHeight = containerRect.height;
+      // Image is taller or square - fit to height
+      displayHeight = maxDimension;
       displayWidth = displayHeight * imageAspect;
     }
 
     setImageSize({ width: displayWidth, height: displayHeight });
     setContainerSize({
-      width: containerRect.width,
-      height: containerRect.height,
+      width: displayWidth,
+      height: displayHeight,
     });
+    setImageOffset({ x: 0, y: 0 });
+
     setImageLoaded(true);
 
-    // Calculate image offset within container
-    const imageOffsetX = (containerRect.width - displayWidth) / 2;
-    const imageOffsetY = (containerRect.height - displayHeight) / 2;
-
-    // Initialize crop area as square in the center
+    // Initialize crop area as square in the center of the image
     const minDimension = Math.min(displayWidth, displayHeight);
-    const cropSize = Math.min(200, minDimension * 0.6); // 60% of smaller dimension, max 200px
+    const cropSize = Math.min(200, minDimension * 0.6);
 
     setCropArea({
-      x: imageOffsetX + (displayWidth - cropSize) / 2,
-      y: imageOffsetY + (displayHeight - cropSize) / 2,
+      x: (displayWidth - cropSize) / 2,
+      y: (displayHeight - cropSize) / 2,
       width: cropSize,
       height: cropSize,
     });
   };
 
   // Handle mouse down on crop area
-  const handleMouseDown = (e: React.MouseEvent, handle?: string) => {
+  const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -112,16 +113,9 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
     const y = e.clientY - rect.top;
 
     setDragStart({ x, y });
-
-    if (handle) {
-      setIsResizing(true);
-      setResizeHandle(handle);
-      setIsDragging(false);
-    } else {
-      setIsDragging(true);
-      setIsResizing(false);
-      setResizeHandle("");
-    }
+    setIsDragging(true);
+    setIsResizing(false);
+    setResizeHandle("");
   };
 
   // Handle resize handle mouse down
@@ -152,27 +146,17 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
       const deltaX = x - dragStart.x;
       const deltaY = y - dragStart.y;
 
-      // Get image position within container
-      const imageOffsetX = (containerSize.width - imageSize.width) / 2;
-      const imageOffsetY = (containerSize.height - imageSize.height) / 2;
-
       if (isDragging && !isResizing) {
         // Move crop area - keep it within image bounds
         setCropArea((prev) => {
-          const newX = Math.max(
-            imageOffsetX,
-            Math.min(
-              imageOffsetX + imageSize.width - prev.width,
-              prev.x + deltaX
-            )
-          );
-          const newY = Math.max(
-            imageOffsetY,
-            Math.min(
-              imageOffsetY + imageSize.height - prev.height,
-              prev.y + deltaY
-            )
-          );
+          const minX = imageOffset.x;
+          const minY = imageOffset.y;
+          const maxX = imageOffset.x + imageSize.width - prev.width;
+          const maxY = imageOffset.y + imageSize.height - prev.height;
+
+          const newX = Math.max(minX, Math.min(maxX, prev.x + deltaX));
+          const newY = Math.max(minY, Math.min(maxY, prev.y + deltaY));
+
           return { ...prev, x: newX, y: newY };
         });
 
@@ -181,89 +165,101 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
         // Resize crop area maintaining square aspect ratio
         setCropArea((prev) => {
           const newCrop = { ...prev };
-          const minSize = 50; // Minimum crop size
-          const maxSize = Math.min(imageSize.width, imageSize.height);
+          const minSize = 50;
+          const maxWidth = imageSize.width;
+          const maxHeight = imageSize.height;
 
           switch (resizeHandle) {
-            case "se": // Southeast corner
+            case "se": {
+              // Southeast: expand right and down
+              const maxSizeFromRight = imageOffset.x + imageSize.width - prev.x;
+              const maxSizeFromBottom =
+                imageOffset.y + imageSize.height - prev.y;
               const newSize = Math.max(
                 minSize,
                 Math.min(
-                  maxSize,
-                  prev.width + deltaX,
-                  prev.height + deltaY,
-                  imageOffsetX + imageSize.width - prev.x, // Max width within image
-                  imageOffsetY + imageSize.height - prev.y // Max height within image
+                  maxWidth,
+                  maxHeight,
+                  maxSizeFromRight,
+                  maxSizeFromBottom,
+                  prev.width + Math.min(deltaX, deltaY)
                 )
               );
               newCrop.width = newSize;
               newCrop.height = newSize;
               break;
+            }
 
-            case "sw": // Southwest corner
-              const swSize = Math.max(
+            case "sw": {
+              // Southwest: expand left and down
+              const maxSizeFromLeft = prev.x + prev.width - imageOffset.x;
+              const maxSizeFromBottom =
+                imageOffset.y + imageSize.height - prev.y;
+              const sizeDelta = Math.min(-deltaX, deltaY);
+              const newSize = Math.max(
                 minSize,
                 Math.min(
-                  maxSize,
-                  prev.width - deltaX,
-                  prev.height + deltaY,
-                  prev.x - imageOffsetX, // Can't go beyond left edge
-                  imageOffsetY + imageSize.height - prev.y // Max height within image
+                  maxWidth,
+                  maxHeight,
+                  maxSizeFromLeft,
+                  maxSizeFromBottom,
+                  prev.width + sizeDelta
                 )
               );
-              if (
-                swSize >= minSize &&
-                prev.x - (swSize - prev.width) >= imageOffsetX
-              ) {
-                newCrop.x = prev.x - (swSize - prev.width);
-                newCrop.width = swSize;
-                newCrop.height = swSize;
+              if (newSize >= minSize) {
+                newCrop.x = prev.x + prev.width - newSize;
+                newCrop.width = newSize;
+                newCrop.height = newSize;
               }
               break;
+            }
 
-            case "ne": // Northeast corner
-              const neSize = Math.max(
+            case "ne": {
+              // Northeast: expand right and up
+              const maxSizeFromRight = imageOffset.x + imageSize.width - prev.x;
+              const maxSizeFromTop = prev.y + prev.height - imageOffset.y;
+              const sizeDelta = Math.min(deltaX, -deltaY);
+              const newSize = Math.max(
                 minSize,
                 Math.min(
-                  maxSize,
-                  prev.width + deltaX,
-                  prev.height - deltaY,
-                  imageOffsetX + imageSize.width - prev.x, // Max width within image
-                  prev.y - imageOffsetY // Can't go beyond top edge
+                  maxWidth,
+                  maxHeight,
+                  maxSizeFromRight,
+                  maxSizeFromTop,
+                  prev.width + sizeDelta
                 )
               );
-              if (
-                neSize >= minSize &&
-                prev.y - (neSize - prev.height) >= imageOffsetY
-              ) {
-                newCrop.y = prev.y - (neSize - prev.height);
-                newCrop.width = neSize;
-                newCrop.height = neSize;
+              if (newSize >= minSize) {
+                newCrop.y = prev.y + prev.height - newSize;
+                newCrop.width = newSize;
+                newCrop.height = newSize;
               }
               break;
+            }
 
-            case "nw": // Northwest corner
-              const nwSize = Math.max(
+            case "nw": {
+              // Northwest: expand left and up
+              const maxSizeFromLeft = prev.x + prev.width - imageOffset.x;
+              const maxSizeFromTop = prev.y + prev.height - imageOffset.y;
+              const sizeDelta = Math.min(-deltaX, -deltaY);
+              const newSize = Math.max(
                 minSize,
                 Math.min(
-                  maxSize,
-                  prev.width - deltaX,
-                  prev.height - deltaY,
-                  prev.x - imageOffsetX, // Can't go beyond left edge
-                  prev.y - imageOffsetY // Can't go beyond top edge
+                  maxWidth,
+                  maxHeight,
+                  maxSizeFromLeft,
+                  maxSizeFromTop,
+                  prev.width + sizeDelta
                 )
               );
-              if (
-                nwSize >= minSize &&
-                prev.x - (nwSize - prev.width) >= imageOffsetX &&
-                prev.y - (nwSize - prev.height) >= imageOffsetY
-              ) {
-                newCrop.x = prev.x - (nwSize - prev.width);
-                newCrop.y = prev.y - (nwSize - prev.height);
-                newCrop.width = nwSize;
-                newCrop.height = nwSize;
+              if (newSize >= minSize) {
+                newCrop.x = prev.x + prev.width - newSize;
+                newCrop.y = prev.y + prev.height - newSize;
+                newCrop.width = newSize;
+                newCrop.height = newSize;
               }
               break;
+            }
           }
 
           return newCrop;
@@ -272,7 +268,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
         setDragStart({ x, y });
       }
     },
-    [isDragging, isResizing, dragStart, imageSize, containerSize, resizeHandle]
+    [isDragging, isResizing, dragStart, imageSize, imageOffset, resizeHandle]
   );
 
   // Handle mouse up
@@ -312,13 +308,9 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
     const scaleX = image.naturalWidth / imageSize.width;
     const scaleY = image.naturalHeight / imageSize.height;
 
-    // Get image offset within container
-    const imageOffsetX = (containerSize.width - imageSize.width) / 2;
-    const imageOffsetY = (containerSize.height - imageSize.height) / 2;
-
     // Calculate crop coordinates relative to the image (not container)
-    const cropX = (cropArea.x - imageOffsetX) * scaleX;
-    const cropY = (cropArea.y - imageOffsetY) * scaleY;
+    const cropX = (cropArea.x - imageOffset.x) * scaleX;
+    const cropY = (cropArea.y - imageOffset.y) * scaleY;
     const cropWidth = cropArea.width * scaleX;
     const cropHeight = cropArea.height * scaleY;
 
@@ -355,7 +347,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
         0.9
       );
     });
-  }, [cropArea, imageLoaded, imageSize, containerSize]);
+  }, [cropArea, imageLoaded, imageSize, imageOffset]);
 
   const handleSave = async () => {
     setLoading(true);
@@ -383,11 +375,11 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
         {/* Image Preview with Crop Overlay */}
         <div
           ref={containerRef}
-          className="relative mx-auto bg-gray-100 rounded-lg overflow-hidden select-none"
+          className="relative mx-auto rounded-lg overflow-hidden select-none"
           style={{
-            width: "400px",
-            height: "400px",
-            backgroundColor: "var(--color-muted, #f1f5f9)",
+            width: imageLoaded ? `${imageSize.width}px` : "400px",
+            height: imageLoaded ? `${imageSize.height}px` : "400px",
+            backgroundColor: "transparent",
           }}
         >
           {imageSrc && (
@@ -397,10 +389,8 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
                 src={imageSrc}
                 alt="Crop preview"
                 onLoad={handleImageLoad}
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                className="w-full h-full"
                 style={{
-                  width: `${imageSize.width}px`,
-                  height: `${imageSize.height}px`,
                   objectFit: "contain",
                   pointerEvents: "none",
                 }}
@@ -409,43 +399,21 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
 
               {/* Crop Overlay */}
               {imageLoaded && (
-                <div className="absolute inset-0">
-                  {/* Dark overlay using proper positioning */}
-                  <div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                      background: "rgba(0,0,0,0.5)",
-                    }}
-                  />
-
-                  {/* Clear crop area */}
-                  <div
-                    className="absolute"
-                    style={{
-                      left: `${cropArea.x}px`,
-                      top: `${cropArea.y}px`,
-                      width: `${cropArea.width}px`,
-                      height: `${cropArea.height}px`,
-                      background: "transparent",
-                      boxShadow: `
-                        0 0 0 9999px rgba(0,0,0,0.5),
-                        inset 0 0 0 2px white,
-                        inset 0 0 0 3px rgba(0,0,0,0.3)
-                      `,
-                    }}
-                  />
-
+                <div className="absolute inset-0 pointer-events-none">
                   {/* Crop area with handles */}
                   <div
-                    className="absolute border-2 border-white cursor-move"
+                    className="absolute border-2 border-white pointer-events-auto cursor-move"
                     style={{
                       left: `${cropArea.x}px`,
                       top: `${cropArea.y}px`,
                       width: `${cropArea.width}px`,
                       height: `${cropArea.height}px`,
-                      boxShadow: "0 0 0 1px rgba(0,0,0,0.3)",
+                      boxShadow: `
+                        0 0 0 9999px rgba(0,0,0,0.5),
+                        inset 0 0 0 1px rgba(0,0,0,0.3)
+                      `,
                     }}
-                    onMouseDown={(e) => handleMouseDown(e)}
+                    onMouseDown={handleMouseDown}
                   >
                     {/* Corner resize handles */}
                     <div
