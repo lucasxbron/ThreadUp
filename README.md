@@ -14,7 +14,7 @@ _Connect authentically. Share freely. Own your data._
 [![Node.js](https://img.shields.io/badge/Node.js-18+-5FA04E?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-8.15-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 
-[🌐 Live Demo](https://threadup-client.onrender.com/) • [📖 Documentation](#-documentation) • [🚀 Quick Start](#-quick-start)
+[🌐 Live Demo](https://threadup-client.onrender.com/) • [📖 Documentation](#documentation) • [🚀 Quick Start](#quick-start)
 
 </div>
 
@@ -30,9 +30,10 @@ ThreadUp is a **modern social media platform** built with privacy and authentici
 - **Ad-Free Experience** - No tracking, no sponsored content, no manipulation
 
 <div align="center">
-  <img src=".github/images/threadup_landing_page_1800x1200.png" alt="ThreadUp Platform Screenshot" style="border-radius: 12px; max-width: 900px; width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
-  <!-- <p><em>Clean, chronological feed without algorithmic manipulation</em></p> -->
-  <p><em>The initial view for unauthenticated users on ThreadUp</em></p>
+  <img src=".github/images/threadup_landing_page_1800x1200.png" alt="ThreadUp Platform Screenshot" width="900">
+  <br>
+  <!-- <em>Clean, chronological feed without algorithmic manipulation</em> -->
+  <em>The initial view for unauthenticated users on ThreadUp</em>
 </div>
 
 ---
