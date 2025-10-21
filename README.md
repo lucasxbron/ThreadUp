@@ -161,7 +161,7 @@ Comprehensive technical documentation is available for developers:
 
 - **[Client Documentation](client/README.md)** - Frontend architecture, components, and features
 - **[Server Documentation](server/README.md)** - Backend API, authentication, and database
-- **[API Testing Guide](server/docs/POSTMAN_TESTING.md)** - Complete Postman collection and testing instructions
+- **[API Testing Guide](server/docs/API_REFERENCE.md)** - Complete API Reference collection and testing instructions
 
 ### Quick Links
 
