@@ -205,18 +205,6 @@ Social media should connect people, not divide them. ThreadUp is our contributio
 
 ---
 
-<!-- ## Roadmap
-
-Future enhancements we're exploring:
-
-- Native mobile applications
-- Real-time notifications
-- Video support
-- Advanced search functionality
-- Enhanced analytics for users
-
---- -->
-
 ## Contributing
 
 We welcome contributions from the community! Whether it's:
