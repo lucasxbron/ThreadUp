@@ -97,7 +97,7 @@ export default function HelpCenterPage() {
           title: "Adding images to posts",
           description: "Upload and share photos in your posts",
           content: `
-            • Click the camera icon when creating a post
+            • Click the image icon when creating a post
             • Select an image from your device
             • Images are automatically resized for optimal viewing
             • You can add text along with your image
@@ -204,9 +204,9 @@ export default function HelpCenterPage() {
           description: "Update your account email safely and securely",
           content: `
             1. Go to your Profile page
-            2. Click on "Email Settings" 
+            2. Find the "Change Email Address" section
             3. Enter your new email address
-            4. Click "Send Verification Email"
+            4. Click "Change Email Address"
             5. Check your new email and click the verification link
             6. Your email will be updated once verified
           `,
@@ -305,9 +305,8 @@ export default function HelpCenterPage() {
             
             1. Go to your Profile page
             2. Scroll to "Danger Zone"
-            3. Click "Delete Account"
-            4. Type "DELETE" to confirm
-            5. Click "Delete My Account"
+            3. Click "Delete My Account"
+            4. Click "Yes, Delete My Account" to confirm
             
             All your posts, comments, and data will be permanently removed.
           `,
