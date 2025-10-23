@@ -11,18 +11,18 @@ A robust, production-ready social media platform backend featuring authenticatio
 
 ## Table of Contents
 
-- [Features](#-features)
-- [Quick Start](#-quick-start)
-- [API Architecture](#-api-architecture)
-- [Environment Configuration](#-environment-configuration)
-- [Authentication & Security](#-authentication--security)
-- [Admin Management](#-admin-management)
-- [API Endpoints](#-api-endpoints)
-- [Database Schema](#-database-schema)
-- [Media Upload System](#-media-upload-system)
-- [Development](#-development)
-- [Production Deployment](#-production-deployment)
-- [Testing](#-testing)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [API Architecture](#api-architecture)
+- [Environment Configuration](#environment-configuration)
+- [Authentication & Security](#authentication--security)
+- [Admin Management](#admin-management)
+- [API Endpoints](#api-endpoints)
+- [Database Schema](#database-schema)
+- [Media Upload System](#media-upload-system)
+- [Development](#development)
+- [Production Deployment](#production-deployment)
+- [Testing](#testing)
 
 ## Features
 

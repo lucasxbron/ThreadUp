@@ -9,19 +9,19 @@ A modern, responsive social media platform frontend built with Next.js 15, featu
 
 ## Table of Contents
 
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Getting Started](#-getting-started)
-- [Project Structure](#-project-structure)
-- [Core Features](#-core-features)
-- [Components Overview](#-components-overview)
-- [Context Providers](#-context-providers)
-- [Routing & Pages](#-routing--pages)
-- [Styling & Theming](#-styling--theming)
-- [API Integration](#-api-integration)
-- [Development](#-development)
-- [Build & Deployment](#-build--deployment)
-- [Environment Variables](#-environment-variables)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Core Features](#core-features)
+- [Components Overview](#components-overview)
+- [Context Providers](#context-providers)
+- [Routing & Pages](#routing--pages)
+- [Styling & Theming](#styling--theming)
+- [API Integration](#api-integration)
+- [Development](#development)
+- [Build & Deployment](#build--deployment)
+- [Environment Variables](#environment-variables)
 
 ---
 
