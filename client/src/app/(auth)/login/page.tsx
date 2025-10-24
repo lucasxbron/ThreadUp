@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/Button";
 import Image from "next/image";
 
 export default function LoginPage() {
+  // TOGGLE DEMO BANNER - Set to false to hide
+  const SHOW_DEMO_BANNER = true;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -61,6 +64,12 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Auto-fill demo credentials
+  const handleDemoFill = () => {
+    setEmail("demo@example.com");
+    setPassword("Demo123!");
   };
 
   return (
@@ -131,6 +140,48 @@ export default function LoginPage() {
               Sign in to your ThreadUp account
             </p>
           </div>
+
+          {/* DEMO ACCOUNT BANNER - Remove this entire block to disable */}
+          {SHOW_DEMO_BANNER && (
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">🎭</span>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-blue-900 dark:text-blue-100 text-sm mb-1">
+                    Try Demo Account
+                  </h3>
+                  <p className="text-xs text-blue-800 dark:text-blue-200 mb-3">
+                    Experience ThreadUp without registration.
+                  </p>
+                  <div className="bg-white dark:bg-gray-800 rounded border border-blue-200 dark:border-blue-700 p-3 space-y-2 mb-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                        Email:
+                      </span>
+                      <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                        demo@example.com
+                      </code>
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                        Password:
+                      </span>
+                      <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                        Demo123!
+                      </code>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleDemoFill}
+                    type="button"
+                    className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                  >
+                    → Auto-fill demo credentials
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Login Form */}
           <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>

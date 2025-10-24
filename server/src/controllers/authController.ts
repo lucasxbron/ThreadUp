@@ -16,11 +16,24 @@ import { deleteFromCloudinary } from "../utils/cloudinary.js";
 
 const secret = config.JWT_SECRET;
 
+const isDemoAccount = (email: string): boolean => {
+  return email.endsWith("@example.com");
+};
+
 export const register = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  // TOGGLE THIS TO CLOSE/OPEN REGISTRATION
+  const REGISTRATION_CLOSED = true; // Set to false to reopen
+
+  if (REGISTRATION_CLOSED) {
+    throw createHttpError(
+      503,
+      "Registration is temporarily closed. Please try our demo account or check back later."
+    );
+  }
   const { firstName, lastName, username, email, password } = req.body;
 
   try {
@@ -380,6 +393,14 @@ export const changePassword = async (
       throw createHttpError(404, "User not found");
     }
 
+    // Block demo accounts
+    if (isDemoAccount(user.email)) {
+      throw createHttpError(
+        403,
+        "Demo accounts cannot change password. Create your own account for full access."
+      );
+    }
+
     // Verify current password
     const isCurrentPasswordValid = await compare(
       currentPassword,
@@ -437,6 +458,14 @@ export const deleteAccount = async (
     const user = await User.findById(userId);
     if (!user) {
       throw createHttpError(404, "User not found");
+    }
+
+    // Block demo accounts
+    if (isDemoAccount(user.email)) {
+      throw createHttpError(
+        403,
+        "Demo accounts cannot be deleted. Create your own account for full control."
+      );
     }
 
     // Verify password before deletion
@@ -590,6 +619,14 @@ export const requestEmailChange = async (
     const user = await User.findById(userId);
     if (!user) {
       throw createHttpError(404, "User not found");
+    }
+
+    // Block demo accounts
+    if (isDemoAccount(user.email)) {
+      throw createHttpError(
+        403,
+        "Demo accounts cannot change email. Create your own account for full access."
+      );
     }
 
     // Verify current password

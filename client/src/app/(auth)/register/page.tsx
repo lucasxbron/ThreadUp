@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/Button";
 import Image from "next/image";
 
 export default function RegisterPage() {
+  // TOGGLE REGISTRATION - Set to false to enable registration
+  const REGISTRATION_CLOSED = true;
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -113,6 +116,108 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
+
+  // REGISTRATION CLOSED VIEW - Remove entire if block to enable registration
+  if (REGISTRATION_CLOSED) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div
+          className="w-full max-w-sm sm:max-w-md space-y-6 md:space-y-8 p-6 md:p-8 rounded-xl shadow-lg border"
+          style={{
+            backgroundColor: "var(--color-card, #ffffff)",
+            borderColor: "var(--color-border, #e2e8f0)",
+          }}
+        >
+          {/* Logo */}
+          <div className="text-center">
+            <div className="flex justify-center mb-3">
+              <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
+                <Image
+                  src="/threadup_icon_gradient.svg"
+                  alt="ThreadUp"
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-contain drop-shadow-lg"
+                  priority
+                />
+              </div>
+            </div>
+            <h2
+              className="text-2xl md:text-3xl font-bold"
+              style={{ color: "var(--color-foreground, #0f172a)" }}
+            >
+              Registration Closed
+            </h2>
+            <p
+              className="mt-2 text-sm md:text-base"
+              style={{ color: "var(--color-muted-foreground, #64748b)" }}
+            >
+              New registrations are temporarily unavailable
+            </p>
+          </div>
+
+          {/* Demo Account Banner */}
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">🎭</span>
+              <div className="flex-1">
+                <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                  Try Our Demo Account
+                </h3>
+                <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
+                  Experience ThreadUp without creating an account. Demo data
+                  resets every 24 hours.
+                </p>
+                <div className="bg-white dark:bg-gray-800 rounded border border-blue-200 dark:border-blue-700 p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Email:
+                    </span>
+                    <code className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                      demo@example.com
+                    </code>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Password:
+                    </span>
+                    <code className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                      Demo123!
+                    </code>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="space-y-3">
+            <Link href="/login" className="block">
+              <Button className="w-full py-3 text-base md:text-sm font-medium">
+                Go to Login
+              </Button>
+            </Link>
+
+            <div className="text-center">
+              <p
+                className="text-sm"
+                style={{ color: "var(--color-muted-foreground, #64748b)" }}
+              >
+                Questions?{" "}
+                <Link
+                  href="/contact"
+                  className="font-medium underline hover:opacity-80 transition-opacity"
+                  style={{ color: "var(--color-primary, #3b82f6)" }}
+                >
+                  Contact us
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

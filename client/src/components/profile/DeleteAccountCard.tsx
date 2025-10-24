@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Modal } from "@/components/ui/Modal";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, isDemoAccount } from "@/contexts/AuthContext";
 import { apiClient } from "@/utils/api";
 
 export const DeleteAccountCard: React.FC = () => {
@@ -15,7 +15,9 @@ export const DeleteAccountCard: React.FC = () => {
   const [error, setError] = useState("");
   const [step, setStep] = useState<"confirm" | "password">("confirm");
 
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
+  const isDemo = isDemoAccount(user);
+
   const router = useRouter();
 
   const handleDeleteClick = () => {
@@ -112,6 +114,24 @@ export const DeleteAccountCard: React.FC = () => {
             </div>
           </div>
 
+          {/* DEMO WARNING BANNER */}
+          {isDemo && (
+            <div className="mb-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <span className="text-xl">🎭</span>
+                <div>
+                  <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                    Demo Account Restriction
+                  </p>
+                  <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+                    Demo accounts cannot be deleted. Create your own account for
+                    full control.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Warning Text */}
           <div
             className="border rounded-lg p-4 mb-4"
@@ -147,27 +167,42 @@ export const DeleteAccountCard: React.FC = () => {
           {/* Delete Button */}
           <button
             onClick={handleDeleteClick}
+            disabled={isDemo}
             className="w-full flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2"
             style={{
-              backgroundColor: "var(--color-destructive, #ef4444)",
-              color: "white",
-              borderColor: "var(--color-destructive, #ef4444)",
+              backgroundColor: isDemo
+                ? "var(--color-muted, #f1f5f9)"
+                : "var(--color-destructive, #ef4444)",
+              color: isDemo
+                ? "var(--color-muted-foreground, #64748b)"
+                : "white",
+              borderColor: isDemo
+                ? "var(--color-border, #e2e8f0)"
+                : "var(--color-destructive, #ef4444)",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor =
-                "var(--color-destructive-600, #dc2626)";
+              if (!isDemo) {
+                e.currentTarget.style.backgroundColor =
+                  "var(--color-destructive-600, #dc2626)";
+              }
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor =
-                "var(--color-destructive, #ef4444)";
+              if (!isDemo) {
+                e.currentTarget.style.backgroundColor =
+                  "var(--color-destructive, #ef4444)";
+              }
             }}
             onMouseDown={(e) => {
-              e.currentTarget.style.backgroundColor =
-                "var(--color-destructive-700, #b91c1c)";
+              if (!isDemo) {
+                e.currentTarget.style.backgroundColor =
+                  "var(--color-destructive-700, #b91c1c)";
+              }
             }}
             onMouseUp={(e) => {
-              e.currentTarget.style.backgroundColor =
-                "var(--color-destructive-600, #dc2626)";
+              if (!isDemo) {
+                e.currentTarget.style.backgroundColor =
+                  "var(--color-destructive-600, #dc2626)";
+              }
             }}
           >
             <svg
