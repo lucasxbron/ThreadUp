@@ -167,44 +167,20 @@ export default function RegisterPage() {
                 <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
                   Experience ThreadUp without creating an account.
                 </p>
-                <div
-                  className="rounded border p-3 space-y-2"
-                  style={{
-                    backgroundColor: "var(--color-card, #ffffff)",
-                    borderColor: "var(--color-border, #e2e8f0)",
-                  }}
-                >
+                <div className="rounded border p-3 space-y-2 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
                   <div className="flex items-center justify-between">
-                    <span
-                      className="text-sm font-medium"
-                      style={{ color: "var(--color-foreground, #0f172a)" }}
-                    >
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       Email:
                     </span>
-                    <code
-                      className="text-sm px-2 py-1 rounded font-mono"
-                      style={{
-                        backgroundColor: "var(--color-gray-200, #e2e8f0)",
-                        color: "var(--color-gray-900, #0f172a)",
-                      }}
-                    >
+                    <code className="text-sm px-2 py-1 rounded font-mono bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                       demo@example.com
                     </code>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span
-                      className="text-sm font-medium"
-                      style={{ color: "var(--color-foreground, #0f172a)" }}
-                    >
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       Password:
                     </span>
-                    <code
-                      className="text-sm px-2 py-1 rounded font-mono"
-                      style={{
-                        backgroundColor: "var(--color-gray-200, #e2e8f0)",
-                        color: "var(--color-gray-900, #0f172a)",
-                      }}
-                    >
+                    <code className="text-sm px-2 py-1 rounded font-mono bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                       Demo123!
                     </code>
                   </div>
