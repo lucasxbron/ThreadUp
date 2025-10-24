@@ -168,10 +168,10 @@ export default function LoginPage() {
                         Email:
                       </span>
                       <code
-                        className="text-xs px-2 py-1 rounded"
+                        className="text-xs px-2 py-1 rounded font-mono"
                         style={{
-                          backgroundColor: "var(--color-muted, #f1f5f9)",
-                          color: "var(--color-foreground, #0f172a)",
+                          backgroundColor: "var(--color-gray-200, #e2e8f0)",
+                          color: "var(--color-gray-900, #0f172a)",
                         }}
                       >
                         demo@example.com
@@ -185,10 +185,10 @@ export default function LoginPage() {
                         Password:
                       </span>
                       <code
-                        className="text-xs px-2 py-1 rounded"
+                        className="text-xs px-2 py-1 rounded font-mono"
                         style={{
-                          backgroundColor: "var(--color-muted, #f1f5f9)",
-                          color: "var(--color-foreground, #0f172a)",
+                          backgroundColor: "var(--color-gray-200, #e2e8f0)",
+                          color: "var(--color-gray-900, #0f172a)",
                         }}
                       >
                         Demo123!
