@@ -4,8 +4,11 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { apiClient } from "@/utils/api";
+import { useAuth, isDemoAccount } from "@/contexts/AuthContext";
 
 export const PasswordChangeCard: React.FC = () => {
+  const { user } = useAuth();
+  const isDemo = isDemoAccount(user);
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -124,6 +127,24 @@ export const PasswordChangeCard: React.FC = () => {
           </div>
         </div>
 
+        {/* DEMO WARNING BANNER */}
+        {isDemo && (
+          <div className="mb-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <span className="text-xl">🎭</span>
+              <div>
+                <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                  Demo Account Restriction
+                </p>
+                <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+                  Demo accounts cannot change passwords. Create your own account
+                  for full access.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Success Message */}
@@ -195,6 +216,7 @@ export const PasswordChangeCard: React.FC = () => {
               loading={loading}
               disabled={
                 loading ||
+                isDemo ||
                 !passwordData.currentPassword ||
                 !passwordData.newPassword ||
                 !passwordData.confirmPassword
