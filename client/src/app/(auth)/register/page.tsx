@@ -165,23 +165,46 @@ export default function RegisterPage() {
                   Try Our Demo Account
                 </h3>
                 <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
-                  Experience ThreadUp without creating an account. Demo data
-                  resets every 24 hours.
+                  Experience ThreadUp without creating an account.
                 </p>
-                <div className="bg-white dark:bg-gray-800 rounded border border-blue-200 dark:border-blue-700 p-3 space-y-2">
+                <div
+                  className="rounded border p-3 space-y-2"
+                  style={{
+                    backgroundColor: "var(--color-card, #ffffff)",
+                    borderColor: "var(--color-border, #e2e8f0)",
+                  }}
+                >
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <span
+                      className="text-sm font-medium"
+                      style={{ color: "var(--color-foreground, #0f172a)" }}
+                    >
                       Email:
                     </span>
-                    <code className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                    <code
+                      className="text-sm px-2 py-1 rounded"
+                      style={{
+                        backgroundColor: "var(--color-muted, #f1f5f9)",
+                        color: "var(--color-foreground, #0f172a)",
+                      }}
+                    >
                       demo@example.com
                     </code>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <span
+                      className="text-sm font-medium"
+                      style={{ color: "var(--color-foreground, #0f172a)" }}
+                    >
                       Password:
                     </span>
-                    <code className="text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                    <code
+                      className="text-sm px-2 py-1 rounded"
+                      style={{
+                        backgroundColor: "var(--color-muted, #f1f5f9)",
+                        color: "var(--color-foreground, #0f172a)",
+                      }}
+                    >
                       Demo123!
                     </code>
                   </div>

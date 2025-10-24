@@ -153,20 +153,44 @@ export default function LoginPage() {
                   <p className="text-xs text-blue-800 dark:text-blue-200 mb-3">
                     Experience ThreadUp without registration.
                   </p>
-                  <div className="bg-white dark:bg-gray-800 rounded border border-blue-200 dark:border-blue-700 p-3 space-y-2 mb-3">
+                  <div
+                    className="rounded border p-3 space-y-2 mb-3"
+                    style={{
+                      backgroundColor: "var(--color-card, #ffffff)",
+                      borderColor: "var(--color-border, #e2e8f0)",
+                    }}
+                  >
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                      <span
+                        className="text-xs font-medium"
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
                         Email:
                       </span>
-                      <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                      <code
+                        className="text-xs px-2 py-1 rounded"
+                        style={{
+                          backgroundColor: "var(--color-muted, #f1f5f9)",
+                          color: "var(--color-foreground, #0f172a)",
+                        }}
+                      >
                         demo@example.com
                       </code>
                     </div>
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                      <span
+                        className="text-xs font-medium"
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
                         Password:
                       </span>
-                      <code className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                      <code
+                        className="text-xs px-2 py-1 rounded"
+                        style={{
+                          backgroundColor: "var(--color-muted, #f1f5f9)",
+                          color: "var(--color-foreground, #0f172a)",
+                        }}
+                      >
                         Demo123!
                       </code>
                     </div>
