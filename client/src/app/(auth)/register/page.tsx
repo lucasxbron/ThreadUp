@@ -161,26 +161,56 @@ export default function RegisterPage() {
             <div className="flex items-start gap-3">
               <span className="text-2xl">🎭</span>
               <div className="flex-1">
-                <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                <h3
+                  className="font-semibold mb-2"
+                  style={{ color: "var(--color-foreground, #0f172a)" }}
+                >
                   Try Our Demo Account
                 </h3>
-                <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
+                <p
+                  className="text-sm mb-3"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
                   Experience ThreadUp without creating an account.
                 </p>
-                <div className="rounded border p-3 space-y-2 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                <div
+                  className="rounded border p-3 space-y-2"
+                  style={{
+                    backgroundColor: "var(--color-card, #ffffff)",
+                    borderColor: "var(--color-border, #e2e8f0)",
+                  }}
+                >
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <span
+                      className="text-sm font-medium"
+                      style={{ color: "var(--color-foreground, #0f172a)" }}
+                    >
                       Email:
                     </span>
-                    <code className="text-sm px-2 py-1 rounded font-mono bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    <code
+                      className="text-sm px-2 py-1 rounded"
+                      style={{
+                        backgroundColor: "var(--color-muted, #f1f5f9)",
+                        color: "var(--color-foreground, #0f172a)",
+                      }}
+                    >
                       demo@example.com
                     </code>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <span
+                      className="text-sm font-medium"
+                      style={{ color: "var(--color-foreground, #0f172a)" }}
+                    >
                       Password:
                     </span>
-                    <code className="text-sm px-2 py-1 rounded font-mono bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    <code
+                      className="text-sm px-2 py-1 rounded"
+                      style={{
+                        backgroundColor: "var(--color-muted, #f1f5f9)",
+                        color: "var(--color-foreground, #0f172a)",
+                      }}
+                    >
                       Demo123!
                     </code>
                   </div>
