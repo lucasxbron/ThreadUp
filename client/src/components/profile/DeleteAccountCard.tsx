@@ -124,8 +124,7 @@ export const DeleteAccountCard: React.FC = () => {
                     Demo Account Restriction
                   </p>
                   <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                    Demo accounts cannot be deleted. Create your own account for
-                    full control.
+                    Demo accounts cannot be deleted.
                   </p>
                 </div>
               </div>
