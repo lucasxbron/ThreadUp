@@ -190,8 +190,7 @@ export const EmailChangeCard: React.FC = () => {
                     Demo Account Restriction
                   </p>
                   <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                    Demo accounts cannot change email addresses. Create your own
-                    account for full access.
+                    Demo accounts cannot change email addresses.
                   </p>
                 </div>
               </div>
