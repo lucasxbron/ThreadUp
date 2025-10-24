@@ -220,7 +220,21 @@ Check out our [GitHub repository](https://github.com/lucasxbron/ThreadUp) to get
 
 ## License
 
-This project is part of the ThreadUp social media platform. All rights reserved.
+This project uses a **dual licensing model**:
+
+### Code License
+
+The **source code** is licensed under the **MIT License** - see [LICENSE](LICENSE.md).
+
+You are free to use, modify, and distribute the code.
+
+### Brand & Trademark
+
+The **ThreadUp name, logo, and visual identity** are **not** covered by the MIT License.
+
+See [TRADEMARK](TRADEMARK.md) for brand usage guidelines.
+
+**TLDR**: You can use the code freely, but you must rebrand if you deploy it.
 
 ---
 
