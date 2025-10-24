@@ -26,7 +26,8 @@ If you deploy this software, you **must**:
 2. **Replace the logo** with your own design
 3. **Update all branding** in the UI
 4. **Change color schemes** and visual identity
-5. **Clearly state** it's based on ThreadUp (attribution)
+5. **Remove team information** - Delete or replace team member names, avatars, and bios
+6. **Clearly state** it's based on ThreadUp (attribution)
 
 ### Attribution
 
