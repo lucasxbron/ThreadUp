@@ -185,8 +185,8 @@ export default function ImpressumPage() {
                         >
                           Die Datenverarbeitung auf dieser Website erfolgt durch
                           den Websitebetreiber. Dessen Kontaktdaten können Sie
-                          dem Abschnitt „Hinweis zur Verantwortlichen Stelle" in
-                          dieser Datenschutzerklärung entnehmen.
+                          dem Abschnitt &quot;Hinweis zur Verantwortlichen
+                          Stelle&quot; in dieser Datenschutzerklärung entnehmen.
                         </p>
                       </div>
 
@@ -837,8 +837,8 @@ export default function ImpressumPage() {
                       Seitenbetreiber senden, eine SSL- bzw.
                       TLS-Verschlüsselung. Eine verschlüsselte Verbindung
                       erkennen Sie daran, dass die Adresszeile des Browsers von
-                      „http://" auf „https://" wechselt und an dem
-                      Schloss-Symbol in Ihrer Browserzeile.
+                      &quot;http://&quot; auf &quot;https://&quot; wechselt und
+                      an dem Schloss-Symbol in Ihrer Browserzeile.
                     </p>
                     <p
                       className="leading-relaxed"
@@ -877,10 +877,10 @@ export default function ImpressumPage() {
                         color: "var(--color-muted-foreground, #64748b)",
                       }}
                     >
-                      Unsere Internetseiten verwenden so genannte „Cookies".
-                      Cookies sind kleine Datenpakete und richten auf Ihrem
-                      Endgerät keinen Schaden an. Sie werden entweder
-                      vorübergehend für die Dauer einer Sitzung
+                      Unsere Internetseiten verwenden so genannte
+                      &quot;Cookies&quot;. Cookies sind kleine Datenpakete und
+                      richten auf Ihrem Endgerät keinen Schaden an. Sie werden
+                      entweder vorübergehend für die Dauer einer Sitzung
                       (Session-Cookies) oder dauerhaft (permanente Cookies) auf
                       Ihrem Endgerät gespeichert. Session-Cookies werden nach
                       Ende Ihres Besuchs automatisch gelöscht. Permanente
