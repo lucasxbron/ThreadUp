@@ -122,9 +122,22 @@ export const Footer: React.FC = () => {
           </div>
 
           <div>
+            <h3 className="font-semibold text-foreground mb-4">Rechtliches</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <Link
+                  href="/impressum"
+                  className="hover:text-foreground transition-colors cursor-pointer"
+                >
+                  Impressum & Datenschutz
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* <div>
             <h3 className="font-semibold text-foreground mb-4">Connect</h3>
             <div className="flex justify-center sm:justify-start space-x-4 mb-4">
-              {/* X (Twitter) */}
               <Link
                 href="/coming-soon"
                 className="text-muted-foreground hover:text-foreground cursor-pointer"
@@ -139,7 +152,6 @@ export const Footer: React.FC = () => {
                 </svg>
               </Link>
 
-              {/* Instagram */}
               <Link
                 href="/coming-soon"
                 className="text-muted-foreground hover:text-foreground cursor-pointer"
@@ -158,7 +170,6 @@ export const Footer: React.FC = () => {
                 </svg>
               </Link>
 
-              {/* YouTube */}
               <Link
                 href="/coming-soon"
                 className="text-muted-foreground hover:text-foreground cursor-pointer"
@@ -177,7 +188,6 @@ export const Footer: React.FC = () => {
                 </svg>
               </Link>
 
-              {/* Facebook */}
               <Link
                 href="/coming-soon"
                 className="text-muted-foreground hover:text-foreground cursor-pointer"
@@ -199,7 +209,7 @@ export const Footer: React.FC = () => {
             <p className="text-sm text-muted-foreground">
               Follow us for updates and news
             </p>
-          </div>
+          </div> */}
         </div>
 
         <div className="border-t border-border pt-8">
@@ -212,9 +222,9 @@ export const Footer: React.FC = () => {
             <div className="flex items-center space-x-4 text-sm">
               <select className="bg-transparent border-none text-muted-foreground cursor-pointer">
                 <option>English</option>
-                <option>Español</option>
+                {/* <option>Español</option>
                 <option>Français</option>
-                <option>Deutsch</option>
+                <option>Deutsch</option> */}
               </select>
             </div>
           </div>
