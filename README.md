@@ -224,17 +224,22 @@ This project uses a **dual licensing model**:
 
 ### Code License
 
-The **source code** is licensed under the **MIT License** - see [LICENSE](LICENSE.md).
+The **source code** is licensed under a **proprietary license** - see [LICENSE](LICENSE.md).
 
-You are free to use, modify, and distribute the code.
+You may:
+
+- View and study the publicly available source code
+- Use the code for **private, non-commercial, educational purposes**
+- Contribute to development, report issues, or suggest improvements
+- Contact the owner to request permission for commercial or public use
 
 ### Brand & Trademark
 
-The **ThreadUp name, logo, and visual identity** are **not** covered by the MIT License.
+The **ThreadUp name, logo, and visual identity** are **not** included in the license and are fully protected.
 
 See [TRADEMARK](TRADEMARK.md) for brand usage guidelines.
 
-**TLDR**: You can use the code freely, but you must rebrand if you deploy it.
+**TLDR**: You can view and experiment with the code, but for any public or commercial deployment, you must obtain permission and rebrand according to the guidelines.
 
 ---
 
