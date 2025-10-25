@@ -440,14 +440,22 @@ export default function RegisterPage() {
                 style={{ color: "var(--color-primary, #3b82f6)" }}
               >
                 Terms of Service
-              </Link>{" "}
-              and{" "}
+              </Link>
+              ,{" "}
               <Link
                 href="/privacy"
                 className="underline hover:opacity-80 transition-opacity"
                 style={{ color: "var(--color-primary, #3b82f6)" }}
               >
                 Privacy Policy
+              </Link>
+              , and{" "}
+              <Link
+                href="/impressum"
+                className="underline hover:opacity-80 transition-opacity"
+                style={{ color: "var(--color-primary, #3b82f6)" }}
+              >
+                Impressum / Datenschutzrichtlinie
               </Link>
             </p>
           </div>
