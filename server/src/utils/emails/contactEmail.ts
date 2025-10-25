@@ -29,7 +29,7 @@ export const sendContactEmail = async (data: ContactEmailData) => {
 
   try {
     const { data: emailData, error } = await resend.emails.send({
-      from: "ThreadUp Contact Form <noreply@threadup.social>",
+      from: config.RESEND_FROM_EMAIL,
       to: ["threadup.social@gmail.com"],
       replyTo: email,
       subject: `[ThreadUp Contact] ${subject}`,

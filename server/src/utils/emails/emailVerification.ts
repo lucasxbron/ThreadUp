@@ -13,7 +13,7 @@ export const sendVerificationEmail = async (
 
   try {
     const { data, error } = await resend.emails.send({
-      from: "ThreadUp <noreply@threadup.social>",
+      from: config.RESEND_FROM_EMAIL,
       to: [email],
       subject: "Welcome to ThreadUp - Verify your email",
       html: `
