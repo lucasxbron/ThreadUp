@@ -87,27 +87,6 @@ export default function ImpressumPage() {
                   E-Mail: threadup.social@gmail.com
                 </p>
               </div>
-
-              <div
-                className="pt-4 border-t"
-                style={{ borderColor: "var(--color-border, #e2e8f0)" }}
-              >
-                <p
-                  className="text-sm"
-                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
-                >
-                  Quelle:{" "}
-                  <a
-                    href="https://www.e-recht24.de"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline hover:no-underline"
-                    style={{ color: "var(--color-primary, #3b82f6)" }}
-                  >
-                    https://www.e-recht24.de
-                  </a>
-                </p>
-              </div>
             </div>
           </div>
 
@@ -1572,7 +1551,7 @@ export default function ImpressumPage() {
                         color: "var(--color-muted-foreground, #64748b)",
                       }}
                     >
-                      Quelle:{" "}
+                      Diese Datenschutzerklärung wurde auf Grundlage von{" "}
                       <a
                         href="https://www.e-recht24.de"
                         target="_blank"
@@ -1580,8 +1559,9 @@ export default function ImpressumPage() {
                         className="underline hover:no-underline"
                         style={{ color: "var(--color-primary, #3b82f6)" }}
                       >
-                        https://www.e-recht24.de
-                      </a>
+                        eRecht24.de
+                      </a>{" "}
+                      erstellt und individuell angepasst.
                     </p>
                   </div>
                 </div>
