@@ -82,8 +82,6 @@ export default function ImpressumPage() {
                   className="leading-relaxed"
                   style={{ color: "var(--color-foreground, #0f172a)" }}
                 >
-                  Telefon: ***REMOVED***
-                  <br />
                   E-Mail: threadup.social@gmail.com
                 </p>
               </div>
