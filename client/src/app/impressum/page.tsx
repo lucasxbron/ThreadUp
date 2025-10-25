@@ -370,16 +370,13 @@ export default function ImpressumPage() {
                       className="leading-relaxed"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
-                      Osano International Compliance Services Limited
+                      Render Services, Inc.
                       <br />
-                      ATTN: 9UOQ
+                      525 Brannan St., Suite 300
                       <br />
-                      3 Dublin Landings
+                      San Francisco, CA 94107
                       <br />
-                      North Wall Quay
-                      <br />
-                      Dublin 1<br />
-                      D01C4E0
+                      USA
                     </p>
                   </div>
 
@@ -869,6 +866,50 @@ export default function ImpressumPage() {
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
+                      Allgemeine Hinweise zur Datenverarbeitung
+                    </h4>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Wir verarbeiten personenbezogene Daten nur, soweit dies
+                      für den Betrieb, die Sicherheit und die Funktionalität
+                      unserer Website sowie zur Erbringung unserer Leistungen
+                      erforderlich ist. Im Folgenden informieren wir Sie
+                      darüber, welche Datenkategorien wir verarbeiten, zu
+                      welchen Zwecken dies erfolgt und auf welcher
+                      Rechtsgrundlage dies beruht.
+                    </p>
+                    <ul
+                      className="list-disc list-inside space-y-2 ml-4"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <li>
+                        <strong>Art. 6 Abs. 1 lit. a DSGVO</strong> –
+                        Einwilligung (z. B. bei freiwilliger Registrierung,
+                        Kommentarfunktionen, Cookie-Einwilligung);
+                      </li>
+                      <li>
+                        <strong>Art. 6 Abs. 1 lit. b DSGVO</strong> –
+                        Vertragserfüllung oder vorvertragliche Maßnahmen (z. B.
+                        Benutzerkonto, Nutzung der Plattform);
+                      </li>
+                      <li>
+                        <strong>Art. 6 Abs. 1 lit. f DSGVO</strong> –
+                        berechtigtes Interesse (z. B. IT-Sicherheit,
+                        Missbrauchsvermeidung, Reichweitenmessung).
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4
+                      className="text-lg font-semibold mb-2"
+                      style={{ color: "var(--color-foreground, #0f172a)" }}
+                    >
                       Cookies
                     </h4>
                     <p
@@ -962,7 +1003,317 @@ export default function ImpressumPage() {
                       werden, können Sie dieser Datenschutzerklärung entnehmen.
                     </p>
                   </div>
+                  <div>
+                    <h4
+                      className="text-lg font-semibold mb-2"
+                      style={{ color: "var(--color-foreground, #0f172a)" }}
+                    >
+                      Benutzerkonto / Registrierung
+                    </h4>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Wenn Sie ein Benutzerkonto anlegen, verarbeiten wir
+                      insbesondere folgende Daten:
+                    </p>
+                    <ul
+                      className="list-disc list-inside space-y-1 ml-4 mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <li>Vor- und Nachname (falls angegeben)</li>
+                      <li>Benutzername</li>
+                      <li>E-Mail-Adresse</li>
+                      <li>
+                        Passwort (ausschließlich verschlüsselt gespeichert)
+                      </li>
+                      <li>optional: Profilbild und freiwillige Profildaten</li>
+                      <li>
+                        Zeitpunkte der Registrierung, letzter Login,
+                        E-Mail-Verifizierungsstatus
+                      </li>
+                    </ul>
+                    <p
+                      className="leading-relaxed mb-2"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <strong
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
+                        Zweck:
+                      </strong>{" "}
+                      Bereitstellung der Plattformfunktionen, Nutzung
+                      personalisierter Bereiche, Login und Kontoverwaltung.
+                    </p>
+                    <p
+                      className="leading-relaxed"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <strong
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
+                        Rechtsgrundlage:
+                      </strong>{" "}
+                      Art. 6 Abs. 1 lit. b DSGVO (Vertrag) und ggf. Art. 6 Abs.
+                      1 lit. a DSGVO (Einwilligung).
+                    </p>
+                  </div>
 
+                  <div>
+                    <h4
+                      className="text-lg font-semibold mb-2"
+                      style={{ color: "var(--color-foreground, #0f172a)" }}
+                    >
+                      Von Nutzern bereitgestellte Inhalte (User-Generated
+                      Content)
+                    </h4>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Bei der Nutzung unserer Plattform werden durch Sie
+                      bereitgestellte Inhalte verarbeitet:
+                    </p>
+                    <ul
+                      className="list-disc list-inside space-y-1 ml-4 mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <li>Beiträge, Threads, Kommentare und deren Inhalte</li>
+                      <li>
+                        Bilder, Medien, Dateien inklusive Dateiname, Dateigröße,
+                        Datum
+                      </li>
+                      <li>Likes, Follows, Interaktionen mit anderen Nutzern</li>
+                      <li>Benutzername und Profilinformationen</li>
+                      <li>Zeitstempel der Veröffentlichung</li>
+                    </ul>
+                    <p
+                      className="leading-relaxed mb-2"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <strong
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
+                        Zweck:
+                      </strong>{" "}
+                      Darstellung Ihrer Inhalte, Kommunikation mit anderen
+                      Nutzern, Moderation, Sicherstellung der
+                      Plattformintegrität.
+                    </p>
+                    <p
+                      className="leading-relaxed"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <strong
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
+                        Rechtsgrundlage:
+                      </strong>{" "}
+                      Art. 6 Abs. 1 lit. b DSGVO (Nutzungsvertrag) und Art. 6
+                      Abs. 1 lit. a DSGVO (Einwilligung für freiwillige
+                      Veröffentlichungen).
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4
+                      className="text-lg font-semibold mb-2"
+                      style={{ color: "var(--color-foreground, #0f172a)" }}
+                    >
+                      Administrations- und Moderationsdaten (nur für
+                      Administratoren)
+                    </h4>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Für Nutzer mit administrativen oder moderativen Rechten
+                      werden zusätzlich folgende Daten verarbeitet:
+                    </p>
+                    <ul
+                      className="list-disc list-inside space-y-1 ml-4 mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <li>IP-Adresse bei Moderationshandlungen</li>
+                      <li>
+                        Browser- und Geräteinformationen beim Ausführen
+                        administrativer Funktionen
+                      </li>
+                      <li>
+                        Zeitpunkt und Art der vorgenommenen administrativen
+                        Aktion (Audit-Log)
+                      </li>
+                    </ul>
+                    <p
+                      className="leading-relaxed mb-2"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <strong
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
+                        Zweck:
+                      </strong>{" "}
+                      Schutz vor unbefugtem Zugriff, Nachvollziehbarkeit von
+                      Moderationsentscheidungen, IT-Sicherheit.
+                    </p>
+                    <p
+                      className="leading-relaxed mb-2"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <strong
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
+                        Rechtsgrundlage:
+                      </strong>{" "}
+                      Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an
+                      Sicherheit und Integrität der Plattform).
+                    </p>
+                    <p
+                      className="leading-relaxed italic"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Hinweis: Diese Datenverarbeitung betrifft ausschließlich
+                      Administratoren/Moderatoren. Normale Nutzer sind hiervon
+                      nicht betroffen.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4
+                      className="text-lg font-semibold mb-2"
+                      style={{ color: "var(--color-foreground, #0f172a)" }}
+                    >
+                      Kontosicherheit & technische Sicherheitsmaßnahmen
+                    </h4>
+                    <ul
+                      className="list-disc list-inside space-y-1 ml-4 mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <li>
+                        Gespeicherte, verschlüsselte Passwörter (kein Klartext)
+                      </li>
+                      <li>Login-Status, Token, Session-IDs</li>
+                      <li>Datum und Uhrzeit des letzten Logins</li>
+                      <li>
+                        IP-Adressen bei sicherheitsrelevanten Ereignissen (z. B.
+                        mehrfach falsche Logins)
+                      </li>
+                    </ul>
+                    <p
+                      className="leading-relaxed mb-2"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <strong
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
+                        Zweck:
+                      </strong>{" "}
+                      Schutz Ihres Kontos, Verhinderung unbefugter Zugriffe,
+                      Systemsicherheit.
+                    </p>
+                    <p
+                      className="leading-relaxed"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <strong
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
+                        Rechtsgrundlage:
+                      </strong>{" "}
+                      Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an
+                      Sicherheit).
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4
+                      className="text-lg font-semibold mb-2"
+                      style={{ color: "var(--color-foreground, #0f172a)" }}
+                    >
+                      Nutzung zur Verbesserung und Analyse
+                    </h4>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Zur Verbesserung unserer Plattform verarbeiten wir
+                      anonymisierte bzw. pseudonymisierte Nutzungsdaten, etwa:
+                    </p>
+                    <ul
+                      className="list-disc list-inside space-y-1 ml-4 mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <li>Seitenaufrufe, Klickverhalten, Verweildauer</li>
+                      <li>Fehlermeldungen, Absturzberichte</li>
+                      <li>
+                        Technische Leistungsdaten (Ladezeiten, Serverantworten)
+                      </li>
+                    </ul>
+                    <p
+                      className="leading-relaxed mb-2"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <strong
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
+                        Zweck:
+                      </strong>{" "}
+                      Fehlerbehebung, Analyse zur Optimierung von Funktionen,
+                      Entwicklung neuer Features.
+                    </p>
+                    <p
+                      className="leading-relaxed"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <strong
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
+                        Rechtsgrundlage:
+                      </strong>{" "}
+                      Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an
+                      Verbesserung unseres Angebots).
+                    </p>
+                  </div>
                   <div>
                     <h4
                       className="text-lg font-semibold mb-2"
