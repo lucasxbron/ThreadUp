@@ -12,7 +12,7 @@ export const sendPasswordResetEmail = async (
 
   try {
     const { data, error } = await resend.emails.send({
-      from: "ThreadUp <noreply@threadup.social>",
+      from: config.RESEND_FROM_EMAIL,
       to: [email],
       subject: "ThreadUp - Reset your password",
       html: `
