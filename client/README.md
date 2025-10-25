@@ -141,22 +141,41 @@ A modern, responsive social media platform frontend built with Next.js 15, featu
    NEXT_PUBLIC_API_URL=http://localhost:3005
    ```
 
-5. **Start development server:**
+5. **Configure API endpoint:**
+
+   The client automatically connects to `http://localhost:3005` by default.
+
+   To override, set in `.env.local`:
+
+   ```env
+   NEXT_PUBLIC_API_URL=http://localhost:3005
+   ```
+
+   **For production deployment:**
+   Set the environment variable in your hosting platform:
+
+   ```env
+   NEXT_PUBLIC_API_URL=https://your-production-api.com
+   ```
+
+   The fallback in `src/utils/api.ts` ensures local development works without configuration.
+
+6. **Start development server:**
 
    ```bash
    npm run dev
    ```
 
-6. **Open browser:**
+7. **Open browser:**
    ```
    http://localhost:3000
    ```
 
+**Note:** Make sure your backend server is running on `http://localhost:3005` before starting the frontend. See `../server/README.md` for backend setup instructions.
+
 ---
 
 ## Project Structure
-
-## 📁 Project Structure
 
 ```
 client/
@@ -1153,9 +1172,27 @@ class ApiClient {
   private baseUrl: string;
 
   constructor() {
+    // Defaults to localhost for development
+    // Override with NEXT_PUBLIC_API_URL environment variable
     this.baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3005";
   }
 }
+```
+
+**Environment Configuration:**
+
+- **Development**: Automatically uses `http://localhost:3005`
+- **Production**: Set `NEXT_PUBLIC_API_URL` in your hosting platform
+- **No hardcoded URLs**: All API endpoints configured via environment
+
+**Example:**
+
+```env
+# Development (.env.local)
+NEXT_PUBLIC_API_URL=http://localhost:3005
+
+# Production (hosting platform)
+NEXT_PUBLIC_API_URL=https://your-production-api.com
 ```
 
 #### Authentication
