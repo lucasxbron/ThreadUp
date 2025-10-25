@@ -172,6 +172,7 @@ PORT=3005
 MONGODB_URL=mongodb://localhost:27017/threadup
 JWT_SECRET=your-super-secret-jwt-key-here
 RESEND_API_KEY=your-resend-api-key
+RESEND_FROM_EMAIL=YourApp <noreply@yourdomain.com>
 FRONTEND_URL=http://localhost:3000
 CLOUDINARY_CLOUD_NAME=your-cloud-name
 CLOUDINARY_API_KEY=your-api-key
@@ -180,16 +181,58 @@ CLOUDINARY_API_SECRET=your-api-secret
 
 ### Configuration Details
 
-| Variable                | Required | Default               | Description                               |
-| ----------------------- | -------- | --------------------- | ----------------------------------------- |
-| `PORT`                  | No       | 3005                  | Server port number                        |
-| `MONGODB_URL`           | Yes      | -                     | MongoDB connection string                 |
-| `JWT_SECRET`            | Yes      | -                     | Secret key for JWT signing (min 32 chars) |
-| `RESEND_API_KEY`        | Yes      | -                     | Resend API key for emails                 |
-| `FRONTEND_URL`          | No       | http://localhost:3000 | Frontend URL for CORS & email links       |
-| `CLOUDINARY_CLOUD_NAME` | Yes      | -                     | Cloudinary cloud name                     |
-| `CLOUDINARY_API_KEY`    | Yes      | -                     | Cloudinary API key                        |
-| `CLOUDINARY_API_SECRET` | Yes      | -                     | Cloudinary API secret                     |
+| Variable                | Required | Default                            | Description                               |
+| ----------------------- | -------- | ---------------------------------- | ----------------------------------------- |
+| `PORT`                  | No       | 3005                               | Server port number                        |
+| `MONGODB_URL`           | Yes      | -                                  | MongoDB connection string                 |
+| `JWT_SECRET`            | Yes      | -                                  | Secret key for JWT signing (min 32 chars) |
+| `RESEND_API_KEY`        | Yes      | -                                  | Resend API key for emails                 |
+| `RESEND_FROM_EMAIL`     | No       | ThreadUp <noreply@threadup.social> | Email sender address                      |
+| `FRONTEND_URL`          | No       | http://localhost:3000              | Frontend URL for CORS & email links       |
+| `CLOUDINARY_CLOUD_NAME` | Yes      | -                                  | Cloudinary cloud name                     |
+| `CLOUDINARY_API_KEY`    | Yes      | -                                  | Cloudinary API key                        |
+| `CLOUDINARY_API_SECRET` | Yes      | -                                  | Cloudinary API secret                     |
+
+**Note:** `RESEND_FROM_EMAIL` should match the format: `Name <email@domain.com>` and must be from a verified domain in your Resend account.
+
+### CORS Configuration
+
+The server uses CORS (Cross-Origin Resource Sharing) to allow requests from your frontend. You need to configure allowed origins based on your deployment:
+
+**For local development:**
+
+```typescript
+// filepath: src/index.ts
+const allowedOrigins = [
+  "http://localhost:3000", // Local development
+];
+```
+
+**For production deployment:**
+
+```typescript
+const allowedOrigins = [
+  "https://your-frontend-domain.com", // Production frontend
+  "http://localhost:3000", // Keep for local testing
+];
+```
+
+**Important Notes:**
+
+- Update `allowedOrigins` array in `src/index.ts` before deploying
+- Include both production and development URLs if you need to test locally against production backend
+- The origin must exactly match the URL your frontend is served from (including protocol: `http://` or `https://`)
+- Remove any trailing slashes from URLs
+
+**Example for multiple environments:**
+
+```typescript
+const allowedOrigins = [
+  "https://threadup.com", // Production
+  "https://staging.threadup.com", // Staging
+  "http://localhost:3000", // Local development
+];
+```
 
 ## Authentication & Security
 
@@ -353,7 +396,7 @@ const makeUserAdmin = async (identifier, isEmail = true) => {
 
     await user.save();
 
-    console.log(`✅ User ${user.email} (${user.username}) is now an admin!`);
+    console.log(`User ${user.email} (${user.username}) is now an admin!`);
     console.log("Updated roles:", user.roles);
     console.log("Updated permissions:", user.permissions);
   } catch (error) {
@@ -485,7 +528,7 @@ const removeAdminPrivileges = async (identifier, isEmail = true) => {
     const user = await User.findOne(query);
 
     if (!user) {
-      console.log("❌ User not found");
+      console.log("User not found");
       return;
     }
 
@@ -494,7 +537,7 @@ const removeAdminPrivileges = async (identifier, isEmail = true) => {
     user.permissions = ["VIEWER_USER", "UPDATE_USER"];
     await user.save();
 
-    console.log(`✅ Admin privileges removed from ${user.username}`);
+    console.log(`Admin privileges removed from ${user.username}`);
     console.log(`Email: ${user.email}`);
     console.log(`Roles: ${user.roles.join(", ")}`);
   } catch (error) {
