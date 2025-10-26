@@ -1197,10 +1197,10 @@ export default function ImpressumPage() {
                       </li>
                       <li>Login-Status, Token, Session-IDs</li>
                       <li>Datum und Uhrzeit des letzten Logins</li>
-                      <li>
+                      {/* <li>
                         IP-Adressen bei sicherheitsrelevanten Ereignissen (z. B.
                         mehrfach falsche Logins)
-                      </li>
+                      </li> */}
                     </ul>
                     <p
                       className="leading-relaxed mb-2"
@@ -1254,7 +1254,7 @@ export default function ImpressumPage() {
                         color: "var(--color-muted-foreground, #64748b)",
                       }}
                     >
-                      <li>Seitenaufrufe, Klickverhalten, Verweildauer</li>
+                      {/* <li>Seitenaufrufe, Klickverhalten, Verweildauer</li> */}
                       <li>Fehlermeldungen, Absturzberichte</li>
                       <li>
                         Technische Leistungsdaten (Ladezeiten, Serverantworten)
