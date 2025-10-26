@@ -275,13 +275,6 @@ export default function ImpressumPage() {
                   2. Hosting
                 </h3>
 
-                <p
-                  className="leading-relaxed mb-4"
-                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
-                >
-                  Wir hosten die Inhalte unserer Website bei folgendem Anbieter:
-                </p>
-
                 <div className="space-y-4">
                   <div>
                     <h4
@@ -354,6 +347,26 @@ export default function ImpressumPage() {
                       San Francisco, CA 94107
                       <br />
                       USA
+                    </p>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Übermittlungen in die USA erfolgen auf Grundlage der
+                      EU‑Standardvertragsklauseln und gestützt auf die
+                      Zertifizierung von Render unter dem EU‑US Data Privacy
+                      Framework (DPF); es wird auf verbleibende Zugriffsrisiken
+                      durch US‑Behörden hingewiesen sowie auf getroffene
+                      Schutzmaßnahmen (z. B. Verschlüsselung).​ Render weist
+                      öffentlich aus, dass es den EU‑US DPF, die UK‑Erweiterung
+                      und den Swiss‑US DPF einhält; Übermittlungen können somit
+                      je nach Konstellation auch auf das DPF gestützt werden.​
+                      Betroffene behalten ihre Rechte (z. B. Auskunft, Löschung,
+                      Beschwerden) auch bei Drittlandübermittlungen; nähere
+                      Informationen zum DPF und zur unabhängigen Streitbeilegung
+                      sind über die DPF‑Informationsseiten verfügbar.​
                     </p>
                   </div>
 
