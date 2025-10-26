@@ -31,7 +31,7 @@ export default function ImpressumPage() {
               className="text-4xl font-bold mb-4"
               style={{ color: "var(--color-foreground, #0f172a)" }}
             >
-              Impressum & Datenschutzerklärung
+              Impressum & Datenschutz&shy;erklärung
             </h1>
             <p
               className="text-xl leading-relaxed max-w-3xl mx-auto"
@@ -100,7 +100,7 @@ export default function ImpressumPage() {
               className="text-3xl font-bold mb-6"
               style={{ color: "var(--color-foreground, #0f172a)" }}
             >
-              Datenschutzerklärung
+              Datenschutz&shy;erklärung
             </h2>
 
             <div className="space-y-8">
