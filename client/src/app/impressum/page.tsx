@@ -337,7 +337,7 @@ export default function ImpressumPage() {
                       Wir setzen folgende(n) Hoster ein:
                     </p>
                     <p
-                      className="leading-relaxed"
+                      className="leading-relaxed  mb-3"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
                       Render Services, Inc.
@@ -357,7 +357,14 @@ export default function ImpressumPage() {
                       Übermittlungen in die USA erfolgen auf Grundlage der
                       EU‑Standardvertragsklauseln und gestützt auf die
                       Zertifizierung von Render unter dem EU‑US Data Privacy
-                      Framework (DPF); es wird auf verbleibende Zugriffsrisiken
+                      Framework (DPF); nähere Informationen zur Zertifizierung
+                      sind im offiziellen DPF‑Register abrufbar, und die
+                      unabhängige Streitbeilegung erfolgt über die
+                      DPF‑Mechanismen (z. B. JAMS), wobei Details dem
+                      Privacy‑Hinweis von Render zu entnehmen sind. Kopien
+                      geeigneter Garantien (insbesondere die SCC‑Anhänge aus dem
+                      Render‑Data‑Processing‑Addendum) stellen wir auf Anfrage
+                      zur Verfügung. Es wird auf verbleibende Zugriffsrisiken
                       durch US‑Behörden hingewiesen sowie auf getroffene
                       Schutzmaßnahmen (z. B. Verschlüsselung).​ Render weist
                       öffentlich aus, dass es den EU‑US DPF, die UK‑Erweiterung
@@ -571,7 +578,7 @@ export default function ImpressumPage() {
                       Empfänger von personenbezogenen Daten
                     </h4>
                     <p
-                      className="leading-relaxed"
+                      className="leading-relaxed mb-3"
                       style={{
                         color: "var(--color-muted-foreground, #64748b)",
                       }}
@@ -593,6 +600,136 @@ export default function ImpressumPage() {
                       gemeinsamen Verarbeitung wird ein Vertrag über gemeinsame
                       Verarbeitung geschlossen.
                     </p>
+
+                    <div
+                      className="mt-4 p-4 rounded-lg border"
+                      style={{
+                        backgroundColor: "rgba(59, 130, 246, 0.05)",
+                        borderColor: "rgba(59, 130, 246, 0.2)",
+                      }}
+                    >
+                      <p
+                        className="font-semibold mb-2"
+                        style={{ color: "var(--color-foreground, #0f172a)" }}
+                      >
+                        E-Mail-Kommunikation über externen Dienstleister (Gmail)
+                      </p>
+                      <p
+                        className="leading-relaxed mb-3 text-sm"
+                        style={{
+                          color: "var(--color-muted-foreground, #64748b)",
+                        }}
+                      >
+                        Für den Versand und Empfang von E-Mails nutzen wir den
+                        Dienst Gmail des Anbieters Google LLC, 1600 Amphitheatre
+                        Parkway, Mountain View, CA 94043, USA; dabei werden
+                        Meta-/Kommunikationsdaten (z. B. Absender, Empfänger,
+                        Zeitpunkt), Inhaltsdaten und ggf. Anhänge auf Servern
+                        des Anbieters verarbeitet. Die Übertragung erfolgt in
+                        der Regel verschlüsselt via TLS; der Anbieter gibt an,
+                        Daten zudem im Ruhezustand zu verschlüsseln, und in
+                        Google Workspace steht optional eine clientseitige
+                        Verschlüsselung zur Verfügung. Bei Nutzung von Google
+                        Workspace besteht ein Auftragsverarbeitungsvertrag; bei
+                        Nutzung eines privaten Gmail‑Kontos verarbeitet Google
+                        als eigener Verantwortlicher gemäß eigener
+                        Datenschutzerklärung.
+                      </p>
+
+                      <div className="space-y-2 text-sm">
+                        <p
+                          className="leading-relaxed"
+                          style={{
+                            color: "var(--color-muted-foreground, #64748b)",
+                          }}
+                        >
+                          <strong
+                            style={{
+                              color: "var(--color-foreground, #0f172a)",
+                            }}
+                          >
+                            Zwecke/Rechtsgrundlagen:
+                          </strong>{" "}
+                          Kommunikation und Bearbeitung von Anfragen sowie
+                          Vertragsanbahnung/-erfüllung nach Art. 6 Abs. 1 lit. b
+                          DSGVO; außerdem berechtigtes Interesse an effizienter
+                          und sicherer Kommunikation nach Art. 6 Abs. 1 lit. f
+                          DSGVO; soweit Sie hierin ausdrücklich eingewilligt
+                          haben, zusätzlich Art. 6 Abs. 1 lit. a DSGVO.
+                        </p>
+
+                        <p
+                          className="leading-relaxed"
+                          style={{
+                            color: "var(--color-muted-foreground, #64748b)",
+                          }}
+                        >
+                          <strong
+                            style={{
+                              color: "var(--color-foreground, #0f172a)",
+                            }}
+                          >
+                            Speicherdauer:
+                          </strong>{" "}
+                          E-Mails werden für die Dauer der Kommunikation bzw.
+                          zur Wahrung gesetzlicher Aufbewahrungspflichten
+                          gespeichert und anschließend gelöscht; weitergehende
+                          Informationen zu Googles Verarbeitung sind der
+                          Google-Datenschutzerklärung zu entnehmen.
+                        </p>
+
+                        <p
+                          className="leading-relaxed"
+                          style={{
+                            color: "var(--color-muted-foreground, #64748b)",
+                          }}
+                        >
+                          <strong
+                            style={{
+                              color: "var(--color-foreground, #0f172a)",
+                            }}
+                          >
+                            Drittlandübermittlung:
+                          </strong>{" "}
+                          Google ist im Data Privacy Framework (DPF) gelistet;
+                          Übermittlungen in die USA stützen sich je nach
+                          Konstellation auf das EU-US DPF und/oder die
+                          EU-Standardvertragsklauseln (SCC).
+                        </p>
+
+                        <p
+                          className="leading-relaxed"
+                          style={{
+                            color: "var(--color-muted-foreground, #64748b)",
+                          }}
+                        >
+                          <strong
+                            style={{
+                              color: "var(--color-foreground, #0f172a)",
+                            }}
+                          >
+                            Unabhängige Streitbeilegung (IRM):
+                          </strong>{" "}
+                          Für DPF-Beschwerden steht eine unabhängige
+                          Streitbeilegung zur Verfügung (z. B. JAMS gemäß
+                          DPF-Vorgaben); Details finden sich im DPF-Register und
+                          in Googles Datenschutzhinweisen.
+                        </p>
+
+                        <p
+                          className="leading-relaxed"
+                          style={{
+                            color: "var(--color-muted-foreground, #64748b)",
+                          }}
+                        >
+                          Kopien geeigneter Garantien (insbesondere SCC-Anhänge)
+                          sowie weitergehende Informationen stellen wir auf
+                          Anfrage über die im Abschnitt &quot;Hinweis zur
+                          Verantwortlichen Stelle&quot; genannten Kontaktdaten
+                          zur Verfügung.
+                        </p>
+                      </div>
+                    </div>
                   </div>
 
                   <div>
@@ -889,7 +1026,8 @@ export default function ImpressumPage() {
                       <li>
                         <strong>Art. 6 Abs. 1 lit. f DSGVO</strong> –
                         berechtigtes Interesse (z. B. IT-Sicherheit,
-                        Missbrauchsvermeidung, Reichweitenmessung).
+                        Missbrauchsvermeidung).
+                        {/* Missbrauchsvermeidung, Reichweitenmessung). */}
                       </li>
                     </ul>
                   </div>
@@ -949,13 +1087,18 @@ export default function ImpressumPage() {
                         color: "var(--color-muted-foreground, #64748b)",
                       }}
                     >
-                      Cookies, die zur Durchführung des elektronischen
+                      {/* Cookies, die zur Durchführung des elektronischen
                       Kommunikationsvorgangs, zur Bereitstellung bestimmter, von
-                      Ihnen erwünschter Funktionen (z. B. für die
-                      Warenkorbfunktion) oder zur Optimierung der Website (z. B.
+                      Ihnen erwünschter Funktionen oder zur Optimierung der Website (z. B.
                       Cookies zur Messung des Webpublikums) erforderlich sind
                       (notwendige Cookies), werden auf Grundlage von Art. 6 Abs.
                       1 lit. f DSGVO gespeichert, sofern keine andere
+                      Rechtsgrundlage angegeben wird. */}
+                      Cookies, die zur Durchführung des elektronischen
+                      Kommunikationsvorgangs oder zur Bereitstellung bestimmter,
+                      von Ihnen ausdrücklich gewünschter Funktionen erforderlich
+                      sind (notwendige Cookies), werden auf Grundlage von Art. 6
+                      Abs. 1 lit. f DSGVO verarbeitet, sofern keine andere
                       Rechtsgrundlage angegeben wird. Der Websitebetreiber hat
                       ein berechtigtes Interesse an der Speicherung von
                       notwendigen Cookies zur technisch fehlerfreien und
@@ -967,6 +1110,22 @@ export default function ImpressumPage() {
                       und § 25 Abs. 1 TDDDG); die Einwilligung ist jederzeit
                       widerrufbar.
                     </p>
+
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Der Zugriff auf Informationen in Ihrer Endeinrichtung bzw.
+                      das Setzen von Cookies erfolgt, soweit nicht unbedingt
+                      erforderlich, nur nach Einwilligung gemäß § 25 Abs. 1
+                      TDDDG; unbedingt erforderliche Vorgänge zur
+                      Nachrichtenübertragung oder zur Bereitstellung eines von
+                      Ihnen ausdrücklich gewünschten digitalen Dienstes sind
+                      nach § 25 Abs. 2 TDDDG zulässig.
+                    </p>
+
                     <p
                       className="leading-relaxed mb-3"
                       style={{
@@ -987,8 +1146,12 @@ export default function ImpressumPage() {
                         color: "var(--color-muted-foreground, #64748b)",
                       }}
                     >
-                      Welche Cookies und Dienste auf dieser Website eingesetzt
-                      werden, können Sie dieser Datenschutzerklärung entnehmen.
+                      Derzeit setzen wir keine optionalen Analyse-, Marketing-
+                      oder Reichweitenmessungs-Cookies ein; Endgerätezugriffe,
+                      die unbedingt erforderlich sind, erfolgen nach § 25 Abs. 2
+                      TDDDG; sollte künftig eine Einwilligung erforderlich sein,
+                      erfolgt der Einsatz erst nach Ihrer Einwilligung gemäß §
+                      25 Abs. 1 TDDDG i.V.m. Art. 6 Abs. 1 lit. a DSGVO.
                     </p>
                   </div>
                   <div>
@@ -1017,7 +1180,8 @@ export default function ImpressumPage() {
                       <li>Benutzername</li>
                       <li>E-Mail-Adresse</li>
                       <li>
-                        Passwort (ausschließlich verschlüsselt gespeichert)
+                        Passwort (ausschließlich gehasht und niemals im Klartext
+                        gespeichert)
                       </li>
                       <li>optional: Profilbild und freiwillige Profildaten</li>
                       <li>
@@ -1205,9 +1369,7 @@ export default function ImpressumPage() {
                         color: "var(--color-muted-foreground, #64748b)",
                       }}
                     >
-                      <li>
-                        Gespeicherte, verschlüsselte Passwörter (kein Klartext)
-                      </li>
+                      <li>Gespeicherte, gehashte Passwörter (kein Klartext)</li>
                       <li>Login-Status, Token, Session-IDs</li>
                       <li>Datum und Uhrzeit des letzten Logins</li>
                       {/* <li>
@@ -1241,7 +1403,7 @@ export default function ImpressumPage() {
                         Rechtsgrundlage:
                       </strong>{" "}
                       Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an
-                      Sicherheit).
+                      Sicherheit, Missbrauchsvermeidung, Rechtsdurchsetzung).
                     </p>
                   </div>
 
@@ -1271,6 +1433,11 @@ export default function ImpressumPage() {
                       <li>Fehlermeldungen, Absturzberichte</li>
                       <li>
                         Technische Leistungsdaten (Ladezeiten, Serverantworten)
+                      </li>
+                      <li>
+                        Es findet keine Webanalyse und keine automatisierte
+                        Entscheidungsfindung einschließlich Profiling im Sinne
+                        von Art. 22 DSGVO statt.
                       </li>
                     </ul>
                     <p
@@ -1338,8 +1505,12 @@ export default function ImpressumPage() {
                         color: "var(--color-muted-foreground, #64748b)",
                       }}
                     >
-                      Eine Zusammenführung dieser Daten mit anderen Datenquellen
-                      wird nicht vorgenommen.
+                      Die Protokollierung von Zugriffs- und technischen
+                      Ereignisdaten (z. B. IP-Adresse, Datum/Uhrzeit,
+                      User-Agent, Referrer) erfolgt ausschließlich durch unseren
+                      Hoster zur Sicherstellung von Betrieb und IT-Sicherheit.
+                      Eine Zusammenführung mit anderen Daten erfolgt nicht durch
+                      uns.
                     </p>
                     <p
                       className="leading-relaxed"
@@ -1350,8 +1521,11 @@ export default function ImpressumPage() {
                       Die Erfassung dieser Daten erfolgt auf Grundlage von Art.
                       6 Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein
                       berechtigtes Interesse an der technisch fehlerfreien
-                      Darstellung und der Optimierung seiner Website – hierzu
-                      müssen die Server-Log-Files erfasst werden.
+                      Darstellung und der Optimierung seiner Website - hierzu
+                      müssen die Server-Log-Files erfasst werden. Die
+                      Speicherdauer bestimmt der Hoster; Logdaten werden nur für
+                      eine kurze sicherheitsbedingte Frist vorgehalten und bei
+                      Vorfällen bis zur Klärung länger gespeichert.
                     </p>
                   </div>
 
@@ -1444,6 +1618,16 @@ export default function ImpressumPage() {
                       lit. f DSGVO) oder auf Ihrer Einwilligung (Art. 6 Abs. 1
                       lit. a DSGVO) sofern diese abgefragt wurde; die
                       Einwilligung ist jederzeit widerrufbar.
+                    </p>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Für die E-Mail-Kommunikation nutzen wir Gmail (Google
+                      LLC); es gelten die Hinweise im Abschnitt
+                      &quot;E-Mail-Dienstleister (Gmail)&quot;.
                     </p>
                     <p
                       className="leading-relaxed"
