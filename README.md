@@ -233,9 +233,9 @@ You may:
 - Contribute to development, report issues, or suggest improvements
 - Contact the owner to request permission for commercial or public use
 
-### Brand & Trademark
+### Branding
 
-The **ThreadUp name, logo, and visual identity** are **not** included in the license and are fully protected.
+The **ThreadUp name, logo, and visual identity** are **not** included in the license and are protected.
 
 See [TRADEMARK](TRADEMARK.md) for brand usage guidelines.
 

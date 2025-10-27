@@ -1,8 +1,8 @@
-# Trademark & Brand Guidelines (Proprietary)
+# Brand Guidelines (Proprietary)
 
 ## 1. Brand Ownership
 
-The name **“ThreadUp”**, the logo, design elements, UI, colors, and overall visual identity are the **exclusive property of Lucas Bron**. They are protected by copyright and trademark rights and are **not licensed for use**, even though the source code is publicly visible.
+The name **“ThreadUp”**, the logo, design elements, UI, colors, and overall visual identity are the **exclusive property of Lucas Bron**. They are protected by copyright rights and are **not licensed for use**, even though the source code is publicly visible.
 
 ---
 
