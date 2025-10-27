@@ -220,26 +220,35 @@ Check out our [GitHub repository](https://github.com/lucasxbron/ThreadUp) to get
 
 ## License
 
-This project uses a **dual licensing model**:
+**This project is proprietary software.** The source code is publicly visible for educational purposes only.
 
-### Code License
+### Source Code License
 
-The **source code** is licensed under a **proprietary license** - see [LICENSE](LICENSE.md).
+The source code is licensed under a **proprietary license** – see [LICENSE.md](LICENSE.md).
 
-You may:
+**You may:**
 
-- View and study the publicly available source code
-- Use the code for **private, non-commercial, educational purposes**
-- Contribute to development, report issues, or suggest improvements
-- Contact the owner to request permission for commercial or public use
+- View and study the code for personal, educational, or research purposes
+- Report issues or contribute via Pull Requests
+- Contact the owner for commercial licensing inquiries
 
-### Branding
+**You may NOT:**
 
-The **ThreadUp name, logo, and visual identity** are **not** included in the license and are protected.
+- Deploy, host, or distribute the software publicly
+- Use the software for commercial purposes
+- Fork or create public derivative works
 
-See [TRADEMARK](TRADEMARK.md) for brand usage guidelines.
+### Branding & Identity
 
-**TLDR**: You can view and experiment with the code, but for any public or commercial deployment, you must obtain permission and rebrand according to the guidelines.
+The **ThreadUp name, logo, and visual identity** are **proprietary** and protected separately from the code license.
+
+See [TRADEMARK.md](TRADEMARK.md) for brand usage guidelines.
+
+### TL;DR
+
+You can view and experiment with the code privately, but **any public deployment, commercial use, or use of the ThreadUp brand requires explicit written permission** from Lucas Bron.
+
+For licensing inquiries: **threadup.social@gmail.com**
 
 ---
 

@@ -1,46 +1,70 @@
 # Brand Guidelines (Proprietary)
 
-## 1. Brand Ownership
+## 1. Copyright & Ownership
 
-The name **“ThreadUp”**, the logo, design elements, UI, colors, and overall visual identity are the **exclusive property of Lucas Bron**. They are protected by copyright rights and are **not licensed for use**, even though the source code is publicly visible.
+**Copyright © 2025 Lucas Bron. All rights reserved.**
 
----
+The source code, user interface, design elements (including layout, colors, graphics), documentation, and the name **"ThreadUp"** are protected by copyright law and are the exclusive property of Lucas Bron.
 
-## 2. Permitted Use of the Code
+While the source code is publicly visible, it is **not licensed for general use**. All rights are reserved unless explicitly granted in writing.
 
-You are allowed to:
-
-- View the source code for **private, non-commercial, educational, or research purposes**
-- Study the code internally
-
-You are **not allowed to**:
-
-- Deploy, host, or distribute the code publicly
-- Use the code for commercial purposes without explicit written permission
-- Remove copyright notices or ownership references
+**Note:** The name "ThreadUp" and associated branding are proprietary. Even though they may not be registered trademarks, they are protected under applicable copyright and unfair competition laws.
 
 ---
 
-## 3. Brand & Design Restrictions
+## 2. License & Permitted Use
 
-You **may not**:
+This software is made **source-available** for transparency and educational purposes only. It is **not open-source** and is not licensed under MIT, GPL, or any other permissive license.
 
-- Use the name **“ThreadUp”** for your deployment or product
-- Use the ThreadUp logo, colors, UI elements, or other branding
-- Suggest an official affiliation with ThreadUp
-- Present your version as the official ThreadUp
+### You may:
+
+- View the source code for **personal, non-commercial, educational, or research purposes**
+- Study the code internally without deploying or modifying it
+
+### You may NOT:
+
+- Deploy, host, distribute, or publicly use the software
+- Modify, fork, or create derivative works
+- Use the software for commercial purposes
+- Remove or alter copyright notices, author attributions, or this license
+- Use the name "ThreadUp" or any associated branding
+
+**Commercial use, deployment, or redistribution require explicit written permission** from Lucas Bron.
 
 ---
 
-## 4. Rebranding Requirements for Public/Commercial Use
+## 3. Branding & Design Restrictions
 
-If you are granted permission to deploy or distribute the software, you **must**:
+The following are proprietary and protected by copyright and unfair competition law:
 
-1. **Change the project name**
-2. **Replace the logo and all branding** with your own designs
-3. **Modify the UI, color schemes, and visual identity**
-4. **Remove or replace all team information** (names, avatars, bios, contributors)
-5. **Include clear attribution**: Your version is based on ThreadUp
+- The name **"ThreadUp"**
+- The ThreadUp logo and visual identity
+- UI/UX design, layout, and color schemes
+- Graphics, icons, and design assets
+
+### You may NOT:
+
+- Use the name "ThreadUp" for any project, product, or service
+- Use or reproduce the ThreadUp logo, colors, or design elements
+- Imply any affiliation with, endorsement by, or sponsorship from ThreadUp
+- Present any derivative work as official or authorized by ThreadUp
+
+**If permission is granted** (in writing), you must fully rebrand your deployment.
+
+---
+
+## 4. Requirements for Authorized Use
+
+If you receive **explicit written permission** to deploy, modify, or distribute the software, you must:
+
+1. **Rename the project** – do not use "ThreadUp" or any confusingly similar name
+2. **Replace all branding** – create your own logo, color scheme, and visual identity
+3. **Modify the UI design** – ensure your version is visually distinct
+4. **Remove team information** – replace all names, avatars, bios, and contributor references
+5. **Include clear attribution** (see below)
+6. **Provide a copy of your deployment** and usage details to Lucas Bron upon request
+
+Failure to comply may result in termination of permission and legal action.
 
 ---
 
@@ -50,11 +74,15 @@ For approved deployments, include an attribution statement that is **agreed upon
 
 ---
 
-## 6. Contact
+## 7. Contact & Licensing
 
-For commercial licensing or brand permissions, contact:  
-**threadup.social@gmail.com**
+For commercial licensing, partnerships, or questions about permitted use, contact:
+
+**Lucas Bron**  
+Email: threadup.social@gmail.com
+
+All permissions must be granted **in writing** (email is acceptable).
 
 ---
 
-Source code is publicly visible, **but use is restricted** under proprietary license terms.
+The source code is **publicly visible but proprietary**. Viewing for educational purposes is allowed; all other use requires explicit written permission.
