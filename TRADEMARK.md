@@ -57,5 +57,4 @@ For commercial licensing or brand permissions, contact:
 
 ---
 
-**ThreadUp™ — All brand rights reserved**  
 Source code is publicly visible, **but use is restricted** under proprietary license terms.
