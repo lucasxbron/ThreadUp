@@ -141,9 +141,9 @@ export const Footer: React.FC = () => {
               Need help? We&apos;re here for you!
             </p>
             <div className="space-y-3">
-              <div className="flex items-start space-x-2 text-sm text-muted-foreground">
+              <div className="flex items-center space-x-2 text-sm text-muted-foreground justify-center sm:justify-start">
                 <svg
-                  className="w-5 h-5 mt-0.5 flex-shrink-0"
+                  className="w-5 h-5 flex-shrink-0"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -157,12 +157,12 @@ export const Footer: React.FC = () => {
                 </svg>
                 <Link
                   href="mailto:threadup.social@gmail.com"
-                  className="hover:text-foreground transition-colors"
+                  className="hover:text-foreground transition-colors break-all"
                 >
                   threadup.social@gmail.com
                 </Link>
               </div>
-              <div className="flex items-start space-x-2 text-sm text-muted-foreground">
+              <div className="flex items-start space-x-2 text-sm text-muted-foreground justify-center sm:justify-start">
                 <svg
                   className="w-5 h-5 mt-0.5 flex-shrink-0"
                   fill="none"
