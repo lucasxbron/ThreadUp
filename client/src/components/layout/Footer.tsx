@@ -121,7 +121,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          <div>
+          {/* <div>
             <h3 className="font-semibold text-foreground mb-4">Rechtliches</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
@@ -133,6 +133,57 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
             </ul>
+          </div> */}
+
+          <div>
+            <h3 className="font-semibold text-foreground mb-4">Support</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Need help? We&apos;re here for you!
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-start space-x-2 text-sm text-muted-foreground">
+                <svg
+                  className="w-5 h-5 mt-0.5 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+                <Link
+                  href="mailto:threadup.social@gmail.com"
+                  className="hover:text-foreground transition-colors"
+                >
+                  threadup.social@gmail.com
+                </Link>
+              </div>
+              <div className="flex items-start space-x-2 text-sm text-muted-foreground">
+                <svg
+                  className="w-5 h-5 mt-0.5 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                  />
+                </svg>
+                <Link
+                  href="/contact"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Contact Us
+                </Link>
+              </div>
+            </div>
           </div>
 
           {/* <div>
@@ -220,12 +271,18 @@ export const Footer: React.FC = () => {
               <span>Made with ❤️</span>
             </div>
             <div className="flex items-center space-x-4 text-sm">
-              <select className="bg-transparent border-none text-muted-foreground cursor-pointer">
+              {/* <select className="bg-transparent border-none text-muted-foreground cursor-pointer">
                 <option>English</option>
-                {/* <option>Español</option>
+                <option>Español</option>
                 <option>Français</option>
-                <option>Deutsch</option> */}
-              </select>
+                <option>Deutsch</option>
+              </select> */}
+              <Link
+                href="/impressum"
+                className="hover:text-foreground transition-colors cursor-pointer"
+              >
+                Impressum & Datenschutz
+              </Link>
             </div>
           </div>
         </div>
