@@ -5,6 +5,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { FollowProvider } from "@/contexts/FollowContext";
 import { ToastProvider } from "@/contexts/ToastContext";
+import { MaintenanceWrapper } from "@/components/layout/MaintenanceWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -54,7 +55,9 @@ export default function RootLayout({
           <AuthProvider>
             <FollowProvider>
               <ToastProvider>
-                <div className="min-h-screen flex flex-col">{children}</div>
+                <MaintenanceWrapper>
+                  <div className="min-h-screen flex flex-col">{children}</div>
+                </MaintenanceWrapper>
               </ToastProvider>
             </FollowProvider>
           </AuthProvider>
