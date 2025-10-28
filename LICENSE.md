@@ -2,7 +2,7 @@
 
 **Copyright © 2025 Lucas Bron. All rights reserved.**
 
-This software and all associated files, including source code, documentation, design elements, and branding (collectively, the "Software"), are the exclusive intellectual property of Lucas Bron.
+This software and all associated files, including source code, documentation, design elements, and branding (collectively, the "Software"), are the exclusive intellectual property of **the copyright holder** ("Licensor").
 
 The Software is made **publicly available for viewing and educational purposes only**. It is **not open-source** and is not licensed under any permissive or copyleft license (e.g., MIT, GPL, Apache).
 
@@ -15,14 +15,14 @@ You **may**:
 - **View and study** the publicly accessible source code for personal, educational, or research purposes
 - **Use the code privately** for non-commercial, educational purposes only (no deployment, hosting, or distribution)
 - **Report issues** or suggest improvements via official channels (e.g., GitHub Issues)
-- **Submit contributions** via Pull Requests to the official repository, subject to acceptance by the copyright holder (by submitting, you grant Lucas Bron a perpetual, worldwide, royalty-free license to use your contribution)
-- **Contact the owner** to request written permission for commercial or public use
+- **Submit contributions** via Pull Requests to the official repository, subject to acceptance by the copyright holder (by submitting, you grant the copyright holder a perpetual, worldwide, royalty-free license to use your contribution)
+- **Contact the author** to request written permission for commercial or public use
 
 ---
 
 ## Prohibited Use
 
-**Without prior written permission** from Lucas Bron, you are **NOT allowed to**:
+**Without prior written permission** from the copyright holder, you are **NOT allowed to**:
 
 - Use the Software for **commercial purposes** (including, but not limited to, selling, sublicensing, or offering as a service)
 - **Copy, redistribute, sublicense, publish, or sell** the Software or any part thereof
@@ -47,11 +47,11 @@ Unauthorized use of these elements is prohibited and may result in legal action.
 
 By submitting any code, documentation, or other materials to this project (e.g., via Pull Requests, Issues, or direct communication), you:
 
-1. Grant Lucas Bron a **perpetual, irrevocable, worldwide, royalty-free, non-exclusive license** to use, modify, distribute, and sublicense your contribution
+1. Grant the copyright holder a **perpetual, irrevocable, worldwide, royalty-free, non-exclusive license** to use, modify, distribute, and sublicense your contribution
 2. Represent and warrant that you have the right to grant this license
 3. Agree that your contribution will remain subject to this Proprietary License
 
-Lucas Bron reserves the right to accept or reject any contribution at their sole discretion.
+The author reserves the right to accept or reject any contribution at their sole discretion.
 
 ---
 
@@ -86,7 +86,7 @@ Upon termination, you must:
 - Cease all use of the Software
 - Destroy all copies in your possession or control
 
-Termination does not limit any other rights or remedies available to Lucas Bron.
+Termination does not limit any other rights or remedies available to the copyright holder.
 
 ---
 

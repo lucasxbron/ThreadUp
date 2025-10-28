@@ -29,7 +29,7 @@ This software is made **source-available** for transparency and educational purp
 - Remove or alter copyright notices, author attributions, or this license
 - Use the name "ThreadUp" or any associated branding
 
-**Commercial use, deployment, or redistribution require explicit written permission** from Lucas Bron.
+**Commercial use, deployment, or redistribution require explicit written permission** from the copyright holder.
 
 ---
 
@@ -62,7 +62,6 @@ If you receive **explicit written permission** to deploy, modify, or distribute 
 3. **Modify the UI design** – ensure your version is visually distinct
 4. **Remove team information** – replace all names, avatars, bios, and contributor references
 5. **Include clear attribution** (see below)
-6. **Provide a copy of your deployment** and usage details to Lucas Bron upon request
 
 Failure to comply may result in termination of permission and legal action.
 

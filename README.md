@@ -246,7 +246,7 @@ See [TRADEMARK.md](TRADEMARK.md) for brand usage guidelines.
 
 ### TL;DR
 
-You can view and experiment with the code privately, but **any public deployment, commercial use, or use of the ThreadUp brand requires explicit written permission** from Lucas Bron.
+You can view and experiment with the code privately, but **any public deployment, commercial use, or use of the ThreadUp brand requires explicit written permission** from the author.
 
 For licensing inquiries: **threadup.social@gmail.com**
 
