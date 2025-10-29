@@ -1,4 +1,4 @@
-# Brand Guidelines (Proprietary)
+# Brand & Copyright Guidelines (Proprietary)
 
 ## 1. Copyright & Ownership
 
@@ -24,7 +24,7 @@ This software is made **source-available** for transparency and educational purp
 ### You may NOT:
 
 - Deploy, host, distribute, or publicly use the software
-- Modify, fork, or create derivative works
+- Modify, fork, or create derivative works **publicly** (contributions via Pull Requests to the official repository are permitted)
 - Use the software for commercial purposes
 - Remove or alter copyright notices, author attributions, or this license
 - Use the name "ThreadUp" or any associated branding
@@ -73,6 +73,18 @@ For approved deployments, include an attribution statement that is **agreed upon
 
 ---
 
+## 6. Enforcement & Termination
+
+Unauthorized use, distribution, or violation of these terms may result in:
+
+- Immediate termination of any granted permissions
+- Legal action for copyright infringement
+- Claims for damages and injunctive relief
+
+This license is effective until terminated. Your rights terminate automatically if you fail to comply with any term.
+
+---
+
 ## 7. Contact & Licensing
 
 For commercial licensing, partnerships, or questions about permitted use, contact:
@@ -85,3 +97,5 @@ All permissions must be granted **in writing** (email is acceptable).
 ---
 
 The source code is **publicly visible but proprietary**. Viewing for educational purposes is allowed; all other use requires explicit written permission.
+
+**Disclaimer:** This software is provided "as is" without warranty of any kind. See [LICENSE.md](LICENSE.md) for full terms and limitations of liability.
