@@ -20,6 +20,8 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [termsError, setTermsError] = useState(false);
 
   const { register } = useAuth();
   const router = useRouter();
@@ -33,6 +35,12 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Check terms acceptance first
+    if (!termsAccepted) {
+      setTermsError(true);
+      return;
+    }
 
     // Validate all fields are filled
     if (
@@ -144,6 +152,30 @@ export default function RegisterPage() {
         .dark .register-input::placeholder {
           color: var(--color-muted-foreground, #94a3b8) !important;
           opacity: 0.8 !important;
+        }
+
+        @keyframes shake {
+          0%,
+          100% {
+            transform: translateX(0);
+          }
+          10%,
+          30%,
+          50%,
+          70%,
+          90% {
+            transform: translateX(-6px);
+          }
+          20%,
+          40%,
+          60%,
+          80% {
+            transform: translateX(6px);
+          }
+        }
+
+        .animate-shake {
+          animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97);
         }
       `}</style>
 
@@ -428,36 +460,73 @@ export default function RegisterPage() {
           </div>
 
           {/* Terms */}
-          <div className="text-center">
-            <p
-              className="text-xs leading-relaxed"
-              style={{ color: "var(--color-muted-foreground, #64748b)" }}
-            >
-              By creating an account, you agree to our{" "}
-              <Link
-                href="/terms"
-                className="underline hover:opacity-80 transition-opacity"
-                style={{ color: "var(--color-primary, #3b82f6)" }}
+          <div className="space-y-2">
+            <div className="flex items-start gap-3">
+              <div className="flex items-center h-5 mt-0.5">
+                <input
+                  id="terms"
+                  type="checkbox"
+                  checked={termsAccepted}
+                  onChange={(e) => {
+                    setTermsAccepted(e.target.checked);
+                    setTermsError(false);
+                  }}
+                  className={`w-4 h-4 rounded border transition-all duration-200 cursor-pointer
+                    ${
+                      termsError
+                        ? "border-red-500 bg-red-50 dark:bg-red-900/20 animate-shake"
+                        : "border-gray-300 dark:border-gray-600"
+                    }
+                    checked:bg-blue-600 checked:border-blue-600 
+                    focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                    dark:focus:ring-offset-gray-800
+                  `}
+                  disabled={loading}
+                />
+              </div>
+              <label
+                htmlFor="terms"
+                className={`text-xs leading-relaxed cursor-pointer transition-all duration-200 ${
+                  termsError ? "animate-shake" : ""
+                }`}
+                style={{
+                  color: "var(--color-muted-foreground, #64748b)",
+                }}
               >
-                Terms of Service
-              </Link>
-              ,{" "}
-              <Link
-                href="/privacy"
-                className="underline hover:opacity-80 transition-opacity"
-                style={{ color: "var(--color-primary, #3b82f6)" }}
-              >
-                Privacy Policy
-              </Link>
-              , and{" "}
-              <Link
-                href="/impressum"
-                className="underline hover:opacity-80 transition-opacity"
-                style={{ color: "var(--color-primary, #3b82f6)" }}
-              >
-                Impressum / Datenschutzrichtlinie
-              </Link>
-            </p>
+                I have read and agree to the{" "}
+                <Link
+                  href="/terms"
+                  className="underline hover:opacity-80 transition-opacity"
+                  style={{ color: "var(--color-primary, #3b82f6)" }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Terms of Service
+                </Link>
+                ,{" "}
+                <Link
+                  href="/privacy"
+                  className="underline hover:opacity-80 transition-opacity"
+                  style={{ color: "var(--color-primary, #3b82f6)" }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Privacy Policy
+                </Link>
+                , and{" "}
+                <Link
+                  href="/impressum"
+                  className="underline hover:opacity-80 transition-opacity"
+                  style={{ color: "var(--color-primary, #3b82f6)" }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Impressum / Datenschutzrichtlinie
+                </Link>
+              </label>
+            </div>
+            {termsError && !termsAccepted && (
+              <p className="text-xs text-red-600 dark:text-red-400 ml-7">
+                Please accept the terms to continue
+              </p>
+            )}
           </div>
         </div>
       </div>
