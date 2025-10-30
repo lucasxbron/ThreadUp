@@ -118,6 +118,35 @@ body {
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
 }
 
+/* Apply gradient background in light mode */
+body {
+  background: linear-gradient(135deg, #fafafa 0%, #f3f4f5 50%, #fafafa 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Subtle texture overlay for light mode */
+/* body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+      circle at 15% 50%,
+      rgba(100, 116, 139, 0.02) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 85% 30%,
+      rgba(148, 163, 184, 0.015) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+} */
+
 /* Apply gradient background in dark mode */
 .dark body {
   background: linear-gradient(135deg, #101828 0%, #1c398e 50%, #101828 100%);
@@ -126,8 +155,8 @@ body {
   position: relative;
 }
 
-/* Subtle texture overlay */
-.dark body::before {
+/* Subtle texture overlay for dark mode */
+/* .dark body::before {
   content: "";
   position: fixed;
   top: 0;
@@ -145,7 +174,7 @@ body {
       transparent 50%
     );
   pointer-events: none;
-}
+} */
 
 @layer utilities {
   .text-balance {
