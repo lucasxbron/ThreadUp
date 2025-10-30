@@ -1581,7 +1581,6 @@ export default function ImpressumPage() {
                       Aufbewahrungsfristen – bleiben unberührt.
                     </p>
                   </div>
-
                   <div>
                     <h4
                       className="text-lg font-semibold mb-2"
@@ -1645,6 +1644,151 @@ export default function ImpressumPage() {
                     </p>
                   </div>
 
+                  <div>
+                    <h4
+                      className="text-lg font-semibold mb-2"
+                      style={{ color: "var(--color-foreground, #0f172a)" }}
+                    >
+                      E-Mail-Versand über Resend
+                    </h4>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Für den Versand von transaktionalen E-Mails (z. B.
+                      Registrierungsbestätigungen, E-Mail-Änderungen,
+                      Passwort-Zurücksetzen-Links und
+                      Kontaktformular-Benachrichtigungen) nutzen wir den Dienst
+                      Resend der Plus Five Five, Inc., 2261 Market Street #5039,
+                      San Francisco, CA 94114, USA.
+                    </p>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Dabei werden folgende personenbezogene Daten an Resend
+                      übermittelt und dort verarbeitet:
+                    </p>
+                    <ul
+                      className="list-disc list-inside space-y-1 ml-4 mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      <li>E-Mail-Adresse des Empfängers</li>
+                      <li>Name des Empfängers (sofern angegeben)</li>
+                      <li>E-Mail-Inhalt und -Betreff</li>
+                      <li>Zeitpunkt des Versands</li>
+                      <li>
+                        Metadaten zur E-Mail-Zustellung (z. B. Zustellstatus)
+                      </li>
+                    </ul>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Resend verarbeitet diese Daten ausschließlich im Auftrag
+                      und nach unseren Weisungen, um die E-Mails zuverlässig
+                      zuzustellen. Die Verarbeitung erfolgt auf Grundlage eines
+                      Auftragsverarbeitungsvertrags (AVV) gemäß Art. 28 DSGVO.
+                    </p>
+
+                    <div className="space-y-3 mb-3">
+                      <p
+                        className="leading-relaxed"
+                        style={{
+                          color: "var(--color-muted-foreground, #64748b)",
+                        }}
+                      >
+                        <strong
+                          style={{ color: "var(--color-foreground, #0f172a)" }}
+                        >
+                          Zweck und Rechtsgrundlage:
+                        </strong>{" "}
+                        Der E-Mail-Versand dient der Vertragserfüllung (z. B.
+                        Registrierung, Kontoänderungen) nach Art. 6 Abs. 1 lit.
+                        b DSGVO sowie der Bearbeitung von Kontaktanfragen auf
+                        Grundlage unseres berechtigten Interesses an effizienter
+                        Kommunikation nach Art. 6 Abs. 1 lit. f DSGVO. Bei
+                        Newsletter- oder Marketing-E-Mails erfolgt die
+                        Verarbeitung auf Grundlage Ihrer Einwilligung nach Art.
+                        6 Abs. 1 lit. a DSGVO.
+                      </p>
+
+                      <p
+                        className="leading-relaxed"
+                        style={{
+                          color: "var(--color-muted-foreground, #64748b)",
+                        }}
+                      >
+                        <strong
+                          style={{ color: "var(--color-foreground, #0f172a)" }}
+                        >
+                          Speicherdauer:
+                        </strong>{" "}
+                        Resend speichert die E-Mail-Daten für die Dauer der
+                        Vertragslaufzeit. Nach Beendigung der Nutzung werden die
+                        Daten innerhalb von 90 Tagen gelöscht, sofern keine
+                        gesetzlichen Aufbewahrungspflichten bestehen.
+                      </p>
+
+                      <p
+                        className="leading-relaxed"
+                        style={{
+                          color: "var(--color-muted-foreground, #64748b)",
+                        }}
+                      >
+                        <strong
+                          style={{ color: "var(--color-foreground, #0f172a)" }}
+                        >
+                          Drittlandübermittlung:
+                        </strong>{" "}
+                        Resend ist im EU-US Data Privacy Framework (DPF)
+                        zertifiziert. Übermittlungen in die USA stützen sich auf
+                        diese Zertifizierung sowie auf die
+                        EU-Standardvertragsklauseln (SCC). Resend unterliegt der
+                        Aufsicht der US-amerikanischen Federal Trade Commission
+                        (FTC). Bei DPF-Beschwerden steht eine unabhängige
+                        Streitbeilegung zur Verfügung.
+                      </p>
+                    </div>
+
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Weitere Informationen zur Datenverarbeitung durch Resend
+                      entnehmen Sie der Datenschutzerklärung von Resend unter:{" "}
+                      <a
+                        href="https://resend.com/legal/privacy-policy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline hover:no-underline"
+                        style={{ color: "var(--color-primary, #3b82f6)" }}
+                      >
+                        https://resend.com/legal/privacy-policy
+                      </a>
+                    </p>
+                    <p
+                      className="leading-relaxed"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Kopien des Auftragsverarbeitungsvertrags und der
+                      Standardvertragsklauseln stellen wir auf Anfrage über die
+                      im Abschnitt &quot;Hinweis zur Verantwortlichen
+                      Stelle&quot; genannten Kontaktdaten zur Verfügung.
+                    </p>
+                  </div>
                   <div>
                     <h4
                       className="text-lg font-semibold mb-2"
