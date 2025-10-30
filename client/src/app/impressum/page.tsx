@@ -7,6 +7,14 @@ import Link from "next/link";
 export default function ImpressumPage() {
   return (
     <div className="min-h-screen flex flex-col">
+      <style jsx global>{`
+        /* Scroll offset for anchor links to account for fixed header */
+        h2[id],
+        h3[id],
+        h4[id] {
+          scroll-margin-top: 120px;
+        }
+      `}</style>
       <Header />
       <main className="flex-1 transition-colors duration-300">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -88,6 +96,259 @@ export default function ImpressumPage() {
             </div>
           </div>
 
+          {/* Table of Contents */}
+          <div
+            className="rounded-2xl border p-6 mb-8"
+            style={{
+              backgroundColor: "var(--color-card, #ffffff)",
+              borderColor: "var(--color-border, #e2e8f0)",
+            }}
+          >
+            <h2
+              className="text-xl font-bold mb-4"
+              style={{ color: "var(--color-foreground, #0f172a)" }}
+            >
+              Inhaltsverzeichnis
+            </h2>
+            <nav className="space-y-2 text-sm">
+              <a
+                href="#datenschutz"
+                className="block hover:underline"
+                style={{ color: "var(--color-primary, #3b82f6)" }}
+              >
+                1. Datenschutz auf einen Blick
+              </a>
+              <div className="ml-4 space-y-1">
+                <a
+                  href="#allgemeine-hinweise"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Allgemeine Hinweise
+                </a>
+                <a
+                  href="#hinweise-datenerfassung"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Wichtige Hinweise zur Datenerfassung
+                </a>
+              </div>
+
+              <a
+                href="#hosting"
+                className="block hover:underline"
+                style={{ color: "var(--color-primary, #3b82f6)" }}
+              >
+                2. Hosting
+              </a>
+              <div className="ml-4 space-y-1">
+                <a
+                  href="#externes-hosting"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Externes Hosting
+                </a>
+                <a
+                  href="#auftragsverarbeitung"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Auftragsverarbeitung
+                </a>
+              </div>
+
+              <a
+                href="#hinweise-und-pflichtinformationen"
+                className="block hover:underline"
+                style={{ color: "var(--color-primary, #3b82f6)" }}
+              >
+                3. Allgemeine Hinweise und Pflichtinformationen
+              </a>
+              <div className="ml-4 space-y-1">
+                <a
+                  href="#datenschutz-info"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Datenschutz
+                </a>
+                <a
+                  href="#verantwortliche-stelle"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Hinweis zur verantwortlichen Stelle
+                </a>
+                <a
+                  href="#speicherdauer"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Speicherdauer
+                </a>
+                <a
+                  href="#rechtsgrundlagen"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Rechtsgrundlagen der Datenverarbeitung
+                </a>
+                <a
+                  href="#empfaenger"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Empfänger von personenbezogenen Daten
+                </a>
+                <a
+                  href="#widerruf"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Widerruf Ihrer Einwilligung
+                </a>
+                <a
+                  href="#widerspruchsrecht"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Widerspruchsrecht
+                </a>
+                <a
+                  href="#beschwerderecht"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Beschwerderecht
+                </a>
+                <a
+                  href="#datenuebertragbarkeit"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Recht auf Datenübertragbarkeit
+                </a>
+                <a
+                  href="#auskunft"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Auskunft, Berichtigung und Löschung
+                </a>
+                <a
+                  href="#einschraenkung"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Recht auf Einschränkung
+                </a>
+                <a
+                  href="#verschluesselung"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • SSL- bzw. TLS-Verschlüsselung
+                </a>
+              </div>
+
+              <a
+                href="#datenerfassung"
+                className="block hover:underline"
+                style={{ color: "var(--color-primary, #3b82f6)" }}
+              >
+                4. Datenerfassung auf dieser Website
+              </a>
+              <div className="ml-4 space-y-1">
+                <a
+                  href="#allgemeine-datenverarbeitung"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Allgemeine Hinweise zur Datenverarbeitung
+                </a>
+                <a
+                  href="#cookies"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Cookies
+                </a>
+                <a
+                  href="#benutzerkonto"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Benutzerkonto / Registrierung
+                </a>
+                <a
+                  href="#nutzerinhalte"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Von Nutzern bereitgestellte Inhalte
+                </a>
+                <a
+                  href="#admin-daten"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Administrations- und Moderationsdaten
+                </a>
+                <a
+                  href="#kontosicherheit"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Kontosicherheit
+                </a>
+                <a
+                  href="#verbesserung"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Nutzung zur Verbesserung und Analyse
+                </a>
+                <a
+                  href="#server-logs"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Server-Log-Dateien
+                </a>
+                <a
+                  href="#kontaktformular"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Kontaktformular
+                </a>
+                <a
+                  href="#email-anfrage"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Anfrage per E-Mail
+                </a>
+                <a
+                  href="#resend"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • E-Mail-Versand über Resend
+                </a>
+                <a
+                  href="#kommentare"
+                  className="block hover:underline"
+                  style={{ color: "var(--color-muted-foreground, #64748b)" }}
+                >
+                  • Kommentarfunktion
+                </a>
+              </div>
+            </nav>
+          </div>
+
           {/* Datenschutzerklärung Section */}
           <div
             className="rounded-2xl border p-8 mb-8"
@@ -107,6 +368,7 @@ export default function ImpressumPage() {
               {/* Section 1 */}
               <div>
                 <h3
+                  id="datenschutz"
                   className="text-2xl font-bold mb-4"
                   style={{ color: "var(--color-foreground, #0f172a)" }}
                 >
@@ -116,6 +378,7 @@ export default function ImpressumPage() {
                 <div className="space-y-4">
                   <div>
                     <h4
+                      id="allgemeine-hinweise"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -139,10 +402,11 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="hinweise-datenerfassung"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
-                      Datenerfassung auf dieser Website
+                      Wichtige Hinweise zur Datenerfassung
                     </h4>
 
                     <div className="space-y-3">
@@ -269,6 +533,7 @@ export default function ImpressumPage() {
               {/* Section 2 */}
               <div>
                 <h3
+                  id="hosting"
                   className="text-2xl font-bold mb-4"
                   style={{ color: "var(--color-foreground, #0f172a)" }}
                 >
@@ -278,6 +543,7 @@ export default function ImpressumPage() {
                 <div className="space-y-4">
                   <div>
                     <h4
+                      id="externes-hosting"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -379,6 +645,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="auftragsverarbeitung"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -405,6 +672,7 @@ export default function ImpressumPage() {
               {/* Section 3 */}
               <div>
                 <h3
+                  id="hinweise-und-pflichtinformationen"
                   className="text-2xl font-bold mb-4"
                   style={{ color: "var(--color-foreground, #0f172a)" }}
                 >
@@ -414,6 +682,7 @@ export default function ImpressumPage() {
                 <div className="space-y-4">
                   <div>
                     <h4
+                      id="datenschutz-info"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -459,6 +728,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="verantwortliche-stelle"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -504,6 +774,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="speicherdauer"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -531,6 +802,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="rechtsgrundlagen"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -572,6 +844,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="empfaenger"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -734,6 +1007,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="widerruf"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -755,6 +1029,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="widerspruchsrecht"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -800,6 +1075,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="beschwerderecht"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -823,6 +1099,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="datenuebertragbarkeit"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -846,6 +1123,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="auskunft"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -870,6 +1148,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="einschraenkung"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -942,6 +1221,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="verschluesselung"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -979,6 +1259,7 @@ export default function ImpressumPage() {
               {/* Section 4 */}
               <div>
                 <h3
+                  id="datenerfassung"
                   className="text-2xl font-bold mb-4"
                   style={{ color: "var(--color-foreground, #0f172a)" }}
                 >
@@ -988,6 +1269,7 @@ export default function ImpressumPage() {
                 <div className="space-y-4">
                   <div>
                     <h4
+                      id="allgemeine-datenverarbeitung"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1033,6 +1315,7 @@ export default function ImpressumPage() {
                   </div>
                   <div>
                     <h4
+                      id="cookies"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1156,6 +1439,7 @@ export default function ImpressumPage() {
                   </div>
                   <div>
                     <h4
+                      id="benutzerkonto"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1221,6 +1505,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="nutzerinhalte"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1285,6 +1570,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="admin-daten"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1358,6 +1644,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="kontosicherheit"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1409,6 +1696,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="verbesserung"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1471,6 +1759,7 @@ export default function ImpressumPage() {
                   </div>
                   <div>
                     <h4
+                      id="server-logs"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1531,6 +1820,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="kontaktformular"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1583,6 +1873,7 @@ export default function ImpressumPage() {
                   </div>
                   <div>
                     <h4
+                      id="email-anfrage"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1646,6 +1937,7 @@ export default function ImpressumPage() {
 
                   <div>
                     <h4
+                      id="resend"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1791,6 +2083,7 @@ export default function ImpressumPage() {
                   </div>
                   <div>
                     <h4
+                      id="kommentare"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
