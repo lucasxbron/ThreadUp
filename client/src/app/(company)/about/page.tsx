@@ -667,6 +667,25 @@ export default function AboutPage() {
                   View on GitHub
                 </button>
               </Link>
+              <Link href="/" className="block">
+                <button
+                  className="px-6 py-3 rounded-lg font-medium transition-colors"
+                  style={{
+                    backgroundColor: "transparent",
+                    color: "var(--color-foreground, #0f172a)",
+                    border: "1px solid var(--color-border, #e2e8f0)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor =
+                      "var(--color-secondary, #f1f5f9)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                  }}
+                >
+                  Back to ThreadUp
+                </button>
+              </Link>
             </div>
           </div>
         </div>
