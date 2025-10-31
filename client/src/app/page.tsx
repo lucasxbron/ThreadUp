@@ -90,7 +90,7 @@ export default function HomePage() {
                       <div className="w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center mb-3 sm:mb-4 mx-auto animate-pulse">
                         <Image
                           src="/threadup_icon_gradient.svg"
-                          alt="ThreadUp"
+                          alt="ThreadUp Logo"
                           width={64}
                           height={64}
                           className="w-full h-full object-contain drop-shadow-lg"
@@ -222,7 +222,7 @@ export default function HomePage() {
                       <div className="w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center animate-pulse">
                         <Image
                           src="/threadup_icon_gradient.svg"
-                          alt="ThreadUp"
+                          alt="ThreadUp Logo"
                           width={80}
                           height={80}
                           className="w-full h-full object-contain drop-shadow-lg"

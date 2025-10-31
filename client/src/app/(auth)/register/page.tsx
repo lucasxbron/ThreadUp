@@ -193,7 +193,7 @@ export default function RegisterPage() {
               <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
                 <Image
                   src="/threadup_icon_gradient.svg"
-                  alt="ThreadUp"
+                  alt="ThreadUp Logo"
                   width={64}
                   height={64}
                   className="w-full h-full object-contain drop-shadow-lg"

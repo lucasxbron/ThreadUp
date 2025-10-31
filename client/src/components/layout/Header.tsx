@@ -65,7 +65,7 @@ export const Header: React.FC = () => {
       <div className="w-9 h-9 flex items-center justify-center">
         <Image
           src="/threadup_icon_gradient.svg"
-          alt="ThreadUp"
+          alt="ThreadUp Logo"
           width={32}
           height={32}
           className="w-full h-full object-contain"
