@@ -8,7 +8,7 @@ export const MaintenancePage: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Main Content */}
-      <div className="flex-1 relative overflow-hidden">
+      <main className="flex-1 relative overflow-hidden">
         <div className="relative z-10 flex items-center justify-center flex-1 px-4 py-12 min-h-[calc(100vh-20rem)]">
           <div className="max-w-2xl mx-auto w-full text-center">
             {/* Logo and Brand */}
@@ -17,7 +17,7 @@ export const MaintenancePage: React.FC = () => {
                 <div className="w-12 h-12 sm:w-18 sm:h-18 flex items-center justify-center animate-pulse">
                   <Image
                     src="/threadup_icon_gradient.svg"
-                    alt="ThreadUp"
+                    alt="ThreadUp Logo"
                     width={64}
                     height={64}
                     className="w-full h-full object-contain drop-shadow-lg"
@@ -218,7 +218,7 @@ export const MaintenancePage: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </main>
 
       {/* Footer - Always visible and functional */}
       <Footer />
