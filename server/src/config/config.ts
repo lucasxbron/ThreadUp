@@ -11,6 +11,7 @@ interface Config {
   CLOUDINARY_CLOUD_NAME: string;
   CLOUDINARY_API_KEY: string;
   CLOUDINARY_API_SECRET: string;
+  ALLOWED_ORIGINS: string[];
 }
 
 function getEnvVar(key: string, required: boolean = true): string | undefined {
@@ -32,6 +33,9 @@ const config: Config = {
   CLOUDINARY_CLOUD_NAME: getEnvVar("CLOUDINARY_CLOUD_NAME")!,
   CLOUDINARY_API_KEY: getEnvVar("CLOUDINARY_API_KEY")!,
   CLOUDINARY_API_SECRET: getEnvVar("CLOUDINARY_API_SECRET")!,
+  ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim())
+    : ["http://localhost:3000"],
 };
 
 export default config;

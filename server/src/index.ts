@@ -14,10 +14,10 @@ import uploadRoutes from "./routes/uploadRouter.js";
 import contactRoutes from "./routes/contactRouter.js";
 import adminRoutes from "./routes/adminRouter.js";
 
-const allowedOrigins = [
-  "https://threadup-client.onrender.com", // Frontend URL
-  "http://localhost:3000", // Local development
-];
+// const allowedOrigins = [
+//   "https://threadup-client.onrender.com",
+//   "http://localhost:3000",
+// ];
 
 const app = express();
 
@@ -25,7 +25,7 @@ app.use(
   cors({
     origin: (origin, callback) => {
       // Allow requests with no origin (mobile apps, Postman, etc.)
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || config.ALLOWED_ORIGINS.includes(origin)) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS: " + origin));
