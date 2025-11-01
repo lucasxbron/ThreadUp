@@ -641,6 +641,24 @@ export default function ImpressumPage() {
                       Informationen zum DPF und zur unabhängigen Streitbeilegung
                       sind über die DPF‑Informationsseiten verfügbar.​
                     </p>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      Weitere Informationen zur Datenverarbeitung durch Render
+                      entnehmen Sie der Render Privacy Policy unter:{" "}
+                      <a
+                        href="https://render.com/privacy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline hover:no-underline"
+                        style={{ color: "var(--color-primary, #3b82f6)" }}
+                      >
+                        https://render.com/privacy
+                      </a>
+                    </p>
                   </div>
 
                   <div>
@@ -946,9 +964,7 @@ export default function ImpressumPage() {
                           </strong>{" "}
                           E-Mails werden für die Dauer der Kommunikation bzw.
                           zur Wahrung gesetzlicher Aufbewahrungspflichten
-                          gespeichert und anschließend gelöscht; weitergehende
-                          Informationen zu Googles Verarbeitung sind der
-                          Google-Datenschutzerklärung zu entnehmen.
+                          gespeichert und anschließend gelöscht.
                         </p>
 
                         <p
@@ -1000,6 +1016,24 @@ export default function ImpressumPage() {
                           Anfrage über die im Abschnitt &quot;Hinweis zur
                           Verantwortlichen Stelle&quot; genannten Kontaktdaten
                           zur Verfügung.
+                        </p>
+                        <p
+                          className="leading-relaxed"
+                          style={{
+                            color: "var(--color-muted-foreground, #64748b)",
+                          }}
+                        >
+                          Weitere Informationen zur Datenverarbeitung durch
+                          Google finden Sie unter:{" "}
+                          <a
+                            href="https://policies.google.com/privacy"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline hover:no-underline"
+                            style={{ color: "var(--color-primary, #3b82f6)" }}
+                          >
+                            https://policies.google.com/privacy
+                          </a>
                         </p>
                       </div>
                     </div>
