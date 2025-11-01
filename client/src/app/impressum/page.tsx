@@ -4,6 +4,9 @@ import React from "react";
 import { Header } from "@/components/layout/Header";
 import Link from "next/link";
 
+// Update this date when the document is updated
+const LAST_UPDATED = "01.11.2025";
+
 export default function ImpressumPage() {
   return (
     <div className="min-h-screen flex flex-col">
@@ -2231,6 +2234,27 @@ export default function ImpressumPage() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Last Updated */}
+          <div
+            className="rounded-2xl border p-4 mb-8 text-center"
+            style={{
+              backgroundColor: "var(--color-card, #ffffff)",
+              borderColor: "var(--color-border, #e2e8f0)",
+            }}
+          >
+            <p
+              className="text-sm"
+              style={{
+                color: "var(--color-muted-foreground, #64748b)",
+              }}
+            >
+              <strong style={{ color: "var(--color-foreground, #0f172a)" }}>
+                Letzte Aktualisierung:
+              </strong>{" "}
+              {LAST_UPDATED}
+            </p>
           </div>
 
           {/* Contact Section */}
