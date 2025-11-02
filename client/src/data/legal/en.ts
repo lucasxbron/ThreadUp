@@ -23,11 +23,13 @@ export const legalNoticeEN: LegalNoticeTranslation = {
       title: "1. Privacy at a Glance",
       generalInfo: {
         title: "General Information",
+        tocTitle: "General Information",
         content:
           "The following notes provide a simple overview of what happens to your personal data when you visit this website. Personal data is all data by which you can be personally identified. For detailed information on data protection, please refer to our privacy policy listed below this text.",
       },
       dataCollection: {
         title: "Important Notes on Data Collection",
+        tocTitle: "Important Notes on Data Collection",
         whoResponsible: {
           question: "Who is responsible for data collection on this website?",
           answer:
@@ -60,6 +62,7 @@ export const legalNoticeEN: LegalNoticeTranslation = {
       title: "2. Hosting",
       externalHosting: {
         title: "External Hosting",
+        tocTitle: "External Hosting",
         paragraph1:
           "This website is hosted externally. The personal data collected on this website is stored on the servers of the host(s). This may primarily include IP addresses, contact requests, metadata and communication data, contract data, contact details, names, website accesses, and other data generated via a website.",
         paragraph2:
@@ -79,6 +82,7 @@ USA`,
       },
       dataProcessing: {
         title: "Data Processing Agreement",
+        tocTitle: "Data Processing Agreement",
         content:
           "We have concluded a data processing agreement (DPA) for the use of the above-mentioned service. This is a contract required by data protection law that ensures that the service processes the personal data of our website visitors only according to our instructions and in compliance with the GDPR.",
       },
@@ -89,6 +93,7 @@ USA`,
       title: "3. General Information and Mandatory Disclosures",
       dataProtection: {
         title: "Data Protection",
+        tocTitle: "Data Protection",
         paragraph1:
           "The operators of these pages take the protection of your personal data very seriously. We treat your personal data confidentially and in accordance with statutory data protection regulations and this privacy policy.",
         paragraph2:
@@ -98,6 +103,7 @@ USA`,
       },
       responsibleParty: {
         title: "Note on the Responsible Party",
+        tocTitle: "Note on the Responsible Party",
         paragraph1:
           "The responsible party for data processing on this website is:",
         contactInfo: `Lucas Bron
@@ -109,11 +115,13 @@ Germany`,
       },
       storageDuration: {
         title: "Storage Duration",
+        tocTitle: "Storage Duration",
         paragraph1:
           "Unless a more specific storage period has been specified within this privacy policy, your personal data will remain with us until the purpose for data processing no longer applies. If you assert a legitimate request for deletion or revoke consent to data processing, your data will be deleted unless we have other legally permissible reasons for storing your personal data (e.g., tax or commercial law retention periods); in the latter case, deletion will take place after these reasons cease to apply.",
       },
       legalBasis: {
         title: "Legal Basis for Data Processing",
+        tocTitle: "Legal Basis for Data Processing",
         paragraph1:
           "We process your personal data only if a legal basis exists. The relevant legal provisions are primarily found in the GDPR. The following legal bases may apply:",
         list: [
@@ -125,6 +133,7 @@ Germany`,
       },
       recipients: {
         title: "Recipients of Personal Data",
+        tocTitle: "Recipients of Personal Data",
         paragraph1:
           "In the course of our business activities, we work with various external parties. In some cases, this also requires the transmission of personal data to these external parties. We only pass on personal data to external parties if this is necessary for contract fulfillment, if we are legally obligated to do so (e.g., passing on data to tax authorities), if we have a legitimate interest in accordance with Art. 6 Para. 1 lit. f GDPR in the transmission, or if another legal basis permits the data transmission. When using processors, we only pass on personal data of our customers on the basis of a valid contract for data processing. In the case of joint processing, a contract for joint processing is concluded.",
         gmailSection: {
@@ -148,12 +157,14 @@ Germany`,
       },
       revocation: {
         title: "Revocation of Your Consent to Data Processing",
+        tocTitle: "Revocation of Your Consent",
         paragraph1:
           "Many data processing operations are only possible with your express consent. You can revoke consent you have already given at any time. The legality of the data processing carried out until the revocation remains unaffected by the revocation.",
       },
       rightToObject: {
         title:
           "Right to Object to Data Collection in Special Cases and to Direct Marketing (Art. 21 GDPR)",
+        tocTitle: "Right to Object",
         paragraph1:
           "IF DATA PROCESSING IS BASED ON ART. 6 PARA. 1 LIT. E OR F GDPR, YOU HAVE THE RIGHT AT ANY TIME TO OBJECT TO THE PROCESSING OF YOUR PERSONAL DATA FOR REASONS ARISING FROM YOUR PARTICULAR SITUATION; THIS ALSO APPLIES TO PROFILING BASED ON THESE PROVISIONS. THE RESPECTIVE LEGAL BASIS ON WHICH PROCESSING IS BASED CAN BE FOUND IN THIS PRIVACY POLICY. IF YOU OBJECT, WE WILL NO LONGER PROCESS YOUR PERSONAL DATA UNLESS WE CAN DEMONSTRATE COMPELLING LEGITIMATE GROUNDS FOR THE PROCESSING WHICH OVERRIDE YOUR INTERESTS, RIGHTS AND FREEDOMS, OR THE PROCESSING SERVES THE ASSERTION, EXERCISE OR DEFENSE OF LEGAL CLAIMS (OBJECTION UNDER ART. 21 PARA. 1 GDPR).",
         paragraph2:
@@ -162,21 +173,25 @@ Germany`,
       complaint: {
         title:
           "Right to Lodge a Complaint with the Competent Supervisory Authority",
+        tocTitle: "Right to Lodge a Complaint",
         paragraph1:
           "In the event of violations of the GDPR, data subjects have the right to lodge a complaint with a supervisory authority, particularly in the Member State of their habitual residence, place of work, or place of the alleged violation. The right to lodge a complaint exists without prejudice to other administrative or judicial remedies.",
       },
       dataPortability: {
         title: "Right to Data Portability",
+        tocTitle: "Right to Data Portability",
         paragraph1:
           "You have the right to have data that we process automatically on the basis of your consent or in fulfillment of a contract handed over to you or to a third party in a common, machine-readable format. If you request the direct transfer of the data to another controller, this will only be done to the extent technically feasible.",
       },
       access: {
         title: "Access, Rectification, and Erasure",
+        tocTitle: "Access, Rectification, and Erasure",
         paragraph1:
           "Within the framework of the applicable legal provisions, you have the right at any time to free information about your stored personal data, its origin and recipient, and the purpose of data processing and, if applicable, a right to rectification or erasure of this data. You can contact us at any time regarding this and other questions about personal data.",
       },
       restriction: {
         title: "Right to Restriction of Processing",
+        tocTitle: "Right to Restriction of Processing",
         paragraph1:
           "You have the right to request the restriction of the processing of your personal data. You can contact us at any time for this purpose. The right to restriction of processing exists in the following cases:",
         list: [
@@ -189,7 +204,8 @@ Germany`,
           "If you have restricted the processing of your personal data, this data – apart from its storage – may only be processed with your consent or for the assertion, exercise, or defense of legal claims or for the protection of the rights of another natural or legal person or for reasons of an important public interest of the European Union or a Member State.",
       },
       encryption: {
-        title: "SSL/TLS Encryption",
+        title: "SSL or TLS Encryption",
+        tocTitle: "SSL or TLS Encryption",
         paragraph1:
           'For security reasons and to protect the transmission of confidential content, such as orders or requests that you send to us as the site operator, this site uses SSL or TLS encryption. You can recognize an encrypted connection by the fact that the address line of the browser changes from "http://" to "https://" and by the lock symbol in your browser line.',
         paragraph2:
@@ -202,6 +218,7 @@ Germany`,
       title: "4. Data Collection on This Website",
       generalProcessing: {
         title: "General Information on Data Processing",
+        tocTitle: "General Information on Data Processing",
         paragraph1:
           "We only process personal data to the extent necessary for the operation, security, and functionality of our website and to provide our services. Below, we inform you about which data categories we process, for what purposes this is done, and on what legal basis.",
         list: [
@@ -212,6 +229,7 @@ Germany`,
       },
       cookies: {
         title: "Cookies",
+        tocTitle: "Cookies",
         paragraph1:
           'Our website uses so-called "cookies". Cookies are small data packets and do not cause any damage to your end device. They are stored either temporarily for the duration of a session (session cookies) or permanently (permanent cookies) on your end device. Session cookies are automatically deleted after your visit. Permanent cookies remain stored on your end device until you delete them yourself or until they are automatically deleted by your web browser.',
         paragraph2:
@@ -229,6 +247,7 @@ Germany`,
       },
       userAccount: {
         title: "User Account / Registration",
+        tocTitle: "User Account / Registration",
         paragraph1:
           "When you create a user account, we process the following data in particular:",
         list: [
@@ -248,6 +267,7 @@ Germany`,
       },
       userContent: {
         title: "User-Generated Content",
+        tocTitle: "User-Generated Content",
         paragraph1:
           "When using our platform, content provided by you is processed:",
         list: [
@@ -266,6 +286,7 @@ Germany`,
       },
       adminData: {
         title: "Administration and Moderation Data (for Administrators Only)",
+        tocTitle: "Administration and Moderation Data",
         paragraph1:
           "For users with administrative or moderative rights, the following additional data is processed:",
         list: [
@@ -283,6 +304,7 @@ Germany`,
       },
       accountSecurity: {
         title: "Account Security & Technical Security Measures",
+        tocTitle: "Account Security",
         list: [
           "Stored, hashed passwords (no plain text)",
           "Login status, tokens, session IDs",
@@ -297,6 +319,7 @@ Germany`,
       },
       improvement: {
         title: "Use for Improvement and Analysis",
+        tocTitle: "Use for Improvement and Analysis",
         paragraph1:
           "To improve our platform, we process anonymized or pseudonymized usage data, such as:",
         list: [
@@ -311,6 +334,7 @@ Germany`,
       },
       serverLogs: {
         title: "Server Log Files",
+        tocTitle: "Server Log Files",
         paragraph1:
           "The provider of the pages automatically collects and stores information in so-called server log files, which your browser automatically transmits to us. These are:",
         list: [
@@ -328,6 +352,7 @@ Germany`,
       },
       contactForm: {
         title: "Contact Form",
+        tocTitle: "Contact Form",
         paragraph1:
           "If you send us inquiries via the contact form, your details from the inquiry form, including the contact details you provided there, will be stored by us for the purpose of processing the inquiry and in the event of follow-up questions. We do not pass on this data without your consent.",
         paragraph2:
@@ -337,6 +362,7 @@ Germany`,
       },
       emailInquiry: {
         title: "Inquiry by Email",
+        tocTitle: "Inquiry by Email",
         paragraph1:
           "If you contact us by email, your inquiry including all resulting personal data (name, inquiry) will be stored and processed by us for the purpose of processing your request. We do not pass on this data without your consent.",
         paragraph2:
@@ -348,6 +374,7 @@ Germany`,
       },
       resend: {
         title: "Email Sending via Resend",
+        tocTitle: "Email Sending via Resend",
         paragraph1:
           "For sending transactional emails (e.g., registration confirmations, email changes, password reset links, and contact form notifications), we use the Resend service provided by Plus Five Five, Inc., 2261 Market Street #5039, San Francisco, CA 94114, USA.",
         paragraph2:
@@ -375,6 +402,7 @@ Germany`,
       },
       comments: {
         title: "Comment Function on This Website",
+        tocTitle: "Comment Function",
         paragraph1:
           "For the comment function on this site, in addition to your comment, details of when the comment was created, your email address, and, if you do not post anonymously, your chosen username are stored.",
         ipStorage: {

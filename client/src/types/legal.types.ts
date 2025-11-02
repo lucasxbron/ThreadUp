@@ -17,11 +17,15 @@ export interface DataCollection {
 
 export interface Section1 {
   title: string;
+  tocTitle?: string; // Shortened title for TOC
   generalInfo: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     content: string;
   };
-  dataCollection: DataCollection;
+  dataCollection: DataCollection & {
+    tocTitle?: string; // Shortened title for TOC
+  };
 }
 
 export interface ExternalHosting {
@@ -38,9 +42,13 @@ export interface ExternalHosting {
 
 export interface Section2 {
   title: string;
-  externalHosting: ExternalHosting;
+  tocTitle?: string; // Shortened title for TOC
+  externalHosting: ExternalHosting & {
+    tocTitle?: string; // Shortened title for TOC
+  };
   dataProcessing: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     content: string;
   };
 }
@@ -59,61 +67,74 @@ export interface GmailSection {
 
 export interface Section3 {
   title: string;
+  tocTitle?: string; // Shortened title for TOC
   dataProtection: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
     paragraph2: string;
     paragraph3: string;
   };
   responsibleParty: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
     contactInfo: string;
     paragraph2: string;
   };
   storageDuration: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
   };
   legalBasis: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
     list?: string[];
   };
   recipients: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
     gmailSection: GmailSection;
   };
   revocation: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
   };
   rightToObject: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
     paragraph2: string;
   };
   complaint: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
   };
   dataPortability: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
   };
   access: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
   };
   restriction: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
     list: string[];
     paragraph2: string;
   };
   encryption: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
     paragraph2: string;
   };
@@ -184,13 +205,16 @@ export interface ResendSection {
 
 export interface Section4 {
   title: string;
+  tocTitle?: string; // Shortened title for TOC
   generalProcessing: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
     list: string[];
   };
   cookies: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
     paragraph2: string;
     paragraph3: string;
@@ -199,11 +223,18 @@ export interface Section4 {
     paragraph6?: string;
     paragraph7?: string;
   };
-  userAccount: UserAccountSection;
-  userContent: UserContentSection;
-  adminData: AdminDataSection;
+  userAccount: UserAccountSection & {
+    tocTitle?: string; // Shortened title for TOC
+  };
+  userContent: UserContentSection & {
+    tocTitle?: string; // Shortened title for TOC
+  };
+  adminData: AdminDataSection & {
+    tocTitle?: string; // Shortened title for TOC
+  };
   accountSecurity: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     list: string[];
     purpose: string;
     legalBasis: string;
@@ -211,6 +242,7 @@ export interface Section4 {
   };
   improvement: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
     list: string[];
     purpose: string;
@@ -218,6 +250,7 @@ export interface Section4 {
   };
   serverLogs: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
     list: string[];
     paragraph2: string;
@@ -225,13 +258,20 @@ export interface Section4 {
   };
   contactForm: {
     title: string;
+    tocTitle?: string; // Shortened title for TOC
     paragraph1: string;
     paragraph2: string;
     paragraph3: string;
   };
-  emailInquiry: EmailInquirySection;
-  resend: ResendSection;
-  comments: CommentsSection;
+  emailInquiry: EmailInquirySection & {
+    tocTitle?: string; // Shortened title for TOC
+  };
+  resend: ResendSection & {
+    tocTitle?: string; // Shortened title for TOC
+  };
+  comments: CommentsSection & {
+    tocTitle?: string; // Shortened title for TOC
+  };
   attribution: string;
   attributionLink: string;
 }

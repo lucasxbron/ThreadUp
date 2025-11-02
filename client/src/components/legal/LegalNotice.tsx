@@ -186,14 +186,18 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section1.generalInfo.title}
+                  •{" "}
+                  {t.sections.section1.generalInfo.tocTitle ||
+                    t.sections.section1.generalInfo.title}
                 </a>
                 <a
                   href="#hinweise-datenerfassung"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section1.dataCollection.title}
+                  •{" "}
+                  {t.sections.section1.dataCollection.tocTitle ||
+                    t.sections.section1.dataCollection.title}
                 </a>
               </div>
 
@@ -210,14 +214,18 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section2.externalHosting.title}
+                  •{" "}
+                  {t.sections.section2.externalHosting.tocTitle ||
+                    t.sections.section2.externalHosting.title}
                 </a>
                 <a
                   href="#auftragsverarbeitung"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section2.dataProcessing.title}
+                  •{" "}
+                  {t.sections.section2.dataProcessing.tocTitle ||
+                    t.sections.section2.dataProcessing.title}
                 </a>
               </div>
 
@@ -234,84 +242,108 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section3.dataProtection.title}
+                  •{" "}
+                  {t.sections.section3.dataProtection.tocTitle ||
+                    t.sections.section3.dataProtection.title}
                 </a>
                 <a
                   href="#verantwortliche-stelle"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section3.responsibleParty.title}
+                  •{" "}
+                  {t.sections.section3.responsibleParty.tocTitle ||
+                    t.sections.section3.responsibleParty.title}
                 </a>
                 <a
                   href="#speicherdauer"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section3.storageDuration.title}
+                  •{" "}
+                  {t.sections.section3.storageDuration.tocTitle ||
+                    t.sections.section3.storageDuration.title}
                 </a>
                 <a
                   href="#rechtsgrundlagen"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section3.legalBasis.title}
+                  •{" "}
+                  {t.sections.section3.legalBasis.tocTitle ||
+                    t.sections.section3.legalBasis.title}
                 </a>
                 <a
                   href="#empfaenger"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section3.recipients.title}
+                  •{" "}
+                  {t.sections.section3.recipients.tocTitle ||
+                    t.sections.section3.recipients.title}
                 </a>
                 <a
                   href="#widerruf"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section3.revocation.title}
+                  •{" "}
+                  {t.sections.section3.revocation.tocTitle ||
+                    t.sections.section3.revocation.title}
                 </a>
                 <a
                   href="#widerspruchsrecht"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section3.rightToObject.title}
+                  •{" "}
+                  {t.sections.section3.rightToObject.tocTitle ||
+                    t.sections.section3.rightToObject.title}
                 </a>
                 <a
                   href="#beschwerderecht"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section3.complaint.title}
+                  •{" "}
+                  {t.sections.section3.complaint.tocTitle ||
+                    t.sections.section3.complaint.title}
                 </a>
                 <a
                   href="#datenuebertragbarkeit"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section3.dataPortability.title}
+                  •{" "}
+                  {t.sections.section3.dataPortability.tocTitle ||
+                    t.sections.section3.dataPortability.title}
                 </a>
                 <a
                   href="#auskunft"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section3.access.title}
+                  •{" "}
+                  {t.sections.section3.access.tocTitle ||
+                    t.sections.section3.access.title}
                 </a>
                 <a
                   href="#einschraenkung"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section3.restriction.title}
+                  •{" "}
+                  {t.sections.section3.restriction.tocTitle ||
+                    t.sections.section3.restriction.title}
                 </a>
                 <a
                   href="#verschluesselung"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section3.encryption.title}
+                  •{" "}
+                  {t.sections.section3.encryption.tocTitle ||
+                    t.sections.section3.encryption.title}
                 </a>
               </div>
 
@@ -328,84 +360,108 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section4.generalProcessing.title}
+                  •{" "}
+                  {t.sections.section4.generalProcessing.tocTitle ||
+                    t.sections.section4.generalProcessing.title}
                 </a>
                 <a
                   href="#cookies"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section4.cookies.title}
+                  •{" "}
+                  {t.sections.section4.cookies.tocTitle ||
+                    t.sections.section4.cookies.title}
                 </a>
                 <a
                   href="#benutzerkonto"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section4.userAccount.title}
+                  •{" "}
+                  {t.sections.section4.userAccount.tocTitle ||
+                    t.sections.section4.userAccount.title}
                 </a>
                 <a
                   href="#nutzerinhalte"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section4.userContent.title}
+                  •{" "}
+                  {t.sections.section4.userContent.tocTitle ||
+                    t.sections.section4.userContent.title}
                 </a>
                 <a
                   href="#admin-daten"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section4.adminData.title}
+                  •{" "}
+                  {t.sections.section4.adminData.tocTitle ||
+                    t.sections.section4.adminData.title}
                 </a>
                 <a
                   href="#kontosicherheit"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section4.accountSecurity.title}
+                  •{" "}
+                  {t.sections.section4.accountSecurity.tocTitle ||
+                    t.sections.section4.accountSecurity.title}
                 </a>
                 <a
                   href="#verbesserung"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section4.improvement.title}
+                  •{" "}
+                  {t.sections.section4.improvement.tocTitle ||
+                    t.sections.section4.improvement.title}
                 </a>
                 <a
                   href="#server-logs"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section4.serverLogs.title}
+                  •{" "}
+                  {t.sections.section4.serverLogs.tocTitle ||
+                    t.sections.section4.serverLogs.title}
                 </a>
                 <a
                   href="#kontaktformular"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section4.contactForm.title}
+                  •{" "}
+                  {t.sections.section4.contactForm.tocTitle ||
+                    t.sections.section4.contactForm.title}
                 </a>
                 <a
                   href="#email-anfrage"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section4.emailInquiry.title}
+                  •{" "}
+                  {t.sections.section4.emailInquiry.tocTitle ||
+                    t.sections.section4.emailInquiry.title}
                 </a>
                 <a
                   href="#resend"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section4.resend.title}
+                  •{" "}
+                  {t.sections.section4.resend.tocTitle ||
+                    t.sections.section4.resend.title}
                 </a>
                 <a
                   href="#kommentare"
                   className="block hover:underline"
                   style={{ color: "var(--color-muted-foreground, #64748b)" }}
                 >
-                  • {t.sections.section4.comments.title}
+                  •{" "}
+                  {t.sections.section4.comments.tocTitle ||
+                    t.sections.section4.comments.title}
                 </a>
               </div>
             </nav>
@@ -975,7 +1031,7 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
 
                   <div>
                     <h4
-                      id="widerspruch"
+                      id="widerspruchsrecht"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1019,7 +1075,7 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
 
                   <div>
                     <h4
-                      id="datenportabilitaet"
+                      id="datenuebertragbarkeit"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1037,7 +1093,7 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
 
                   <div>
                     <h4
-                      id="auskunft-loeschung"
+                      id="auskunft"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1096,7 +1152,7 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
 
                   <div>
                     <h4
-                      id="ssl-tls"
+                      id="verschluesselung"
                       className="text-lg font-semibold mb-2"
                       style={{ color: "var(--color-foreground, #0f172a)" }}
                     >
@@ -1243,7 +1299,7 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                   {t.sections.section4.userAccount && (
                     <div>
                       <h4
-                        id="registrierung"
+                        id="benutzerkonto"
                         className="text-lg font-semibold mb-2"
                         style={{ color: "var(--color-foreground, #0f172a)" }}
                       >
@@ -1309,7 +1365,7 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                   {t.sections.section4.userContent && (
                     <div>
                       <h4
-                        id="kommentare-beitraege"
+                        id="nutzerinhalte"
                         className="text-lg font-semibold mb-2"
                         style={{ color: "var(--color-foreground, #0f172a)" }}
                       >
@@ -1816,7 +1872,7 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                   {t.sections.section4.comments && (
                     <div>
                       <h4
-                        id="kommentarfunktion"
+                        id="kommentare"
                         className="text-lg font-semibold mb-2"
                         style={{ color: "var(--color-foreground, #0f172a)" }}
                       >

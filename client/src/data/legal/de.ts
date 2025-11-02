@@ -23,11 +23,13 @@ export const legalNoticeDE: LegalNoticeTranslation = {
       title: "1. Datenschutz auf einen Blick",
       generalInfo: {
         title: "Allgemeine Hinweise",
+        tocTitle: "Allgemeine Hinweise",
         content:
           "Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.",
       },
       dataCollection: {
         title: "Wichtige Hinweise zur Datenerfassung",
+        tocTitle: "Wichtige Hinweise zur Datenerfassung",
         whoResponsible: {
           question:
             "Wer ist verantwortlich für die Datenerfassung auf dieser Website?",
@@ -61,6 +63,7 @@ export const legalNoticeDE: LegalNoticeTranslation = {
       title: "2. Hosting",
       externalHosting: {
         title: "Externes Hosting",
+        tocTitle: "Externes Hosting",
         paragraph1:
           "Diese Website wird extern gehostet. Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters / der Hoster gespeichert. Hierbei kann es sich v. a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten, Vertragsdaten, Kontaktdaten, Namen, Websitezugriffe und sonstige Daten, die über eine Website generiert werden, handeln.",
         paragraph2:
@@ -80,6 +83,7 @@ USA`,
       },
       dataProcessing: {
         title: "Auftragsverarbeitung",
+        tocTitle: "Auftragsverarbeitung",
         content:
           "Wir haben einen Vertrag über Auftragsverarbeitung (AVV) zur Nutzung des oben genannten Dienstes geschlossen. Hierbei handelt es sich um einen datenschutzrechtlich vorgeschriebenen Vertrag, der gewährleistet, dass dieser die personenbezogenen Daten unserer Websitebesucher nur nach unseren Weisungen und unter Einhaltung der DSGVO verarbeitet.",
       },
@@ -90,6 +94,7 @@ USA`,
       title: "3. Allgemeine Hinweise und Pflichtinformationen",
       dataProtection: {
         title: "Datenschutz",
+        tocTitle: "Datenschutz",
         paragraph1:
           "Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend den gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.",
         paragraph2:
@@ -99,6 +104,7 @@ USA`,
       },
       responsibleParty: {
         title: "Hinweis zur Verantwortlichen Stelle",
+        tocTitle: "Hinweis zur verantwortlichen Stelle",
         paragraph1:
           "Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:",
         contactInfo: `Lucas Bron
@@ -111,17 +117,20 @@ E-Mail: threadup.social@gmail.com`,
       },
       storageDuration: {
         title: "Speicherdauer",
+        tocTitle: "Speicherdauer",
         paragraph1:
           "Soweit innerhalb dieser Datenschutzerklärung keine speziellere Speicherdauer genannt wurde, verbleiben Ihre personenbezogenen Daten bei uns, bis der Zweck für die Datenverarbeitung entfällt. Wenn Sie ein berechtigtes Löschersuchen geltend machen oder eine Einwilligung zur Datenverarbeitung widerrufen, werden Ihre Daten gelöscht, sofern wir keine anderen rechtlich zulässigen Gründe für die Speicherung Ihrer personenbezogenen Daten haben (z. B. steuer- oder handelsrechtliche Aufbewahrungsfristen); im letztgenannten Fall erfolgt die Löschung nach Fortfall dieser Gründe.",
       },
       legalBasis: {
         title:
           "Allgemeine Hinweise zu den Rechtsgrundlagen der Datenverarbeitung auf dieser Website",
+        tocTitle: "Rechtsgrundlagen der Datenverarbeitung",
         paragraph1:
           "Sofern Sie in die Datenverarbeitung eingewilligt haben, verarbeiten wir Ihre personenbezogenen Daten auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO bzw. Art. 9 Abs. 2 lit. a DSGVO, sofern besondere Datenkategorien nach Art. 9 Abs. 1 DSGVO verarbeitet werden. Im Falle einer ausdrücklichen Einwilligung in die Übertragung personenbezogener Daten in Drittstaaten erfolgt die Datenverarbeitung außerdem auf Grundlage von Art. 49 Abs. 1 lit. a DSGVO. Sofern Sie in die Speicherung von Cookies oder in den Zugriff auf Informationen in Ihr Endgerät (z. B. via Device-Fingerprinting) eingewilligt haben, erfolgt die Datenverarbeitung zusätzlich auf Grundlage von § 25 Abs. 1 TDDDG. Die Einwilligung ist jederzeit widerrufbar. Sind Ihre Daten zur Vertragserfüllung oder zur Durchführung vorvertraglicher Maßnahmen erforderlich, verarbeiten wir Ihre Daten auf Grundlage des Art. 6 Abs. 1 lit. b DSGVO. Des Weiteren verarbeiten wir Ihre Daten, sofern diese zur Erfüllung einer rechtlichen Verpflichtung erforderlich sind auf Grundlage von Art. 6 Abs. 1 lit. c DSGVO. Die Datenverarbeitung kann ferner auf Grundlage unseres berechtigten Interesses nach Art. 6 Abs. 1 lit. f DSGVO erfolgen. Über die jeweils im Einzelfall einschlägigen Rechtsgrundlagen wird in den folgenden Absätzen dieser Datenschutzerklärung informiert.",
       },
       recipients: {
         title: "Empfänger von personenbezogenen Daten",
+        tocTitle: "Empfänger von personenbezogenen Daten",
         paragraph1:
           "Im Rahmen unserer Geschäftstätigkeit arbeiten wir mit verschiedenen externen Stellen zusammen. Dabei ist teilweise auch eine Übermittlung von personenbezogenen Daten an diese externen Stellen erforderlich. Wir geben personenbezogene Daten nur dann an externe Stellen weiter, wenn dies im Rahmen einer Vertragserfüllung erforderlich ist, wenn wir gesetzlich hierzu verpflichtet sind (z. B. Weitergabe von Daten an Steuerbehörden), wenn wir ein berechtigtes Interesse nach Art. 6 Abs. 1 lit. f DSGVO an der Weitergabe haben oder wenn eine sonstige Rechtsgrundlage die Datenweitergabe erlaubt. Beim Einsatz von Auftragsverarbeitern geben wir personenbezogene Daten unserer Kunden nur auf Grundlage eines gültigen Vertrags über Auftragsverarbeitung weiter. Im Falle einer gemeinsamen Verarbeitung wird ein Vertrag über gemeinsame Verarbeitung geschlossen.",
         gmailSection: {
@@ -145,12 +154,14 @@ E-Mail: threadup.social@gmail.com`,
       },
       revocation: {
         title: "Widerruf Ihrer Einwilligung zur Datenverarbeitung",
+        tocTitle: "Widerruf Ihrer Einwilligung",
         paragraph1:
           "Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.",
       },
       rightToObject: {
         title:
           "Widerspruchsrecht gegen die Datenerhebung in besonderen Fällen sowie gegen Direktwerbung (Art. 21 DSGVO)",
+        tocTitle: "Widerspruchsrecht",
         paragraph1:
           "WENN DIE DATENVERARBEITUNG AUF GRUNDLAGE VON ART. 6 ABS. 1 LIT. E ODER F DSGVO ERFOLGT, HABEN SIE JEDERZEIT DAS RECHT, AUS GRÜNDEN, DIE SICH AUS IHRER BESONDEREN SITUATION ERGEBEN, GEGEN DIE VERARBEITUNG IHRER PERSONENBEZOGENEN DATEN WIDERSPRUCH EINZULEGEN; DIES GILT AUCH FÜR EIN AUF DIESE BESTIMMUNGEN GESTÜTZTES PROFILING. DIE JEWEILIGE RECHTSGRUNDLAGE, AUF DENEN EINE VERARBEITUNG BERUHT, ENTNEHMEN SIE DIESER DATENSCHUTZERKLÄRUNG. WENN SIE WIDERSPRUCH EINLEGEN, WERDEN WIR IHRE BETROFFENEN PERSONENBEZOGENEN DATEN NICHT MEHR VERARBEITEN, ES SEI DENN, WIR KÖNNEN ZWINGENDE SCHUTZWÜRDIGE GRÜNDE FÜR DIE VERARBEITUNG NACHWEISEN, DIE IHRE INTERESSEN, RECHTE UND FREIHEITEN ÜBERWIEGEN ODER DIE VERARBEITUNG DIENT DER GELTENDMACHUNG, AUSÜBUNG ODER VERTEIDIGUNG VON RECHTSANSPRÜCHEN (WIDERSPRUCH NACH ART. 21 ABS. 1 DSGVO).",
         paragraph2:
@@ -158,21 +169,25 @@ E-Mail: threadup.social@gmail.com`,
       },
       complaint: {
         title: "Beschwerderecht bei der zuständigen Aufsichtsbehörde",
+        tocTitle: "Beschwerderecht",
         paragraph1:
           "Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein Beschwerderecht bei einer Aufsichtsbehörde, insbesondere in dem Mitgliedstaat ihres gewöhnlichen Aufenthalts, ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes zu. Das Beschwerderecht besteht unbeschadet anderweitiger verwaltungsrechtlicher oder gerichtlicher Rechtsbehelfe.",
       },
       dataPortability: {
         title: "Recht auf Datenübertragbarkeit",
+        tocTitle: "Recht auf Datenübertragbarkeit",
         paragraph1:
           "Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an einen Dritten in einem gängigen, maschinenlesbaren Format aushändigen zu lassen. Sofern Sie die direkte Übertragung der Daten an einen anderen Verantwortlichen verlangen, erfolgt dies nur, soweit es technisch machbar ist.",
       },
       access: {
         title: "Auskunft, Berichtigung und Löschung",
+        tocTitle: "Auskunft, Berichtigung und Löschung",
         paragraph1:
           "Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten. Hierzu sowie zu weiteren Fragen zum Thema personenbezogene Daten können Sie sich jederzeit an uns wenden.",
       },
       restriction: {
         title: "Recht auf Einschränkung der Verarbeitung",
+        tocTitle: "Recht auf Einschränkung",
         paragraph1:
           "Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Hierzu können Sie sich jederzeit an uns wenden. Das Recht auf Einschränkung der Verarbeitung besteht in folgenden Fällen:",
         list: [
@@ -186,6 +201,7 @@ E-Mail: threadup.social@gmail.com`,
       },
       encryption: {
         title: "SSL- bzw. TLS-Verschlüsselung",
+        tocTitle: "SSL- bzw. TLS-Verschlüsselung",
         paragraph1:
           'Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte, wie zum Beispiel Bestellungen oder Anfragen, die Sie an uns als Seitenbetreiber senden, eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von "http://" auf "https://" wechselt und an dem Schloss-Symbol in Ihrer Browserzeile.',
         paragraph2:
@@ -198,6 +214,7 @@ E-Mail: threadup.social@gmail.com`,
       title: "4. Datenerfassung auf dieser Website",
       generalProcessing: {
         title: "Allgemeine Hinweise zur Datenverarbeitung",
+        tocTitle: "Allgemeine Hinweise zur Datenverarbeitung",
         paragraph1:
           "Wir verarbeiten personenbezogene Daten nur, soweit dies für den Betrieb, die Sicherheit und die Funktionalität unserer Website sowie zur Erbringung unserer Leistungen erforderlich ist. Im Folgenden informieren wir Sie darüber, welche Datenkategorien wir verarbeiten, zu welchen Zwecken dies erfolgt und auf welcher Rechtsgrundlage dies beruht.",
         list: [
@@ -208,6 +225,7 @@ E-Mail: threadup.social@gmail.com`,
       },
       cookies: {
         title: "Cookies",
+        tocTitle: "Cookies",
         paragraph1:
           'Unsere Internetseiten verwenden so genannte "Cookies". Cookies sind kleine Datenpakete und richten auf Ihrem Endgerät keinen Schaden an. Sie werden entweder vorübergehend für die Dauer einer Sitzung (Session-Cookies) oder dauerhaft (permanente Cookies) auf Ihrem Endgerät gespeichert. Session-Cookies werden nach Ende Ihres Besuchs automatisch gelöscht. Permanente Cookies bleiben auf Ihrem Endgerät gespeichert, bis Sie diese selbst löschen oder eine automatische Löschung durch Ihren Webbrowser erfolgt.',
         paragraph2:
@@ -225,6 +243,7 @@ E-Mail: threadup.social@gmail.com`,
       },
       userAccount: {
         title: "Benutzerkonto / Registrierung",
+        tocTitle: "Benutzerkonto / Registrierung",
         paragraph1:
           "Wenn Sie ein Benutzerkonto anlegen, verarbeiten wir insbesondere folgende Daten:",
         list: [
@@ -242,6 +261,7 @@ E-Mail: threadup.social@gmail.com`,
       },
       userContent: {
         title: "Von Nutzern bereitgestellte Inhalte (User-Generated Content)",
+        tocTitle: "Von Nutzern bereitgestellte Inhalte",
         paragraph1:
           "Bei der Nutzung unserer Plattform werden durch Sie bereitgestellte Inhalte verarbeitet:",
         list: [
@@ -259,6 +279,7 @@ E-Mail: threadup.social@gmail.com`,
       adminData: {
         title:
           "Administrations- und Moderationsdaten (nur für Administratoren)",
+        tocTitle: "Administrations- und Moderationsdaten",
         paragraph1:
           "Für Nutzer mit administrativen oder moderativen Rechten werden zusätzlich folgende Daten verarbeitet:",
         list: [
@@ -274,6 +295,7 @@ E-Mail: threadup.social@gmail.com`,
       },
       accountSecurity: {
         title: "Kontosicherheit & technische Sicherheitsmaßnahmen",
+        tocTitle: "Kontosicherheit",
         list: [
           "Gespeicherte, gehashte Passwörter (kein Klartext)",
           "Login-Status, Token, Session-IDs",
@@ -286,6 +308,7 @@ E-Mail: threadup.social@gmail.com`,
       },
       improvement: {
         title: "Nutzung zur Verbesserung und Analyse",
+        tocTitle: "Nutzung zur Verbesserung und Analyse",
         paragraph1:
           "Zur Verbesserung unserer Plattform verarbeiten wir anonymisierte bzw. pseudonymisierte Nutzungsdaten, etwa:",
         list: [
@@ -300,6 +323,7 @@ E-Mail: threadup.social@gmail.com`,
       },
       serverLogs: {
         title: "Server-Log-Dateien",
+        tocTitle: "Server-Log-Dateien",
         paragraph1:
           "Der Provider der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt. Dies sind:",
         list: [
@@ -317,6 +341,7 @@ E-Mail: threadup.social@gmail.com`,
       },
       contactForm: {
         title: "Kontaktformular",
+        tocTitle: "Kontaktformular",
         paragraph1:
           "Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.",
         paragraph2:
@@ -326,6 +351,7 @@ E-Mail: threadup.social@gmail.com`,
       },
       emailInquiry: {
         title: "Anfrage per E-Mail, Telefon oder Telefax",
+        tocTitle: "Anfrage per E-Mail",
         paragraph1:
           "Wenn Sie uns per E-Mail, Telefon oder Telefax kontaktieren, wird Ihre Anfrage inklusive aller daraus hervorgehenden personenbezogenen Daten (Name, Anfrage) zum Zwecke der Bearbeitung Ihres Anliegens bei uns gespeichert und verarbeitet. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.",
         paragraph2:
@@ -337,6 +363,7 @@ E-Mail: threadup.social@gmail.com`,
       },
       resend: {
         title: "E-Mail-Versand über Resend",
+        tocTitle: "E-Mail-Versand über Resend",
         paragraph1:
           "Für den Versand von transaktionalen E-Mails (z. B. Registrierungsbestätigungen, E-Mail-Änderungen, Passwort-Zurücksetzen-Links und Kontaktformular-Benachrichtigungen) nutzen wir den Dienst Resend der Plus Five Five, Inc., 2261 Market Street #5039, San Francisco, CA 94114, USA.",
         paragraph2:
@@ -364,6 +391,7 @@ E-Mail: threadup.social@gmail.com`,
       },
       comments: {
         title: "Kommentarfunktion auf dieser Website",
+        tocTitle: "Kommentarfunktion",
         paragraph1:
           "Für die Kommentarfunktion auf dieser Seite werden neben Ihrem Kommentar auch Angaben zum Zeitpunkt der Erstellung des Kommentars, Ihre E-Mail-Adresse und, wenn Sie nicht anonym posten, der von Ihnen gewählte Nutzername gespeichert.",
         ipStorage: {
