@@ -1480,7 +1480,7 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                       {t.sections.section4.adminData.legalBasis}
                     </p>
                     <p
-                      className="leading-relaxed italic"
+                      className="leading-relaxed italic mb-3"
                       style={{
                         color: "var(--color-muted-foreground, #64748b)",
                       }}

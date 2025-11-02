@@ -258,6 +258,8 @@ E-Mail: threadup.social@gmail.com`,
           "Zweck: Bereitstellung der Plattformfunktionen, Nutzung personalisierter Bereiche, Login und Kontoverwaltung.",
         legalBasis:
           "Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertrag) und ggf. Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).",
+        paragraph2:
+          "Die während der Registrierung eingegebenen Daten verbleiben bei uns für die Dauer der Nutzung des Benutzerkontos und werden anschließend gelöscht, sofern keine gesetzlichen Aufbewahrungspflichten bestehen. Sie haben jederzeit die Möglichkeit, Ihre Daten in den Einstellungen Ihres Benutzerkontos zu löschen oder zu ändern.",
       },
       userContent: {
         title: "Von Nutzern bereitgestellte Inhalte (User-Generated Content)",
@@ -275,6 +277,8 @@ E-Mail: threadup.social@gmail.com`,
           "Zweck: Darstellung Ihrer Inhalte, Kommunikation mit anderen Nutzern, Moderation, Sicherstellung der Plattformintegrität.",
         legalBasis:
           "Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Nutzungsvertrag) und Art. 6 Abs. 1 lit. a DSGVO (Einwilligung für freiwillige Veröffentlichungen).",
+        paragraph2:
+          "Die veröffentlichten Inhalte verbleiben bei uns gespeichert, bis Sie oder wir diese löschen. Sie haben in der Regel die Möglichkeit, Ihre Beiträge selbstständig über Ihr Benutzerkonto zu bearbeiten oder zu löschen. Sofern Sie wünschen, dass wir bestimmte Inhalte löschen, können Sie sich jederzeit an uns wenden.",
       },
       adminData: {
         title:
@@ -292,6 +296,8 @@ E-Mail: threadup.social@gmail.com`,
         legalBasis:
           "Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an Sicherheit und Integrität der Plattform).",
         note: "Hinweis: Diese Datenverarbeitung betrifft ausschließlich Administratoren/Moderatoren. Normale Nutzer sind hiervon nicht betroffen.",
+        paragraph2:
+          "Diese Datenverarbeitung erfolgt auf Grundlage unseres berechtigten Interesses an der Aufrechterhaltung einer sicheren und funktionsfähigen Plattform gemäß Art. 6 Abs. 1 lit. f DSGVO. Die Daten werden nur so lange gespeichert, wie dies für den jeweiligen Zweck erforderlich ist, und nach Ablauf der Aufbewahrungsfristen gelöscht, sofern keine gesetzlichen Aufbewahrungspflichten bestehen.",
       },
       accountSecurity: {
         title: "Kontosicherheit & technische Sicherheitsmaßnahmen",
@@ -305,6 +311,8 @@ E-Mail: threadup.social@gmail.com`,
           "Zweck: Schutz Ihres Kontos, Verhinderung unbefugter Zugriffe, Systemsicherheit.",
         legalBasis:
           "Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an Sicherheit, Missbrauchsvermeidung, Rechtsdurchsetzung).",
+        paragraph1:
+          "Zum Schutz Ihres Benutzerkontos ergreifen wir technische und organisatorische Maßnahmen. Diese umfassen die Verschlüsselung von Passwörtern, den Einsatz sicherer Verbindungen (SSL/TLS) sowie die Überwachung auf verdächtige Aktivitäten. Die Maßnahmen dienen dem Schutz Ihrer Daten und Ihres Kontos und erfolgen auf Grundlage unseres berechtigten Interesses nach Art. 6 Abs. 1 lit. f DSGVO.",
       },
       improvement: {
         title: "Nutzung zur Verbesserung und Analyse",
