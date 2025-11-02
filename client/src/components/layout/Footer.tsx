@@ -103,7 +103,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Legal</h3>
+            <h3 className="font-semibold text-foreground mb-4">Policies</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <Link
