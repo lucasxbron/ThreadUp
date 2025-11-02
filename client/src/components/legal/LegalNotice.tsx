@@ -1276,45 +1276,32 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                             )}
                           </ul>
                         )}
-                      {"purpose" in t.sections.section4.userAccount &&
-                        (t.sections.section4.userAccount as any).purpose && (
-                          <p
-                            className="leading-relaxed mb-2"
-                            style={{
-                              color: "var(--color-muted-foreground, #64748b)",
-                            }}
-                          >
-                            {(t.sections.section4.userAccount as any).purpose}
-                          </p>
-                        )}
-                      {"legalBasis" in t.sections.section4.userAccount &&
-                        (t.sections.section4.userAccount as any).legalBasis && (
-                          <p
-                            className="leading-relaxed mb-3"
-                            style={{
-                              color: "var(--color-muted-foreground, #64748b)",
-                            }}
-                          >
-                            {
-                              (t.sections.section4.userAccount as any)
-                                .legalBasis
-                            }
-                          </p>
-                        )}
-                      {"paragraph2" in t.sections.section4.userAccount &&
-                        (t.sections.section4.userAccount as any).paragraph2 && (
-                          <p
-                            className="leading-relaxed"
-                            style={{
-                              color: "var(--color-muted-foreground, #64748b)",
-                            }}
-                          >
-                            {
-                              (t.sections.section4.userAccount as any)
-                                .paragraph2
-                            }
-                          </p>
-                        )}
+                      <p
+                        className="leading-relaxed mb-2"
+                        style={{
+                          color: "var(--color-muted-foreground, #64748b)",
+                        }}
+                      >
+                        {t.sections.section4.userAccount.purpose}
+                      </p>
+                      <p
+                        className="leading-relaxed mb-3"
+                        style={{
+                          color: "var(--color-muted-foreground, #64748b)",
+                        }}
+                      >
+                        {t.sections.section4.userAccount.legalBasis}
+                      </p>
+                      {t.sections.section4.userAccount.paragraph2 && (
+                        <p
+                          className="leading-relaxed"
+                          style={{
+                            color: "var(--color-muted-foreground, #64748b)",
+                          }}
+                        >
+                          {t.sections.section4.userAccount.paragraph2}
+                        </p>
+                      )}
                     </div>
                   )}
 
@@ -1355,45 +1342,32 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                             )}
                           </ul>
                         )}
-                      {"purpose" in t.sections.section4.userContent &&
-                        (t.sections.section4.userContent as any).purpose && (
-                          <p
-                            className="leading-relaxed mb-2"
-                            style={{
-                              color: "var(--color-muted-foreground, #64748b)",
-                            }}
-                          >
-                            {(t.sections.section4.userContent as any).purpose}
-                          </p>
-                        )}
-                      {"legalBasis" in t.sections.section4.userContent &&
-                        (t.sections.section4.userContent as any).legalBasis && (
-                          <p
-                            className="leading-relaxed mb-3"
-                            style={{
-                              color: "var(--color-muted-foreground, #64748b)",
-                            }}
-                          >
-                            {
-                              (t.sections.section4.userContent as any)
-                                .legalBasis
-                            }
-                          </p>
-                        )}
-                      {"paragraph2" in t.sections.section4.userContent &&
-                        (t.sections.section4.userContent as any).paragraph2 && (
-                          <p
-                            className="leading-relaxed"
-                            style={{
-                              color: "var(--color-muted-foreground, #64748b)",
-                            }}
-                          >
-                            {
-                              (t.sections.section4.userContent as any)
-                                .paragraph2
-                            }
-                          </p>
-                        )}
+                      <p
+                        className="leading-relaxed mb-2"
+                        style={{
+                          color: "var(--color-muted-foreground, #64748b)",
+                        }}
+                      >
+                        {t.sections.section4.userContent.purpose}
+                      </p>
+                      <p
+                        className="leading-relaxed mb-3"
+                        style={{
+                          color: "var(--color-muted-foreground, #64748b)",
+                        }}
+                      >
+                        {t.sections.section4.userContent.legalBasis}
+                      </p>
+                      {t.sections.section4.userContent.paragraph2 && (
+                        <p
+                          className="leading-relaxed"
+                          style={{
+                            color: "var(--color-muted-foreground, #64748b)",
+                          }}
+                        >
+                          {t.sections.section4.userContent.paragraph2}
+                        </p>
+                      )}
                     </div>
                   )}
 
@@ -1433,50 +1407,40 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                           )}
                         </ul>
                       )}
-                    {"purpose" in t.sections.section4.adminData &&
-                      (t.sections.section4.adminData as any).purpose && (
-                        <p
-                          className="leading-relaxed mb-2"
-                          style={{
-                            color: "var(--color-muted-foreground, #64748b)",
-                          }}
-                        >
-                          {(t.sections.section4.adminData as any).purpose}
-                        </p>
-                      )}
-                    {"legalBasis" in t.sections.section4.adminData &&
-                      (t.sections.section4.adminData as any).legalBasis && (
-                        <p
-                          className="leading-relaxed mb-3"
-                          style={{
-                            color: "var(--color-muted-foreground, #64748b)",
-                          }}
-                        >
-                          {(t.sections.section4.adminData as any).legalBasis}
-                        </p>
-                      )}
-                    {"note" in t.sections.section4.adminData &&
-                      (t.sections.section4.adminData as any).note && (
-                        <p
-                          className="leading-relaxed italic"
-                          style={{
-                            color: "var(--color-muted-foreground, #64748b)",
-                          }}
-                        >
-                          {(t.sections.section4.adminData as any).note}
-                        </p>
-                      )}
-                    {"paragraph2" in t.sections.section4.adminData &&
-                      (t.sections.section4.adminData as any).paragraph2 && (
-                        <p
-                          className="leading-relaxed"
-                          style={{
-                            color: "var(--color-muted-foreground, #64748b)",
-                          }}
-                        >
-                          {(t.sections.section4.adminData as any).paragraph2}
-                        </p>
-                      )}
+                    <p
+                      className="leading-relaxed mb-2"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      {t.sections.section4.adminData.purpose}
+                    </p>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      {t.sections.section4.adminData.legalBasis}
+                    </p>
+                    <p
+                      className="leading-relaxed italic"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      {t.sections.section4.adminData.note}
+                    </p>
+                    {t.sections.section4.adminData.paragraph2 && (
+                      <p
+                        className="leading-relaxed"
+                        style={{
+                          color: "var(--color-muted-foreground, #64748b)",
+                        }}
+                      >
+                        {t.sections.section4.adminData.paragraph2}
+                      </p>
+                    )}
                   </div>
 
                   {/* Account Security */}
@@ -1509,47 +1473,32 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                           )}
                         </ul>
                       )}
-                    {"purpose" in t.sections.section4.accountSecurity &&
-                      (t.sections.section4.accountSecurity as any).purpose && (
-                        <p
-                          className="leading-relaxed mb-2"
-                          style={{
-                            color: "var(--color-muted-foreground, #64748b)",
-                          }}
-                        >
-                          {(t.sections.section4.accountSecurity as any).purpose}
-                        </p>
-                      )}
-                    {"legalBasis" in t.sections.section4.accountSecurity &&
-                      (t.sections.section4.accountSecurity as any)
-                        .legalBasis && (
-                        <p
-                          className="leading-relaxed mb-3"
-                          style={{
-                            color: "var(--color-muted-foreground, #64748b)",
-                          }}
-                        >
-                          {
-                            (t.sections.section4.accountSecurity as any)
-                              .legalBasis
-                          }
-                        </p>
-                      )}
-                    {"paragraph1" in t.sections.section4.accountSecurity &&
-                      (t.sections.section4.accountSecurity as any)
-                        .paragraph1 && (
-                        <p
-                          className="leading-relaxed"
-                          style={{
-                            color: "var(--color-muted-foreground, #64748b)",
-                          }}
-                        >
-                          {
-                            (t.sections.section4.accountSecurity as any)
-                              .paragraph1
-                          }
-                        </p>
-                      )}
+                    <p
+                      className="leading-relaxed mb-2"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      {t.sections.section4.accountSecurity.purpose}
+                    </p>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      {t.sections.section4.accountSecurity.legalBasis}
+                    </p>
+                    {t.sections.section4.accountSecurity.paragraph1 && (
+                      <p
+                        className="leading-relaxed"
+                        style={{
+                          color: "var(--color-muted-foreground, #64748b)",
+                        }}
+                      >
+                        {t.sections.section4.accountSecurity.paragraph1}
+                      </p>
+                    )}
                   </div>
 
                   {/* Improvement */}
@@ -1588,28 +1537,22 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                           )}
                         </ul>
                       )}
-                    {"purpose" in t.sections.section4.improvement &&
-                      (t.sections.section4.improvement as any).purpose && (
-                        <p
-                          className="leading-relaxed mb-2"
-                          style={{
-                            color: "var(--color-muted-foreground, #64748b)",
-                          }}
-                        >
-                          {(t.sections.section4.improvement as any).purpose}
-                        </p>
-                      )}
-                    {"legalBasis" in t.sections.section4.improvement &&
-                      (t.sections.section4.improvement as any).legalBasis && (
-                        <p
-                          className="leading-relaxed"
-                          style={{
-                            color: "var(--color-muted-foreground, #64748b)",
-                          }}
-                        >
-                          {(t.sections.section4.improvement as any).legalBasis}
-                        </p>
-                      )}
+                    <p
+                      className="leading-relaxed mb-2"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      {t.sections.section4.improvement.purpose}
+                    </p>
+                    <p
+                      className="leading-relaxed"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      {t.sections.section4.improvement.legalBasis}
+                    </p>
                   </div>
 
                   {/* Server Logs */}
@@ -1737,36 +1680,24 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                           {t.sections.section4.emailInquiry.paragraph2}
                         </p>
                       )}
-                      {"paragraph3" in t.sections.section4.emailInquiry &&
-                        (t.sections.section4.emailInquiry as any)
-                          .paragraph3 && (
-                          <p
-                            className="leading-relaxed mb-3"
-                            style={{
-                              color: "var(--color-muted-foreground, #64748b)",
-                            }}
-                          >
-                            {
-                              (t.sections.section4.emailInquiry as any)
-                                .paragraph3
-                            }
-                          </p>
-                        )}
-                      {"paragraph4" in t.sections.section4.emailInquiry &&
-                        (t.sections.section4.emailInquiry as any)
-                          .paragraph4 && (
-                          <p
-                            className="leading-relaxed"
-                            style={{
-                              color: "var(--color-muted-foreground, #64748b)",
-                            }}
-                          >
-                            {
-                              (t.sections.section4.emailInquiry as any)
-                                .paragraph4
-                            }
-                          </p>
-                        )}
+                      <p
+                        className="leading-relaxed mb-3"
+                        style={{
+                          color: "var(--color-muted-foreground, #64748b)",
+                        }}
+                      >
+                        {t.sections.section4.emailInquiry.paragraph3}
+                      </p>
+                      {t.sections.section4.emailInquiry.paragraph4 && (
+                        <p
+                          className="leading-relaxed"
+                          style={{
+                            color: "var(--color-muted-foreground, #64748b)",
+                          }}
+                        >
+                          {t.sections.section4.emailInquiry.paragraph4}
+                        </p>
+                      )}
                     </div>
                   )}
 
@@ -1826,39 +1757,30 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                         {t.sections.section4.resend.paragraph3}
                       </p>
                     )}
-                    {"purpose" in t.sections.section4.resend &&
-                      (t.sections.section4.resend as any).purpose && (
-                        <p
-                          className="leading-relaxed mb-3"
-                          style={{
-                            color: "var(--color-muted-foreground, #64748b)",
-                          }}
-                        >
-                          {(t.sections.section4.resend as any).purpose}
-                        </p>
-                      )}
-                    {"storageDuration" in t.sections.section4.resend &&
-                      (t.sections.section4.resend as any).storageDuration && (
-                        <p
-                          className="leading-relaxed mb-3"
-                          style={{
-                            color: "var(--color-muted-foreground, #64748b)",
-                          }}
-                        >
-                          {(t.sections.section4.resend as any).storageDuration}
-                        </p>
-                      )}
-                    {"thirdCountry" in t.sections.section4.resend &&
-                      (t.sections.section4.resend as any).thirdCountry && (
-                        <p
-                          className="leading-relaxed mb-3"
-                          style={{
-                            color: "var(--color-muted-foreground, #64748b)",
-                          }}
-                        >
-                          {(t.sections.section4.resend as any).thirdCountry}
-                        </p>
-                      )}
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      {t.sections.section4.resend.purpose}
+                    </p>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      {t.sections.section4.resend.storageDuration}
+                    </p>
+                    <p
+                      className="leading-relaxed mb-3"
+                      style={{
+                        color: "var(--color-muted-foreground, #64748b)",
+                      }}
+                    >
+                      {t.sections.section4.resend.thirdCountry}
+                    </p>
                     {t.sections.section4.resend.paragraph4 && (
                       <p
                         className="leading-relaxed mb-2"
@@ -1908,84 +1830,60 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
                       >
                         {t.sections.section4.comments.paragraph1}
                       </p>
-                      {"ipStorage" in t.sections.section4.comments && (
-                        <div className="mb-3">
-                          <p
-                            className="font-medium mb-1"
-                            style={{
-                              color: "var(--color-foreground, #0f172a)",
-                            }}
-                          >
-                            {
-                              (t.sections.section4.comments as any).ipStorage
-                                .title
-                            }
-                          </p>
-                          <p
-                            className="leading-relaxed"
-                            style={{
-                              color: "var(--color-muted-foreground, #64748b)",
-                            }}
-                          >
-                            {
-                              (t.sections.section4.comments as any).ipStorage
-                                .content
-                            }
-                          </p>
-                        </div>
-                      )}
-                      {"commentDuration" in t.sections.section4.comments && (
-                        <div className="mb-3">
-                          <p
-                            className="font-medium mb-1"
-                            style={{
-                              color: "var(--color-foreground, #0f172a)",
-                            }}
-                          >
-                            {
-                              (t.sections.section4.comments as any)
-                                .commentDuration.title
-                            }
-                          </p>
-                          <p
-                            className="leading-relaxed"
-                            style={{
-                              color: "var(--color-muted-foreground, #64748b)",
-                            }}
-                          >
-                            {
-                              (t.sections.section4.comments as any)
-                                .commentDuration.content
-                            }
-                          </p>
-                        </div>
-                      )}
-                      {"legalBasis" in t.sections.section4.comments && (
-                        <div>
-                          <p
-                            className="font-medium mb-1"
-                            style={{
-                              color: "var(--color-foreground, #0f172a)",
-                            }}
-                          >
-                            {
-                              (t.sections.section4.comments as any).legalBasis
-                                .title
-                            }
-                          </p>
-                          <p
-                            className="leading-relaxed"
-                            style={{
-                              color: "var(--color-muted-foreground, #64748b)",
-                            }}
-                          >
-                            {
-                              (t.sections.section4.comments as any).legalBasis
-                                .content
-                            }
-                          </p>
-                        </div>
-                      )}
+                      <div className="mb-3">
+                        <p
+                          className="font-medium mb-1"
+                          style={{
+                            color: "var(--color-foreground, #0f172a)",
+                          }}
+                        >
+                          {t.sections.section4.comments.ipStorage.title}
+                        </p>
+                        <p
+                          className="leading-relaxed"
+                          style={{
+                            color: "var(--color-muted-foreground, #64748b)",
+                          }}
+                        >
+                          {t.sections.section4.comments.ipStorage.content}
+                        </p>
+                      </div>
+                      <div className="mb-3">
+                        <p
+                          className="font-medium mb-1"
+                          style={{
+                            color: "var(--color-foreground, #0f172a)",
+                          }}
+                        >
+                          {t.sections.section4.comments.commentDuration.title}
+                        </p>
+                        <p
+                          className="leading-relaxed"
+                          style={{
+                            color: "var(--color-muted-foreground, #64748b)",
+                          }}
+                        >
+                          {t.sections.section4.comments.commentDuration.content}
+                        </p>
+                      </div>
+                      <div>
+                        <p
+                          className="font-medium mb-1"
+                          style={{
+                            color: "var(--color-foreground, #0f172a)",
+                          }}
+                        >
+                          {t.sections.section4.comments.legalBasis.title}
+                        </p>
+                        <p
+                          className="leading-relaxed"
+                          style={{
+                            color: "var(--color-muted-foreground, #64748b)",
+                          }}
+                        >
+                          {t.sections.section4.comments.legalBasis.content}
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>

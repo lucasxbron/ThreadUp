@@ -1,4 +1,6 @@
-export const legalNoticeDE = {
+import type { LegalNoticeTranslation } from "@/types/legal.types";
+
+export const legalNoticeDE: LegalNoticeTranslation = {
   lastUpdated: "01.11.2025",
 
   // Meta
