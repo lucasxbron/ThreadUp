@@ -1,7 +1,26 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 export const Footer: React.FC = () => {
+  const [legalLink, setLegalLink] = useState("/impressum-datenschutz");
+  const [legalText, setLegalText] = useState("Impressum & Datenschutz");
+
+  useEffect(() => {
+    // Detect browser language on mount
+    const browserLang = navigator.language.toLowerCase();
+
+    // If browser language starts with 'de' (German), use German version
+    // Otherwise use English version
+    if (browserLang.startsWith("de")) {
+      setLegalLink("/impressum-datenschutz");
+      setLegalText("Impressum & Datenschutz");
+    } else {
+      setLegalLink("/legal-notice");
+      setLegalText("Legal Notice & Privacy");
+    }
+  }, []);
   return (
     <footer className="bg-muted border-t border-border py-12">
       <div className="max-w-6xl mx-auto px-4">
@@ -278,10 +297,10 @@ export const Footer: React.FC = () => {
                 <option>Deutsch</option>
               </select> */}
               <Link
-                href="/impressum"
-                className="hover:text-foreground transition-colors cursor-pointer"
+                href={legalLink}
+                className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
               >
-                Impressum & Datenschutz
+                {legalText}
               </Link>
             </div>
           </div>
