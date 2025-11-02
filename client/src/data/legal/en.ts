@@ -263,7 +263,7 @@ Germany`,
         legalBasis:
           "Legal Basis: Art. 6 Para. 1 lit. b GDPR (contract) and, if applicable, Art. 6 Para. 1 lit. a GDPR (consent).",
         paragraph2:
-          "The data entered during registration is stored by us for the duration of your use of the user account and is deleted thereafter, unless there are legal retention obligations. You can delete or modify your data at any time in the settings of your user account. Please contact us if you would like us to delete your account.",
+          "The data entered during registration is stored by us for the duration of your use of the user account and is deleted thereafter, unless there are legal retention obligations. You can delete or modify your data at any time in the settings of your user account.",
       },
       userContent: {
         title: "User-Generated Content",
