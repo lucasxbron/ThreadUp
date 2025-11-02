@@ -479,7 +479,7 @@ export const LegalNotice: React.FC<LegalNoticeProps> = ({ lang }) => {
               className="text-3xl font-bold mb-6"
               style={{ color: "var(--color-foreground, #0f172a)" }}
             >
-              {isGerman ? "Datenschutzerklärung" : "Privacy Policy"}
+              {isGerman ? "Datenschutz\u00ADerklärung" : "Privacy Policy"}
             </h2>
 
             <div className="space-y-8">

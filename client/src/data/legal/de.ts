@@ -4,7 +4,7 @@ export const legalNoticeDE: LegalNoticeTranslation = {
   lastUpdated: "01.11.2025",
 
   // Meta
-  title: "Impressum & Datenschutzerklärung",
+  title: "Impressum & Datenschutz\u00ADerklärung",
   subtitle:
     "Rechtliche Informationen und Datenschutzhinweise gemäß deutschem Recht",
 
