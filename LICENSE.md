@@ -2,9 +2,11 @@
 
 **Copyright © 2025 Lucas Bron. All rights reserved.**
 
-This software and all associated files, including source code, documentation, design elements, and branding (collectively, the "Software"), are the exclusive intellectual property of **the copyright holder** ("Licensor").
+This software and all associated files, including source code, user interface, design elements (including layout, colors, graphics), documentation, and the name **"ThreadUp"** (collectively, the "Software"), are the exclusive intellectual property of **the copyright holder** ("Licensor").
 
-The Software is made **publicly available for viewing and educational purposes only**. It is **not open-source** and is not licensed under any permissive or copyleft license (e.g., MIT, GPL, Apache).
+The Software is made **publicly available for viewing and educational purposes only**. It is **not open-source** and is not licensed under any permissive or copyleft license (e.g., MIT, GPL, Apache). All rights are reserved unless explicitly granted in writing.
+
+**Note:** The name "ThreadUp" and associated branding are proprietary. Even though they may not be registered trademarks, they are protected under applicable **copyright and unfair competition laws**.
 
 ---
 
@@ -35,11 +37,41 @@ You **may**:
 
 ---
 
-## Copyright & Branding Notice
+## Brand & Design Restrictions
 
-The name **"ThreadUp"**, logo, color schemes, UI/UX design, and all associated branding are proprietary and protected by copyright and applicable intellectual property laws.
+The following are proprietary and protected by copyright and unfair competition law:
 
-Unauthorized use of these elements is prohibited and may result in legal action.
+- The name **"ThreadUp"**
+- The ThreadUp logo and visual identity
+- UI/UX design, layout, and color schemes
+- Graphics, icons, and design assets
+
+### You may NOT:
+
+- Use the name "ThreadUp" for any project, product, or service
+- Use or reproduce the ThreadUp logo, colors, or design elements
+- Imply any affiliation with, endorsement by, or sponsorship from ThreadUp
+- Present any derivative work as official or authorized by ThreadUp
+
+---
+
+## Requirements for Authorized Use
+
+If you receive **explicit written permission** to deploy, modify, or distribute the software, you must:
+
+1. **Rename the project** – do not use "ThreadUp" or any confusingly similar name
+2. **Replace all branding** – create your own logo, color scheme, and visual identity
+3. **Modify the UI design** – ensure your version is visually distinct
+4. **Remove team information** – replace all names, avatars, bios, and contributor references
+5. **Include clear attribution** (see below)
+
+---
+
+## Attribution Requirement
+
+If authorized to use this software, you must include an attribution statement that is **agreed upon in writing with the copyright holder**.
+
+The exact wording and placement must be agreed upon in writing with the copyright holder.
 
 ---
 
@@ -51,7 +83,7 @@ By submitting any code, documentation, or other materials to this project (e.g.,
 2. Represent and warrant that you have the right to grant this license
 3. Agree that your contribution will remain subject to this Proprietary License
 
-The author reserves the right to accept or reject any contribution at their sole discretion.
+The copyright holder reserves the right to accept or reject any contribution at their sole discretion.
 
 ---
 
@@ -59,7 +91,7 @@ The author reserves the right to accept or reject any contribution at their sole
 
 **THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.**
 
-**IN NO EVENT SHALL LUCAS BRON BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.**
+**IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.**
 
 **This disclaimer applies to the fullest extent permitted by applicable law.** Some jurisdictions do not allow the exclusion of implied warranties or limitation of liability for incidental or consequential damages, so the above limitations may not apply to you in full.
 
@@ -67,7 +99,7 @@ The author reserves the right to accept or reject any contribution at their sole
 
 ## Limitation of Liability
 
-To the maximum extent permitted by law, Lucas Bron shall not be liable for:
+To the maximum extent permitted by law, the copyright holder shall not be liable for:
 
 - Any indirect, incidental, special, consequential, or punitive damages
 - Loss of profits, revenue, data, or use
@@ -77,24 +109,15 @@ To the maximum extent permitted by law, Lucas Bron shall not be liable for:
 
 ---
 
-## Termination
+## Termination & Enforcement
 
 This license is effective until terminated. Your rights under this license will terminate automatically and immediately without notice if you fail to comply with any term of this license.
-
-Upon termination, you must:
-
-- Cease all use of the Software
-- Destroy all copies in your possession or control
-
-Termination does not limit any other rights or remedies available to the copyright holder.
 
 ---
 
 ## Governing Law & Jurisdiction
 
 This license and any disputes arising from or related to the Software shall be governed by the laws of **Germany**, without regard to its conflict of law principles.
-
-Any legal action or proceeding shall be brought exclusively in the courts of **[Your City/Region, e.g., Bonn or Cologne]**, and you consent to the personal jurisdiction of such courts.
 
 ---
 
@@ -116,4 +139,7 @@ Email: threadup.social@gmail.com
 
 ---
 
-**Last Updated:** October 27, 2025
+**Summary:**  
+The source code is **publicly visible but proprietary**. Viewing for educational purposes is allowed; all other use requires explicit written permission.
+
+**Last Updated:** November 6, 2025
